@@ -98,7 +98,7 @@ public class HelloWorld {
     myTree.printTree();
 
   }
-  
+
   private static void writeToFile(String fileName, List<String> data) {
     try  {
       PrintWriter writer = new PrintWriter(fileName, "UTF-8");

@@ -1,0 +1,4 @@
+package linkedlist
+
+class MyLinkedList {
+}
