@@ -98,21 +98,7 @@ public class HelloWorld {
     myTree.printTree();
 
   }
-
-  private static void compareLinkedList() {
-    MyLinkedList myLinkedList1 = new MyLinkedList(6, 7, 0, -4);
-    System.out.println("List 1:");
-    System.out.println(myLinkedList1 + "\n");
-
-    MyLinkedList myLinkedList2 = new MyLinkedList(6, 7, 0, -4);
-    System.out.println("List 2:");
-    System.out.println(myLinkedList2 + "\n");
-
-    String message = (!myLinkedList1.equals(myLinkedList2) ? "not equal." : "equal!");
-
-    System.out.println("Lists are " + message);
-  }
-
+  
   private static void writeToFile(String fileName, List<String> data) {
     try  {
       PrintWriter writer = new PrintWriter(fileName, "UTF-8");
