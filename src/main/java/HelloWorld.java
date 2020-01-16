@@ -1,64 +1,70 @@
 import linkedlist.MyLinkedList;
 import tree.MyBinarySearchTree;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 public class HelloWorld {
 
   public static void main(String[] args) {
 
     // Parameters
-    int numberOfDataPoints = 100;
-    int maxListSize = 9_999_999;
+    int numberOfDataPoints = 200;
+    int maxListSize = 5000000;
 
-    Map<Integer, Long> addTimeMap = new HashMap<>();
-    Map<Integer, Long> getTimeMap = new HashMap<>();
-    Map<Integer, Long> removeTimeMap = new HashMap<>();
-    Map<Integer, Long> findTimeMap = new HashMap<>();
+    List<String> timeList = new ArrayList<>();
+    timeList.add("MapSize,AddToStartTime,GetAtEndTime,RemoveFromEndTime,FindRandomValueTime,RandomValueFound");
+    System.out.print("Running...");
 
     for (int i = 2; i <= maxListSize; i = i + (maxListSize / numberOfDataPoints)) {
-      // Created using add at end
+      String timeListString = Integer.toString(i);
+
+      // Created using addAtEnd
       long startTimeNs = System.nanoTime();
       MyLinkedList list = createRandLinkedList(i);
       long endTimeNs = System.nanoTime();
-      long timeElapsedMs = (endTimeNs - startTimeNs) / 1000000;
-      addTimeMap.put(i, timeElapsedMs);
-      System.out.println("Map size " + i + " created in " + timeElapsedMs + " ms");
+      long timeElapsedNs = (endTimeNs - startTimeNs);
 
-      // Get from end
+      timeListString += "," + timeElapsedNs;
+
+
+      // getFromEnd
       assert list != null;
       startTimeNs = System.nanoTime();
       list.getAtEnd();
       endTimeNs = System.nanoTime();
-      timeElapsedMs = (endTimeNs - startTimeNs) / 1000000;
-      getTimeMap.put(i, timeElapsedMs);
-      System.out.println("Got from end in " + timeElapsedMs + " ms");
+      timeElapsedNs = (endTimeNs - startTimeNs);
 
-      // Remove from end
+      timeListString += "," + timeElapsedNs;
+
+
+      // removeFromEnd
       startTimeNs = System.nanoTime();
       list.deleteAtEnd();
       endTimeNs = System.nanoTime();
-      timeElapsedMs = (endTimeNs - startTimeNs) / 1000000;
-      removeTimeMap.put(i, timeElapsedMs);
-      System.out.println("Deleted last item in " + timeElapsedMs + " ms");
+      timeElapsedNs = (endTimeNs - startTimeNs);
 
-      // Find random value
+      timeListString += "," + timeElapsedNs;
+
+
+      // contains
       startTimeNs = System.nanoTime();
       int randomInt = new Random().nextInt();
       boolean found = list.contains(randomInt);
       endTimeNs = System.nanoTime();
-      timeElapsedMs = (endTimeNs - startTimeNs) / 1000000;
-      findTimeMap.put(i, timeElapsedMs);
-      System.out.println((found ? "Found random item in " : "Did not find random item in ") + timeElapsedMs + " ms");
+      timeElapsedNs = (endTimeNs - startTimeNs);
 
-      System.out.println("\n");
+      timeListString += "," + timeElapsedNs + "," + found;
+
+      timeList.add(timeListString);
     }
 
-    System.out.println("Finished. Saving to notepad.");
+    System.out.println("done!");
 
-    //TODO save to notepad
+    System.out.print("Writing to file...");
+    writeToFile("LinkedListEfficiency.txt", timeList);
 
   }
 
@@ -105,6 +111,25 @@ public class HelloWorld {
     String message = (!myLinkedList1.equals(myLinkedList2) ? "not equal." : "equal!");
 
     System.out.println("Lists are " + message);
+  }
+
+  private static void writeToFile(String fileName, List<String> data) {
+    try  {
+      PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+
+      for (String s : data) {
+        writer.println(s);
+      }
+
+      writer.close();
+      System.out.println("done!");
+
+    } catch (FileNotFoundException e) {
+      System.out.println("failed. File not found.");
+
+    } catch (UnsupportedEncodingException e) {
+      System.out.println("failed. Unsupported encoding type.");
+    }
   }
 
 }
