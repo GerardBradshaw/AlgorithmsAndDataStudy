@@ -1,4 +1,0 @@
-package linkedlist
-
-class MyLinkedList {
-}

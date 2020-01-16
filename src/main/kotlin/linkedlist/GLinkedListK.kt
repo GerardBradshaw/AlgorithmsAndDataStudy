@@ -1,0 +1,4 @@
+package linkedlist
+
+interface GLinkedListK {
+}
