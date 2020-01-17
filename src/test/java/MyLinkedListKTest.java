@@ -16,7 +16,7 @@ public class MyLinkedListKTest {
 
   @Before
   public void setUp() throws Exception {
-    linkedList = new MyLinkedListK(6, 7, 0); // [0] -> [7] -> [6] -> null
+    linkedList = new MyLinkedListK(6, 7, 0); // [6] -> [7] -> [0] -> null
   }
 
 
@@ -25,25 +25,25 @@ public class MyLinkedListKTest {
   @Test
   public void testAddAtEnd_negativeValue() {
     linkedList.addAtEnd(-4);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(-4, 6, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 0, -4))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexInMiddle() {
     linkedList.addAtIndex(33, 1);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 33, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 33, 7, 0))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexAtEnd() {
     linkedList.addAtIndex(99, 3);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(99, 6, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 0, 99))));
   }
 
   @Test
   public void testAddAtStart_positiveValue() {
     linkedList.addAtStart(5);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 0, 5))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(5, 6, 7, 0))));
   }
 
   @Test
@@ -58,7 +58,7 @@ public class MyLinkedListKTest {
   @Test
   public void testSetAtStart_validList() {
     linkedList.setAtStart(9);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(9, 7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -69,7 +69,7 @@ public class MyLinkedListKTest {
   @Test
   public void testSetAtEnd_validList() {
     linkedList.setAtEnd(9);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 9))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -80,13 +80,13 @@ public class MyLinkedListKTest {
   @Test
   public void testSetAtIndex_indexStart() {
     linkedList.setAtIndex(9, 0);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(9, 7, 0))));
   }
 
   @Test
   public void testSetAtIndex_indexEnd() {
     linkedList.setAtIndex(9, 2);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7, 9))));
   }
 
   @Test
@@ -149,7 +149,7 @@ public class MyLinkedListKTest {
   @Test
   public void testDeleteAtIndex_indexZero() {
     linkedList.deleteAtIndex(0);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(7, 0))));
   }
 
   @Test
@@ -161,7 +161,7 @@ public class MyLinkedListKTest {
   @Test
   public void testDeleteAtIndex_indexLast() {
     linkedList.deleteAtIndex(2);
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -172,7 +172,7 @@ public class MyLinkedListKTest {
   @Test
   public void testDeleteAtEnd_validList() {
     linkedList.deleteAtEnd();
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -183,7 +183,7 @@ public class MyLinkedListKTest {
   @Test
   public void testDeleteAtStart_validList() {
     linkedList.deleteAtStart();
-    assertThat(linkedList, is(equalTo(new MyLinkedListK(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyLinkedListK(7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -201,7 +201,7 @@ public class MyLinkedListKTest {
 
   @Test
   public void testGetAtIndex_indexZero() {
-    assertThat(linkedList.getAtIndex(0), is(equalTo(0)));
+    assertThat(linkedList.getAtIndex(0), is(equalTo(6)));
   }
 
   @Test(expected = NullPointerException.class)
@@ -216,7 +216,7 @@ public class MyLinkedListKTest {
 
   @Test
   public void testGetAtIndex_indexLast() {
-    assertThat(linkedList.getAtIndex(2), is(equalTo(6)));
+    assertThat(linkedList.getAtIndex(2), is(equalTo(0)));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -231,7 +231,7 @@ public class MyLinkedListKTest {
 
   @Test
   public void testGetAtStart_validList() {
-    assertThat(linkedList.getAtStart(), is(equalTo(0)));
+    assertThat(linkedList.getAtStart(), is(equalTo(6)));
   }
 
   @Test(expected = NullPointerException.class)
@@ -241,7 +241,7 @@ public class MyLinkedListKTest {
 
   @Test
   public void testGetAtEnd_validList() {
-    assertThat(linkedList.getAtEnd(), is(equalTo(6)));
+    assertThat(linkedList.getAtEnd(), is(equalTo(0)));
   }
 
   // - - - - - - - - - - - - - - - Contains tests - - - - - - - - - - - - - - -
