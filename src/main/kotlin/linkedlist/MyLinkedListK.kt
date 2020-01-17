@@ -227,7 +227,15 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
   // - - - - - - - - - - - - - - - Check - - - - - - - - - - - - - - -
 
   override fun contains(data: Int?): Boolean {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    var currentNode = headNode
+
+    while (currentNode != null) {
+      if (currentNode.data == data) return true
+      currentNode = currentNode.linkedNode
+    }
+    return false
   }
 
 
