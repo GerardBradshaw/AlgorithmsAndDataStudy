@@ -2,14 +2,12 @@ package linkedlist
 
 import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
-import java.util.*
-import java.util.function.Consumer
 
-class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
+class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
 
-  constructor(vararg ints: Int) {
-    for (i in ints) {
-      addAtStart(i)
+  constructor(vararg ints: Int) : this() {
+    for (index in (ints.size - 1) downTo 0) {
+      addAtStart(ints[index])
     }
   }
 

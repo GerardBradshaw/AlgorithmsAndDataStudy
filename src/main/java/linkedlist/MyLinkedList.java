@@ -12,9 +12,9 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   // ------- Constructor -------
 
-  public MyLinkedList(Integer... integers) {
-    for (Integer i : integers) {
-      this.addAtStart(i);
+  public MyLinkedList(Integer... ints) {
+    for (int i = (ints.length - 1); i >= 0; i--) {
+      addAtStart(ints[i]);
     }
   }
 
