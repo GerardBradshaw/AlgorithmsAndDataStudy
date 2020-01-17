@@ -73,7 +73,7 @@ class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
 
     } else {
       // Loop through this to find index. If found, add and return. Otherwise, add to last index or throw exception.
-      while (currentNode?.linkedNode != null && currentIndex < index) {
+      while (currentNode != null && currentIndex < index) {
         if (currentIndex == index - 1) {
           newNode.linkedNode = currentNode.linkedNode
           currentNode.linkedNode = newNode
@@ -93,7 +93,7 @@ class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
 
   override fun setAtStart(data: Int) {
     if (headNode == null) {
-      headNode = Node(data)
+      throw NullPointerException()
 
     } else {
       val newNode = Node(data)
@@ -103,26 +103,23 @@ class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
   }
 
   override fun setAtEnd(data: Int) {
-    val newNode = Node(data)
-
     // If the list is null, make newNode the headNode immediately.
     // Otherwise, iterate to the end of the list and add it there.
     if (headNode == null) {
-      headNode = newNode
+      throw NullPointerException()
 
     } else {
       var currentNode = headNode
 
       // Iterate to the end and link the last Node to newNode
       while (currentNode?.linkedNode != null) currentNode = currentNode.linkedNode
-      currentNode?.linkedNode = newNode
+      currentNode?.data = data
     }
   }
 
   override fun setAtIndex(data: Int, index: Int) {
     if (index < 0) throw IndexOutOfBoundsException()
-
-    val newNode = Node(data)
+    if (headNode == null) throw NullPointerException()
 
     // If index is 0, set headNode to newNode.
     // Otherwise, check if index is in range and add it there.
@@ -206,7 +203,7 @@ class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
       currentNode = currentNode.linkedNode
       currentIndex += 1
     }
-    throw NullPointerException()
+    throw IndexOutOfBoundsException()
   }
 
   override fun deleteItem(data: Int) {
