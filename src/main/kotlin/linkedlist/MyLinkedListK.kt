@@ -1,6 +1,7 @@
 package linkedlist
 
 import java.lang.IndexOutOfBoundsException
+import java.lang.NullPointerException
 
 class MyLinkedListK : GLinkedList<Int> {
 
@@ -83,7 +84,14 @@ class MyLinkedListK : GLinkedList<Int> {
   // - - - - - - - - - - - - - - - Set - - - - - - - - - - - - - - -
 
   override fun setAtStart(data: Int) {
-    addAtStart(data)
+    if (headNode == null) {
+      headNode = Node(data)
+
+    } else {
+      val newNode = Node(data)
+      newNode.linkedNode = headNode?.linkedNode
+      headNode = newNode
+    }
   }
 
   override fun setAtEnd(data: Int) {
@@ -111,7 +119,7 @@ class MyLinkedListK : GLinkedList<Int> {
     // If index is 0, set headNode to newNode.
     // Otherwise, check if index is in range and add it there.
     if (index == 0) {
-      headNode = newNode
+      setAtStart(data)
       return
 
     } else {
@@ -137,18 +145,63 @@ class MyLinkedListK : GLinkedList<Int> {
   // - - - - - - - - - - - - - - - Delete - - - - - - - - - - - - - - -
 
   override fun deleteAtStart() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    // If the list only contains headNode, delete it
+    // Otherwise, make headNode's linkedNode null and make the second Node the new head
+    if (headNode?.linkedNode == null) {
+      headNode = null
+
+    } else {
+      val newHeadNode = headNode?.linkedNode
+      headNode?.linkedNode = null
+      headNode = newHeadNode
+    }
   }
 
   override fun deleteAtEnd() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    // If the list only contains headNode, delete it
+    // Otherwise, iterate to the end of the list and make the second-to-last Node link null (unlink the last Node)
+    if (headNode?.linkedNode == null) {
+      headNode = null
+
+    } else {
+      var currentNode = headNode
+
+      // Iterate until currentNode is the second-to-last Node, then delete it's reference to the last Node
+      while (currentNode?.linkedNode?.linkedNode != null) currentNode = currentNode.linkedNode
+      currentNode?.linkedNode = null
+    }
   }
 
   override fun deleteAtIndex(index: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    if (index == 0) {
+      deleteAtStart()
+      return
+    }
+
+    var currentNode = headNode
+    var currentIndex = 0
+
+    while (currentNode?.linkedNode != null && currentIndex < index) {
+      if (currentIndex == index - 1) {
+        val newRef = currentNode.linkedNode?.linkedNode
+        currentNode.linkedNode?.linkedNode = null
+        currentNode.linkedNode = newRef
+        return
+      }
+
+      currentNode = currentNode.linkedNode
+      currentIndex += 1
+    }
+    throw NullPointerException()
   }
 
-  override fun deleteItem(data: Int?) {
+  override fun deleteItem(data: Int) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
