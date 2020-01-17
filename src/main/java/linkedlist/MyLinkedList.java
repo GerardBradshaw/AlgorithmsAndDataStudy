@@ -341,21 +341,21 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   public boolean equals(Object obj) {
     if (obj instanceof MyLinkedList) {
       // Cast the obj to MyLinkedList
-      MyLinkedList comparedList = (MyLinkedList) obj;
+      MyLinkedList other = (MyLinkedList) obj;
 
-      Iterator<Integer> comparedListIterator = comparedList.iterator();
-      Iterator<Integer> thisListIterator = this.iterator();
+      Iterator<Integer> otherIterator = other.iterator();
+      Iterator<Integer> thisIterator = this.iterator();
 
-      while (thisListIterator.hasNext() && comparedListIterator.hasNext()) {
+      while (thisIterator.hasNext() && otherIterator.hasNext()) {
         // If the next data in this and the compared are equal, continue iterating. Otherwise, return false.
-        if (thisListIterator.next().equals(comparedListIterator.next())) {
+        if (thisIterator.next().equals(otherIterator.next())) {
           continue;
         }
         return false;
       }
 
-      // Statement reached if this or comparedList cannot be iterated further and have been equal so far.
-      return (thisListIterator.hasNext() == comparedListIterator.hasNext());
+      // Statement reached if this or other cannot be iterated further and have been equal so far.
+      return (thisIterator.hasNext() == otherIterator.hasNext());
     }
     return false;
   }
