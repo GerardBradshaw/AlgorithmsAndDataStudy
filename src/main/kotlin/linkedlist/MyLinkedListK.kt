@@ -4,7 +4,6 @@ import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
 
 class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
-
   constructor(vararg ints: Int) : this() {
     for (index in (ints.size - 1) downTo 0) {
       addAtStart(ints[index])
@@ -211,6 +210,7 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
 
     if (currentNode?.data == data) {
       deleteAtStart()
+      return
     }
 
     while (currentNode?.linkedNode != null) {
@@ -229,15 +229,31 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
   // - - - - - - - - - - - - - - - Get - - - - - - - - - - - - - - -
 
   override fun getAtStart(): Int {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    val tempNode = headNode;
+    if (tempNode == null) throw NullPointerException() else return tempNode.data
   }
 
   override fun getAtEnd(): Int {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    var currentNode = headNode
+    while (currentNode?.linkedNode != null) currentNode = currentNode.linkedNode
+    if (currentNode?.data != null) return currentNode.data else throw NullPointerException()
   }
 
   override fun getAtIndex(index: Int): Int {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+    if (index < 0) throw IndexOutOfBoundsException()
+
+    var currentNode = headNode
+    var currentIndex = 0
+
+    while (currentNode != null && currentIndex <= index) {
+      if (currentIndex == index) return currentNode.data
+      currentNode = currentNode.linkedNode
+      currentIndex += 1
+    }
+    throw IndexOutOfBoundsException()
   }
 
 
