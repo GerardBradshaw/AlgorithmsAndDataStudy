@@ -3,44 +3,26 @@ package linkedlist;
 public interface GLinkedList<T> {
 
   // ------- Add
-
+  void addAtStart(T data);
   void addAtEnd(T data);
-
   void addAtIndex(T data, int index);
 
-  void addAtStart(T data);
-
-
   // ------- Set
-
+  void setAtStart(T data);
   void setAtEnd(T data);
-
   void setAtIndex(T data, int index);
 
-  void setAtStart(T data);
-
-
   // ------- Delete
-
+  void deleteAtStart();
+  void deleteAtEnd();
+  void deleteAtIndex(int index);
   void deleteItem(T data);
 
-  void deleteAtIndex(int index);
-
-  void deleteAtEnd();
-
-  void deleteAtStart();
-
-
-  /// ------- Get
-
-  T getAtIndex(int position);
-
-  T getAtEnd();
-
+  // ------- Get
   T getAtStart();
-
+  T getAtEnd();
+  T getAtIndex(int index);
 
   // ------- Check
-
   boolean contains(T data);
 }
