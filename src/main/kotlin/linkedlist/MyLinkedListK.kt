@@ -205,7 +205,24 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
   }
 
   override fun deleteItem(data: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    if (headNode == null) throw NullPointerException()
+
+    var currentNode = headNode
+
+    if (currentNode?.data == data) {
+      deleteAtStart()
+    }
+
+    while (currentNode?.linkedNode != null) {
+      if (currentNode.linkedNode?.data == data) {
+        val link = currentNode.linkedNode?.linkedNode
+        currentNode.linkedNode?.linkedNode = null
+        currentNode.linkedNode = link
+        return
+      }
+      currentNode = currentNode.linkedNode
+    }
+    throw NullPointerException()
   }
 
 
