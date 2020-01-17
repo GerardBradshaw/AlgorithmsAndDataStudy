@@ -31,7 +31,8 @@ class MyLinkedListK : GLinkedList<Int> {
   override fun addAtEnd(data: Int) {
     val newNode = Node(data)
 
-    // If this is empty, make newNode the headNode immediately. Otherwise, copy old headNode link to newNode and add.
+    // If the list is null, make newNode the headNode immediately.
+    // Otherwise, iterate to the end of the list and add it there.
     if (headNode == null) {
       headNode = newNode
 
@@ -48,7 +49,6 @@ class MyLinkedListK : GLinkedList<Int> {
   }
 
   override fun addAtIndex(data: Int, index: Int) {
-    // If index is less than zero, throw immediate exception
     if (index < 0) throw IndexOutOfBoundsException()
 
     // Set up for iteration
@@ -56,7 +56,8 @@ class MyLinkedListK : GLinkedList<Int> {
     var currentNode = headNode
     var currentIndex = 0
 
-    // If index is 0, add to start. Otherwise if valid index, add it there. Otherwise, throw exception.
+    // If index is 0, add newNode to start.
+    // Otherwise, check if the index exists in the list but is not the last index, and add it there.
     if (index == 0) {
       addAtStart(data)
       return
@@ -74,22 +75,62 @@ class MyLinkedListK : GLinkedList<Int> {
       }
     }
 
+    // If the index is the last position, add it there. Otherwise, throw an exception.
     if (currentIndex == index) currentNode?.linkedNode = newNode else throw IndexOutOfBoundsException()
   }
 
 
   // - - - - - - - - - - - - - - - Set - - - - - - - - - - - - - - -
 
-  override fun setAtStart(data: Int?) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun setAtStart(data: Int) {
+    addAtStart(data)
   }
 
-  override fun setAtEnd(data: Int?) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun setAtEnd(data: Int) {
+    val newNode = Node(data)
+
+    // If the list is null, make newNode the headNode immediately.
+    // Otherwise, iterate to the end of the list and add it there.
+    if (headNode == null) {
+      headNode = newNode
+
+    } else {
+      var currentNode = headNode
+
+      // Iterate to the end and link the last Node to newNode
+      while (currentNode?.linkedNode != null) currentNode = currentNode.linkedNode
+      currentNode?.linkedNode = newNode
+    }
   }
 
-  override fun setAtIndex(data: Int?, index: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun setAtIndex(data: Int, index: Int) {
+    if (index < 0) throw IndexOutOfBoundsException()
+
+    val newNode = Node(data)
+
+    // If index is 0, set headNode to newNode.
+    // Otherwise, check if index is in range and add it there.
+    if (index == 0) {
+      headNode = newNode
+      return
+
+    } else {
+      var currentNode = headNode
+      var currentIndex = 0
+
+      while (currentNode != null && currentIndex <= index) {
+        if (currentIndex == index) {
+          currentNode.data = data
+          return
+        }
+
+        currentNode = currentNode.linkedNode
+        currentIndex += 1
+      }
+    }
+
+    // Throw invalid index exception
+    throw IndexOutOfBoundsException()
   }
 
 
