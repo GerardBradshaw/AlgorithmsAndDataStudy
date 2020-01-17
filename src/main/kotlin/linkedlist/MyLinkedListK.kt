@@ -2,8 +2,16 @@ package linkedlist
 
 import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
+import java.util.*
+import java.util.function.Consumer
 
-class MyLinkedListK : GLinkedList<Int> {
+class MyLinkedListK : GLinkedList<Int>, Iterable<Int> {
+
+  constructor(vararg ints: Int) {
+    for (i in ints) {
+      addAtStart(i)
+    }
+  }
 
   // - - - - - - - - - - - - - - - Properties/Fields - - - - - - - - - - - - - - -
 
@@ -228,6 +236,57 @@ class MyLinkedListK : GLinkedList<Int> {
   }
 
 
+  // - - - - - - - - - - - - - - - Object callbacks - - - - - - - - - - - - - - -
+
+  override fun equals(other: Any?): Boolean {
+    if (other is MyLinkedListK) {
+      val thisIterator = this.iterator()
+      val otherIterator = other.iterator()
+
+      while (thisIterator.hasNext() && otherIterator.hasNext()) {
+        if (thisIterator.next() == otherIterator.next()) continue else return false
+      }
+
+      return (!thisIterator.hasNext() == !otherIterator.hasNext())
+    }
+    return false
+  }
+
+  override fun toString(): String {
+    if (headNode != null) {
+      return headNode.toString()
+    }
+    return "empty"
+  }
+
+
+  // - - - - - - - - - - - - - - - Iterable callbacks - - - - - - - - - - - - - - -
+
+  override fun iterator(): Iterator<Int> {
+    return object : Iterator<Int> {
+
+      var currentNode = headNode;
+
+      override fun hasNext(): Boolean {
+        return currentNode != null
+      }
+
+      override fun next(): Int {
+        val returnInt: Int? = currentNode?.data
+
+        if (returnInt == null) {
+          throw NullPointerException()
+
+        } else {
+          currentNode = currentNode?.linkedNode
+          return returnInt
+        }
+      }
+    }
+  }
+
+  // - - - - - - - - - - - - - - - Node data class - - - - - - - - - - - - - - -
+
   private data class Node(var data: Int) {
     var linkedNode: Node? = null
 
@@ -235,5 +294,6 @@ class MyLinkedListK : GLinkedList<Int> {
       return "[" + data + "]" + " -> " + if (linkedNode == null) "null" else linkedNode.toString()
     }
   }
+
 
 }
