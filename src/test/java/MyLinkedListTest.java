@@ -23,7 +23,7 @@ public class MyLinkedListTest {
   // - - - - - - - - - - - - - - - Add tests - - - - - - - - - - - - - - -
 
   @Test
-  public void testAddAtEnd_negativeValue() {
+  public void testAddLast_negativeValue() {
     linkedList.addLast(-4);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 0, -4))));
   }
@@ -35,19 +35,19 @@ public class MyLinkedListTest {
   }
 
   @Test
-  public void testAddAtIndex_positiveValueIndexAtEnd() {
+  public void testAddAtIndex_positiveValueIndexLast() {
     linkedList.addAtIndex(99, 3);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 0, 99))));
   }
 
   @Test
-  public void testAddAtStart_positiveValue() {
+  public void testAddFirst_positiveValue() {
     linkedList.addFirst(5);
     assertThat(linkedList, is(equalTo(new MyLinkedList(5, 6, 7, 0))));
   }
 
   @Test
-  public void testAddAtStart_positiveValueNullList() {
+  public void testAddFirst_positiveValueNullList() {
     nullList.addFirst(5);
     assertThat(nullList, is(equalTo(new MyLinkedList(5))));
   }
@@ -56,35 +56,35 @@ public class MyLinkedListTest {
   // - - - - - - - - - - - - - - - Set tests - - - - - - - - - - - - - - -
 
   @Test
-  public void testSetAtStart_validList() {
+  public void testSetFirst_validList() {
     linkedList.setFirst(9);
     assertThat(linkedList, is(equalTo(new MyLinkedList(9, 7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testSetAtStart_nullList() {
+  public void testSetFirst_nullList() {
     nullList.setFirst(9);
   }
 
   @Test
-  public void testSetAtEnd_validList() {
+  public void testSetLast_validList() {
     linkedList.setLast(9);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 9))));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testSetAtEnd_nullList() {
+  public void testSetLast_nullList() {
     nullList.setLast(9);
   }
 
   @Test
-  public void testSetAtIndex_indexStart() {
+  public void testSetAtIndex_indexFirst() {
     linkedList.setAtIndex(9, 0);
     assertThat(linkedList, is(equalTo(new MyLinkedList(9, 7, 0))));
   }
 
   @Test
-  public void testSetAtIndex_indexEnd() {
+  public void testSetAtIndex_indexLast() {
     linkedList.setAtIndex(9, 2);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 9))));
   }
@@ -106,88 +106,88 @@ public class MyLinkedListTest {
   }
 
 
-  // - - - - - - - - - - - - - - - Delete tests - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Remove tests - - - - - - - - - - - - - - -
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteItem_nullList() {
+  public void testRemoveItem_nullList() {
     nullList.remove(6);
   }
 
   @Test
-  public void testDeleteItem_firstItem() {
+  public void testRemoveItem_firstItem() {
     linkedList.remove(6);
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
-  public void testDeleteItem_middleItem() {
+  public void testRemoveItem_middleItem() {
     linkedList.remove(7);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
-  public void testDeleteItem_lastItem() {
+  public void testRemoveItem_lastItem() {
     linkedList.remove(0);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteItem_invalidItem() {
+  public void testRemoveItem_invalidItem() {
     linkedList.remove(5);
   }
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteAtIndex_indexRandomNullList() {
+  public void testRemoveAtIndex_indexRandomNullList() {
     nullList.removeAtIndex(3);
   }
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteAtIndex_indexZeroNullList() {
+  public void testRemoveAtIndex_indexZeroNullList() {
     nullList.removeAtIndex(0);
   }
 
   @Test
-  public void testDeleteAtIndex_indexZero() {
+  public void testRemoveAtIndex_indexZero() {
     linkedList.removeAtIndex(0);
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
-  public void testDeleteAtIndex_indexInMiddle() {
+  public void testRemoveAtIndex_indexInMiddle() {
     linkedList.removeAtIndex(1);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
-  public void testDeleteAtIndex_indexLast() {
+  public void testRemoveAtIndex_indexLast() {
     linkedList.removeAtIndex(2);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
-  public void testDeleteAtIndex_indexOutOfBounds() {
+  public void testRemoveAtIndex_indexOutOfBounds() {
     linkedList.removeAtIndex(3);
   }
 
   @Test
-  public void testDeleteAtEnd_validList() {
+  public void testRemoveLast_validList() {
     linkedList.removeLast();
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteAtEnd_nullList() {
+  public void testRemoveLast_nullList() {
     nullList.removeLast();
   }
 
   @Test
-  public void testDeleteAtStart_validList() {
+  public void testRemoveFirst_validList() {
     linkedList.removeFirst();
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testDeleteAtStart_nullList() {
+  public void testRemoveFirst_nullList() {
     nullList.removeFirst();
   }
 
@@ -225,22 +225,22 @@ public class MyLinkedListTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void testGetAtStart_nullList() {
+  public void testGetFirst_nullList() {
     int result = nullList.getFirst();
   }
 
   @Test
-  public void testGetAtStart_validList() {
+  public void testGetFirst_validList() {
     assertThat(linkedList.getFirst(), is(equalTo(6)));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testGetAtEnd_nullList() {
+  public void testGetLast_nullList() {
     int result = nullList.getLast();
   }
 
   @Test
-  public void testGetAtEnd_validList() {
+  public void testGetLast_validList() {
     assertThat(linkedList.getLast(), is(equalTo(0)));
   }
 
