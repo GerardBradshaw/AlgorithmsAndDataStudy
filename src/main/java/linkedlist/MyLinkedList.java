@@ -139,7 +139,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
     boolean dataDeleted = false;
 
-    if (headNode.getData() == data) {
+    if (headNode.getData().equals(data)) {
       removeFirst();
       dataDeleted = true;
     }
@@ -147,7 +147,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     Node currentNode = headNode;
 
     do {
-      if (currentNode.getNext().getData() == data) {
+      if (currentNode.getNext().getData().equals(data)) {
         // Get the Node to delete (the next one) and it's reference (the one after).
         Node nodeToDelete = currentNode.getNext();
         Node nodeToDeleteLinkedNode = nodeToDelete.getNext();
@@ -295,7 +295,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     Node currentNode = headNode;
 
     while (currentNode != null) {
-      if (currentNode.getData() == data) {
+      if (currentNode.getData().equals(data)) {
         return true;
       }
 
