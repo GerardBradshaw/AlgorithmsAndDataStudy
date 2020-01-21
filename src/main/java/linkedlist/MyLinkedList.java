@@ -401,46 +401,10 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
 
-  private static class Node extends GLinkedListNode<Integer> {
-
-    // -------- Constructor --------
+  private static class Node extends GLinkedListNode<Node, Integer> {
 
     public Node(Integer data) {
       super(data);
     }
-
-    // -------- Getters and Setters --------
-
-    public Integer getData() {
-      return super.getData();
-    }
-
-
-    public void setData(Integer data) {
-      super.setData(data);
-    }
-
-    public Node getNext() {
-      return (Node) super.getNext();
-    }
-
-    public void setNext(Node next) {
-      super.setNext(next);
-    }
-
-
-    // -------- Helpers --------
-
-    public void deleteNode() {
-      super.deleteNode();
-    }
-
-    // -------- Object callbacks --------
-
-    @Override
-    public String toString() {
-      return super.toString();
-    }
-
   }
 }
