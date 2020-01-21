@@ -24,7 +24,7 @@ public class MyLinkedListTest {
 
   @Test
   public void testAddAtEnd_negativeValue() {
-    linkedList.addAtEnd(-4);
+    linkedList.addLast(-4);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 0, -4))));
   }
 
@@ -42,13 +42,13 @@ public class MyLinkedListTest {
 
   @Test
   public void testAddAtStart_positiveValue() {
-    linkedList.addAtStart(5);
+    linkedList.addFirst(5);
     assertThat(linkedList, is(equalTo(new MyLinkedList(5, 6, 7, 0))));
   }
 
   @Test
   public void testAddAtStart_positiveValueNullList() {
-    nullList.addAtStart(5);
+    nullList.addFirst(5);
     assertThat(nullList, is(equalTo(new MyLinkedList(5))));
   }
 
@@ -57,24 +57,24 @@ public class MyLinkedListTest {
 
   @Test
   public void testSetAtStart_validList() {
-    linkedList.setAtStart(9);
+    linkedList.setFirst(9);
     assertThat(linkedList, is(equalTo(new MyLinkedList(9, 7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
   public void testSetAtStart_nullList() {
-    nullList.setAtStart(9);
+    nullList.setFirst(9);
   }
 
   @Test
   public void testSetAtEnd_validList() {
-    linkedList.setAtEnd(9);
+    linkedList.setLast(9);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 9))));
   }
 
   @Test(expected = NullPointerException.class)
   public void testSetAtEnd_nullList() {
-    nullList.setAtEnd(9);
+    nullList.setLast(9);
   }
 
   @Test
@@ -110,85 +110,85 @@ public class MyLinkedListTest {
 
   @Test(expected = NullPointerException.class)
   public void testDeleteItem_nullList() {
-    nullList.deleteItem(6);
+    nullList.remove(6);
   }
 
   @Test
   public void testDeleteItem_firstItem() {
-    linkedList.deleteItem(6);
+    linkedList.remove(6);
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
   public void testDeleteItem_middleItem() {
-    linkedList.deleteItem(7);
+    linkedList.remove(7);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
   public void testDeleteItem_lastItem() {
-    linkedList.deleteItem(0);
+    linkedList.remove(0);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
   public void testDeleteItem_invalidItem() {
-    linkedList.deleteItem(5);
+    linkedList.remove(5);
   }
 
   @Test(expected = NullPointerException.class)
   public void testDeleteAtIndex_indexRandomNullList() {
-    nullList.deleteAtIndex(3);
+    nullList.removeAtIndex(3);
   }
 
   @Test(expected = NullPointerException.class)
   public void testDeleteAtIndex_indexZeroNullList() {
-    nullList.deleteAtIndex(0);
+    nullList.removeAtIndex(0);
   }
 
   @Test
   public void testDeleteAtIndex_indexZero() {
-    linkedList.deleteAtIndex(0);
+    linkedList.removeAtIndex(0);
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
   public void testDeleteAtIndex_indexInMiddle() {
-    linkedList.deleteAtIndex(1);
+    linkedList.removeAtIndex(1);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
   public void testDeleteAtIndex_indexLast() {
-    linkedList.deleteAtIndex(2);
+    linkedList.removeAtIndex(2);
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
   public void testDeleteAtIndex_indexOutOfBounds() {
-    linkedList.deleteAtIndex(3);
+    linkedList.removeAtIndex(3);
   }
 
   @Test
   public void testDeleteAtEnd_validList() {
-    linkedList.deleteAtEnd();
+    linkedList.removeLast();
     assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
   public void testDeleteAtEnd_nullList() {
-    nullList.deleteAtEnd();
+    nullList.removeLast();
   }
 
   @Test
   public void testDeleteAtStart_validList() {
-    linkedList.deleteAtStart();
+    linkedList.removeFirst();
     assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
   public void testDeleteAtStart_nullList() {
-    nullList.deleteAtStart();
+    nullList.removeFirst();
   }
 
 
@@ -226,22 +226,22 @@ public class MyLinkedListTest {
 
   @Test(expected = NullPointerException.class)
   public void testGetAtStart_nullList() {
-    int result = nullList.getAtStart();
+    int result = nullList.getFirst();
   }
 
   @Test
   public void testGetAtStart_validList() {
-    assertThat(linkedList.getAtStart(), is(equalTo(6)));
+    assertThat(linkedList.getFirst(), is(equalTo(6)));
   }
 
   @Test(expected = NullPointerException.class)
   public void testGetAtEnd_nullList() {
-    int result = nullList.getAtEnd();
+    int result = nullList.getLast();
   }
 
   @Test
   public void testGetAtEnd_validList() {
-    assertThat(linkedList.getAtEnd(), is(equalTo(0)));
+    assertThat(linkedList.getLast(), is(equalTo(0)));
   }
 
   // - - - - - - - - - - - - - - - Contains tests - - - - - - - - - - - - - - -

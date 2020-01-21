@@ -14,14 +14,14 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   public MyLinkedList(Integer... ints) {
     for (int i = (ints.length - 1); i >= 0; i--) {
-      addAtStart(ints[i]);
+      addFirst(ints[i]);
     }
   }
 
 
   // ------- Add -------
 
-  public void addAtEnd(Integer data) {
+  public void addLast(Integer data) {
     Node newNode = new Node(data);
 
     // If list is null, make the headNode the newNode. Otherwise, find the end and add the new node
@@ -84,14 +84,14 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     }
   }
 
-  public void addAtStart(Integer data) {
+  public void addFirst(Integer data) {
     addAtIndex(data, 0);
   }
 
 
   // ------- Set -------
 
-  public void setAtEnd(Integer data) {
+  public void setLast(Integer data) {
     nullListCheck();
 
     Node currentNode = headNode;
@@ -107,7 +107,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     nullListCheck();
 
     if (index == 0) {
-      setAtStart(data);
+      setFirst(data);
       return;
     }
 
@@ -126,7 +126,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     throw new IndexOutOfBoundsException();
   }
 
-  public void setAtStart(Integer data) {
+  public void setFirst(Integer data) {
     nullListCheck();
     headNode.setData(data);
   }
@@ -134,13 +134,13 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   // ------- Delete -------
 
-  public void deleteItem(Integer data) {
+  public void remove(Integer data) {
     nullListCheck();
 
     boolean dataDeleted = false;
 
     if (headNode.getData() == data) {
-      deleteAtStart();
+      removeFirst();
       dataDeleted = true;
     }
 
@@ -170,12 +170,12 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     }
   }
 
-  public void deleteAtIndex(int index) {
+  public void removeAtIndex(int index) {
     nullListCheck();
 
     // Remove headNode when index is zero, otherwise remove the referenced Node
     if (index == 0) {
-      deleteAtStart();
+      removeFirst();
 
     } else {
       Node currentNode = headNode;
@@ -203,7 +203,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     }
   }
 
-  public void deleteAtEnd() {
+  public void removeLast() {
     nullListCheck();
 
     // If the list contains one element, delete the list.
@@ -223,7 +223,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     currentNode.setLinkedNode(null);
   }
 
-  public void deleteAtStart() {
+  public void removeFirst() {
     nullListCheck();
 
     // Make the headNode the second Node if one exists, otherwise make the headNode null.
@@ -270,11 +270,11 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     throw new IndexOutOfBoundsException();
   }
 
-  public Integer getAtStart() {
+  public Integer getFirst() {
     return headNode.getData();
   }
 
-  public Integer getAtEnd() {
+  public Integer getLast() {
     nullListCheck();
 
     Node currentNode = headNode;

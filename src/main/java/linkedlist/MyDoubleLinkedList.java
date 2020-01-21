@@ -14,12 +14,12 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterator<T> {
   // TODO - - - - - - - - - - - - - - - Add - - - - - - - - - - - - - - -
 
   @Override
-  public void addAtStart(T data) {
+  public void addFirst(T data) {
 
   }
 
   @Override
-  public void addAtEnd(T data) {
+  public void addLast(T data) {
 
   }
 
@@ -32,12 +32,12 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterator<T> {
   // TODO - - - - - - - - - - - - - - - Set - - - - - - - - - - - - - - -
 
   @Override
-  public void setAtStart(T data) {
+  public void setFirst(T data) {
 
   }
 
   @Override
-  public void setAtEnd(T data) {
+  public void setLast(T data) {
 
   }
 
@@ -50,22 +50,22 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterator<T> {
   // TODO - - - - - - - - - - - - - - - Delete - - - - - - - - - - - - - - -
 
   @Override
-  public void deleteAtStart() {
+  public void removeFirst() {
 
   }
 
   @Override
-  public void deleteAtEnd() {
+  public void removeLast() {
 
   }
 
   @Override
-  public void deleteAtIndex(int index) {
+  public void removeAtIndex(int index) {
 
   }
 
   @Override
-  public void deleteItem(T data) {
+  public void remove(T data) {
 
   }
 
@@ -73,12 +73,12 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterator<T> {
   // TODO - - - - - - - - - - - - - - - Get - - - - - - - - - - - - - - -
 
   @Override
-  public T getAtStart() {
+  public T getFirst() {
     return null;
   }
 
   @Override
-  public T getAtEnd() {
+  public T getLast() {
     return null;
   }
 

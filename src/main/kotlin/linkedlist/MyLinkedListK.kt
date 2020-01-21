@@ -146,7 +146,7 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
 
   // - - - - - - - - - - - - - - - Delete - - - - - - - - - - - - - - -
 
-  override fun deleteAtStart() {
+  override fun removeFirst() {
     if (headNode == null) throw NullPointerException()
 
     // If the list only contains headNode, delete it
@@ -161,7 +161,7 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
     }
   }
 
-  override fun deleteAtEnd() {
+  override fun removeLast() {
     if (headNode == null) throw NullPointerException()
 
     // If the list only contains headNode, delete it
@@ -178,11 +178,11 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
     }
   }
 
-  override fun deleteAtIndex(index: Int) {
+  override fun removeAtIndex(index: Int) {
     if (headNode == null) throw NullPointerException()
 
     if (index == 0) {
-      deleteAtStart()
+      removeFirst()
       return
     }
 
@@ -209,7 +209,7 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
     var currentNode = headNode
 
     if (currentNode?.data == data) {
-      deleteAtStart()
+      removeFirst()
       return
     }
 
@@ -228,12 +228,12 @@ class MyLinkedListK() : GLinkedList<Int>, Iterable<Int> {
 
   // - - - - - - - - - - - - - - - Get - - - - - - - - - - - - - - -
 
-  override fun getAtStart(): Int {
+  override fun getFirst(): Int {
     val tempNode = headNode;
     if (tempNode == null) throw NullPointerException() else return tempNode.data
   }
 
-  override fun getAtEnd(): Int {
+  override fun getLast(): Int {
     if (headNode == null) throw NullPointerException()
 
     var currentNode = headNode
