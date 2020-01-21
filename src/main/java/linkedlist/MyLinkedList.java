@@ -32,10 +32,10 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
       Node currentNode  = headNode;
 
       // Loop to the end of the current list and link the last node to newNode
-      while (currentNode.getLinkedNode() != null) {
-        currentNode = currentNode.getLinkedNode();
+      while (currentNode.getNext() != null) {
+        currentNode = currentNode.getNext();
       }
-      currentNode.setLinkedNode(newNode);
+      currentNode.setNext(newNode);
     }
   }
 
@@ -52,10 +52,10 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
       // Copy info from headNode into new Node for second index
       Node newSecondNode = new Node(headNode.getData());
-      newSecondNode.setLinkedNode(headNode.getLinkedNode());
+      newSecondNode.setNext(headNode.getNext());
 
       // Create a new Node from the input data and make it the first Node
-      newNode.setLinkedNode(newSecondNode);
+      newNode.setNext(newSecondNode);
       headNode = newNode;
 
     } else {
@@ -63,20 +63,20 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
       int positionCounter = 0;
 
       // Iterate until the end of the list
-      while (currentNode.getLinkedNode() != null) {
+      while (currentNode.getNext() != null) {
         if (positionCounter == index - 1) {
-          newNode.setLinkedNode(currentNode.getLinkedNode());
-          currentNode.setLinkedNode(newNode);
+          newNode.setNext(currentNode.getNext());
+          currentNode.setNext(newNode);
           return;
         }
 
         positionCounter += 1;
-        currentNode = currentNode.getLinkedNode();
+        currentNode = currentNode.getNext();
       }
 
       // Index is either the last (currently null) position, or out of bounds.
       if (positionCounter == index - 1) {
-        currentNode.setLinkedNode(newNode);
+        currentNode.setNext(newNode);
 
       } else {
         throw new IndexOutOfBoundsException();
@@ -96,8 +96,8 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
     Node currentNode = headNode;
 
-    while (currentNode.getLinkedNode() != null) {
-      currentNode = currentNode.getLinkedNode();
+    while (currentNode.getNext() != null) {
+      currentNode = currentNode.getNext();
     }
 
     currentNode.setData(data);
@@ -119,7 +119,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
         currentNode.setData(data);
         return;
       }
-      currentNode = currentNode.getLinkedNode();
+      currentNode = currentNode.getNext();
       currentIndex += 1;
     }
 
@@ -147,23 +147,23 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     Node currentNode = headNode;
 
     do {
-      if (currentNode.getLinkedNode().getData() == data) {
+      if (currentNode.getNext().getData() == data) {
         // Get the Node to delete (the next one) and it's reference (the one after).
-        Node nodeToDelete = currentNode.getLinkedNode();
-        Node nodeToDeleteLinkedNode = nodeToDelete.getLinkedNode();
+        Node nodeToDelete = currentNode.getNext();
+        Node nodeToDeleteLinkedNode = nodeToDelete.getNext();
 
         // Remove link from nodeToDelete
-        nodeToDelete.setLinkedNode(null);
+        nodeToDelete.setNext(null);
 
         // Fix the chain
-        currentNode.setLinkedNode(nodeToDeleteLinkedNode);
+        currentNode.setNext(nodeToDeleteLinkedNode);
         dataDeleted = true;
       }
 
-      if (currentNode.getLinkedNode() != null) {
-        currentNode = currentNode.getLinkedNode();
+      if (currentNode.getNext() != null) {
+        currentNode = currentNode.getNext();
       }
-    } while (currentNode.getLinkedNode() != null);
+    } while (currentNode.getNext() != null);
 
     if (!dataDeleted) {
       throw new NullPointerException();
@@ -181,21 +181,21 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
       Node currentNode = headNode;
       int currentIndex = 0;
 
-      while (currentNode.getLinkedNode() != null && currentIndex < index) {
+      while (currentNode.getNext() != null && currentIndex < index) {
         if (currentIndex == index - 1) {
           // Get the Node to remove (the next Node) and it's reference
-          Node nodeToDelete = currentNode.getLinkedNode();
-          Node nodeToDeleteLinkedNode = nodeToDelete.getLinkedNode();
+          Node nodeToDelete = currentNode.getNext();
+          Node nodeToDeleteLinkedNode = nodeToDelete.getNext();
 
           // Remove the link to any other Node from the Node to remove
-          nodeToDelete.setLinkedNode(null);
+          nodeToDelete.setNext(null);
 
           // Set the removed link to the currentNode
-          currentNode.setLinkedNode(nodeToDeleteLinkedNode);
+          currentNode.setNext(nodeToDeleteLinkedNode);
           return;
         }
 
-        currentNode = currentNode.getLinkedNode();
+        currentNode = currentNode.getNext();
         currentIndex += 1;
       }
 
@@ -207,7 +207,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     nullListCheck();
 
     // If the list contains one element, delete the list.
-    if (headNode.getLinkedNode() == null) {
+    if (headNode.getNext() == null) {
       headNode = null;
       return;
     }
@@ -215,20 +215,20 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     Node currentNode = headNode;
 
     // Iterate to find the second-to-last element
-    while (currentNode.getLinkedNode().getLinkedNode() != null) {
-      currentNode = currentNode.getLinkedNode();
+    while (currentNode.getNext().getNext() != null) {
+      currentNode = currentNode.getNext();
     }
 
     // Remove the link between the second-to-last element and the last element.
-    currentNode.setLinkedNode(null);
+    currentNode.setNext(null);
   }
 
   public void removeFirst() {
     nullListCheck();
 
     // Make the headNode the second Node if one exists, otherwise make the headNode null.
-    if (headNode.getLinkedNode() != null) {
-      headNode = headNode.getLinkedNode();
+    if (headNode.getNext() != null) {
+      headNode = headNode.getNext();
 
     } else {
       headNode = null;
@@ -242,8 +242,8 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
     Node currentNode = headNode;
 
-    while (currentNode.getLinkedNode() != null) {
-      Node nextNode = currentNode.getLinkedNode();
+    while (currentNode.getNext() != null) {
+      Node nextNode = currentNode.getNext();
       currentNode.deleteNode();
       currentNode = nextNode;
     }
@@ -263,7 +263,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
         return currentNode.getData();
       }
 
-      currentNode = currentNode.getLinkedNode();
+      currentNode = currentNode.getNext();
       currentIndex += 1;
     }
 
@@ -279,8 +279,8 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
     Node currentNode = headNode;
 
-    while (currentNode.getLinkedNode() != null) {
-      currentNode = currentNode.getLinkedNode();
+    while (currentNode.getNext() != null) {
+      currentNode = currentNode.getNext();
     }
 
     return currentNode.getData();
@@ -299,7 +299,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
         return true;
       }
 
-      currentNode = currentNode.getLinkedNode();
+      currentNode = currentNode.getNext();
     }
 
     return false;
@@ -381,7 +381,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
         Integer currentData = currentNode.getData();
 
         // Move to next
-        currentNode = currentNode.getLinkedNode();
+        currentNode = currentNode.getNext();
 
         // Return the value
         return currentData;
@@ -401,49 +401,45 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
 
-  private static class Node {
+  private static class Node extends GLinkedListNode<Integer> {
 
-    // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
-
-    private Integer data;
-    private Node linkedNode;
-
-
-    // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
-
-    public void deleteNode() {
-      this.setLinkedNode(null);
-    }
-
-
-    // - - - - - - - - - - - - - - - Getters and Setters - - - - - - - - - - - - - - -
+    // -------- Constructor --------
 
     public Node(Integer data) {
-      this.data = data;
+      super(data);
     }
 
-    public int getData() {
-      return data;
+    // -------- Getters and Setters --------
+
+    public Integer getData() {
+      return super.getData();
     }
+
 
     public void setData(Integer data) {
-      this.data = data;
+      super.setData(data);
     }
 
-    public Node getLinkedNode() {
-      return linkedNode;
+    public Node getNext() {
+      return (Node) super.getNext();
     }
 
-    public void setLinkedNode(Node linkedNode) {
-      this.linkedNode = linkedNode;
+    public void setNext(Node next) {
+      super.setNext(next);
     }
 
 
-    // - - - - - - - - - - - - - - - Object callbacks - - - - - - - - - - - - - - -
+    // -------- Helpers --------
+
+    public void deleteNode() {
+      super.deleteNode();
+    }
+
+    // -------- Object callbacks --------
 
     @Override
     public String toString() {
-      return "[" + data + "] -> " + (linkedNode == null ? "null" : linkedNode.toString());
+      return super.toString();
     }
 
   }
