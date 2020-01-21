@@ -1,10 +1,10 @@
 package linkedlist;
 
-public abstract class GLinkedListNode<T> {
+public abstract class GLinkedListNode<N extends GLinkedListNode<N, T>, T> {
 
   // ------- Member variables
   private T data;
-  private GLinkedListNode<T> next;
+  private N next;
 
   // ------- Constructor
   public GLinkedListNode(T data) {
@@ -19,10 +19,10 @@ public abstract class GLinkedListNode<T> {
   public void setData(T data) {
     this.data = data;
   }
-  public GLinkedListNode<T> getNext() {
+  public N getNext() {
     return next;
   }
-  public void setNext(GLinkedListNode<T> next) {
+  public void setNext(N next) {
     this.next = next;
   }
 
