@@ -310,7 +310,12 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
 
   @Override
   public void deleteNodeNotLast(Node node) {
+    if (node.getNext() == null) {
+      throw new IllegalArgumentException();
+    }
 
+    node.setData(node.getNext().getData());
+    node.setNext(node.getNext().getNext());
   }
 
   @Override
