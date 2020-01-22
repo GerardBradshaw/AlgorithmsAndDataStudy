@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
+public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, MyLinkedListExtras {
 
   private Node head;
 
@@ -308,8 +308,80 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     }
   }
 
+  @Override
+  public void deleteNodeNotLast(Node node) {
 
+  }
 
+  @Override
+  public void addAfterNode(Node node, int data) {
+
+  }
+
+  @Override
+  public MyLinkedList quickSort() {
+    return null;
+  }
+
+  @Override
+  public void addInOrder() {
+
+  }
+
+  @Override
+  public MyLinkedList mergeWithSorted(MyLinkedList sortedList) {
+    return null;
+  }
+
+  @Override
+  public void removeNthFromEnd(int n) {
+
+  }
+
+  @Override
+  public int getMiddle() {
+    return 0;
+  }
+
+  @Override
+  public void detectLoopWithDictionary() {
+
+  }
+
+  @Override
+  public void detectAndCountLoopWithPointers() {
+
+  }
+
+  @Override
+  public int size() {
+    return 0;
+  }
+
+  @Override
+  public boolean detectPalindrome() {
+    return false;
+  }
+
+  @Override
+  public void swapNode(int index1, int index2) {
+
+  }
+
+  @Override
+  public MyLinkedList pairwiseSwap() {
+    return null;
+  }
+
+  @Override
+  public MyLinkedList intersectionOfLinkedLists(MyLinkedList sortedList) {
+    return null;
+  }
+
+  @Override
+  public MyLinkedList reverseList() {
+    return null;
+  }
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 

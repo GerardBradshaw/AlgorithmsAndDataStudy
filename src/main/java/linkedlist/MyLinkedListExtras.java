@@ -2,7 +2,7 @@ package linkedlist;
 
 public interface MyLinkedListExtras {
 
-  void deleteNode(MyLinkedList.Node node);
+  void deleteNodeNotLast(MyLinkedList.Node node);
 
   void addAfterNode(MyLinkedList.Node node, int data);
 
