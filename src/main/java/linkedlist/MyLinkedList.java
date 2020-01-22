@@ -320,7 +320,14 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
 
   @Override
   public void addAfterNode(Node node, int data) {
+    if (node.getNext() == null) {
+      node.setNext(new Node(data));
+      return;
+    }
 
+    Node newNode = new Node(data);
+    newNode.setNext(node.getNext());
+    node.setNext(newNode);
   }
 
   @Override
