@@ -1,20 +1,20 @@
 package linkedlist;
 
-public interface MyLinkedListExtras<T> {
+public interface MyLinkedListExtras {
 
   void deleteNode(MyLinkedList.Node node);
 
-  void addAfterNode(MyLinkedList.Node node, T data);
+  void addAfterNode(MyLinkedList.Node node, int data);
 
   MyLinkedList quickSort();
 
   void addInOrder();
 
-  MyLinkedList mergeSorted(MyLinkedList sortedList);
+  MyLinkedList mergeWithSorted(MyLinkedList sortedList);
 
   void removeNthFromEnd(int n);
 
-  T getMiddle();
+  int getMiddle();
 
   void detectLoopWithDictionary(); // See https://www.geeksforgeeks.org/detect-loop-in-a-linked-list/ for help
 
