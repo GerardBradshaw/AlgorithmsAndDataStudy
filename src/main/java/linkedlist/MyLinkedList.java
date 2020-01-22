@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
-  private Node headNode;
+  private Node head;
 
   // ------- Constructor -------
 
@@ -19,17 +19,17 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   }
 
 
-  // ------- Add -------
+  // -------- Add --------
 
   public void addLast(Integer data) {
     Node newNode = new Node(data);
 
     // If list is null, make the headNode the newNode. Otherwise, find the end and add the new node
-    if (headNode == null) {
-      headNode = newNode;
+    if (head == null) {
+      head = newNode;
 
     } else {
-      Node currentNode  = headNode;
+      Node currentNode  = head;
 
       // Loop to the end of the current list and link the last node to newNode
       while (currentNode.getNext() != null) {
@@ -45,21 +45,21 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     // If the index is 0, add a new head. Otherwise, find the index and add new Node.
     if (index == 0) {
       // If the list is null, create a new head, otherwise copy new head info
-      if (headNode == null) {
-        headNode = newNode;
+      if (head == null) {
+        head = newNode;
         return;
       }
 
       // Copy info from headNode into new Node for second index
-      Node newSecondNode = new Node(headNode.getData());
-      newSecondNode.setNext(headNode.getNext());
+      Node newSecondNode = new Node(head.getData());
+      newSecondNode.setNext(head.getNext());
 
       // Create a new Node from the input data and make it the first Node
       newNode.setNext(newSecondNode);
-      headNode = newNode;
+      head = newNode;
 
     } else {
-      Node currentNode = headNode;
+      Node currentNode = head;
       int positionCounter = 0;
 
       // Iterate until the end of the list
@@ -89,12 +89,12 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   }
 
 
-  // ------- Set -------
+  // -------- Set --------
 
   public void setLast(Integer data) {
     nullListCheck();
 
-    Node currentNode = headNode;
+    Node currentNode = head;
 
     while (currentNode.getNext() != null) {
       currentNode = currentNode.getNext();
@@ -111,7 +111,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
       return;
     }
 
-    Node currentNode = headNode;
+    Node currentNode = head;
     int currentIndex = 0;
 
     while (currentNode != null && currentIndex <= index) {
@@ -128,23 +128,23 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   public void setFirst(Integer data) {
     nullListCheck();
-    headNode.setData(data);
+    head.setData(data);
   }
 
 
-  // ------- Delete -------
+  // -------- Remove --------
 
   public void remove(Integer data) {
     nullListCheck();
 
     boolean dataDeleted = false;
 
-    if (headNode.getData().equals(data)) {
+    if (head.getData().equals(data)) {
       removeFirst();
       dataDeleted = true;
     }
 
-    Node currentNode = headNode;
+    Node currentNode = head;
 
     do {
       if (currentNode.getNext().getData().equals(data)) {
@@ -178,7 +178,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
       removeFirst();
 
     } else {
-      Node currentNode = headNode;
+      Node currentNode = head;
       int currentIndex = 0;
 
       while (currentNode.getNext() != null && currentIndex < index) {
@@ -207,12 +207,12 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     nullListCheck();
 
     // If the list contains one element, delete the list.
-    if (headNode.getNext() == null) {
-      headNode = null;
+    if (head.getNext() == null) {
+      head = null;
       return;
     }
 
-    Node currentNode = headNode;
+    Node currentNode = head;
 
     // Iterate to find the second-to-last element
     while (currentNode.getNext().getNext() != null) {
@@ -227,35 +227,21 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
     nullListCheck();
 
     // Make the headNode the second Node if one exists, otherwise make the headNode null.
-    if (headNode.getNext() != null) {
-      headNode = headNode.getNext();
+    if (head.getNext() != null) {
+      head = head.getNext();
 
     } else {
-      headNode = null;
-    }
-  }
-
-  public void deleteList() {
-    if (headNode == null) {
-      return;
-    }
-
-    Node currentNode = headNode;
-
-    while (currentNode.getNext() != null) {
-      Node nextNode = currentNode.getNext();
-      currentNode.deleteNode();
-      currentNode = nextNode;
+      head = null;
     }
   }
 
 
-  // ------- Get -------
+  // -------- Get --------
 
   public Integer getAtIndex(int index) {
     nullListCheck();
 
-    Node currentNode = headNode;
+    Node currentNode = head;
     int currentIndex = 0;
 
     while (currentNode != null && currentIndex <= index) {
@@ -271,13 +257,13 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   }
 
   public Integer getFirst() {
-    return headNode.getData();
+    return head.getData();
   }
 
   public Integer getLast() {
     nullListCheck();
 
-    Node currentNode = headNode;
+    Node currentNode = head;
 
     while (currentNode.getNext() != null) {
       currentNode = currentNode.getNext();
@@ -287,12 +273,12 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   }
 
 
-  // ------- Contains -------
+  // -------- Contains --------
 
   public boolean contains(Integer data) {
     nullListCheck();
 
-    Node currentNode = headNode;
+    Node currentNode = head;
 
     while (currentNode != null) {
       if (currentNode.getData().equals(data)) {
@@ -306,10 +292,29 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   }
 
 
+  // -------- Bonus methods! --------
+
+  public void deleteList() {
+    if (head == null) {
+      return;
+    }
+
+    Node currentNode = head;
+
+    while (currentNode.getNext() != null) {
+      Node nextNode = currentNode.getNext();
+      currentNode.deleteNode();
+      currentNode = nextNode;
+    }
+  }
+
+
+
+
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
   private void nullListCheck() {
-    if (headNode == null) {
+    if (head == null) {
       throw new NullPointerException();
     }
   }
@@ -325,8 +330,8 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   @Override
   public String toString() {
-    if (headNode != null) {
-      return headNode.toString();
+    if (head != null) {
+      return head.toString();
     }
     return "empty";
   }
@@ -368,7 +373,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
   public Iterator<Integer> iterator() {
     return new Iterator<Integer>() {
 
-      Node currentNode = headNode;
+      Node currentNode = head;
 
       @Override
       public boolean hasNext() {
@@ -401,7 +406,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer> {
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
 
-  private static class Node extends GLinkedListNode<Node, Integer> {
+  static class Node extends GLinkedListNode<Node, Integer> {
 
     public Node(Integer data) {
       super(data);
