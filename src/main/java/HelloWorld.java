@@ -9,21 +9,35 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
+
   }
 
-  private static MyLinkedList createRandLinkedList(int size) {
+  // -------- LinkedList --------
+
+  private static MyLinkedList createRandLinkedList(int size, int maxData) {
     if (size <= 0) {
       return null;
     }
-
+    
     Integer[] ints = new Integer[size];
     Random rand = new Random();
 
-    for (int i = 0; i < size; i++) {
-      ints[i] = rand.nextInt();
+    if (maxData < 0) {
+      for (int i = 0; i < size; i++) {
+        ints[i] = rand.nextInt();
+      }
+
+    } else {
+      for (int i = 0; i < size; i++) {
+        ints[i] = rand.nextInt(maxData);
+      }
     }
 
     return new MyLinkedList(ints);
+  }
+
+  private static MyLinkedList createRandLinkedList(int size) {
+    return createRandLinkedList(size, -1);
   }
 
   private static void createTree() {
