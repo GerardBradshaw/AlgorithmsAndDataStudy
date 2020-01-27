@@ -2,71 +2,78 @@ public abstract class ArraySorting {
 
   // -------- Sorting --------
 
-  private static int[] mergeSortArray(int[] array) {
-    return mergeSortRecur(array, new int[array.length], 0, array.length - 1);
-  }
 
-  private static int[] mergeSortRecur(int[] array, int[] tempArray, int low, int high) {
-    if (low >= high) {
+  public static int[] mergeSort(int[] array) {
+    // Base case
+    if (array.length <= 1) {
       return array;
     }
 
-    int mid = (low + high) / 2;
-    mergeSortRecur(array, tempArray, low, mid);
-    mergeSortRecur(array, tempArray, mid + 1, high);
-    mergeHalvesG(low, mid, high);
-    return mergeHalves(array, tempArray, low, high);
+    int midpoint = array.length / 2;
+
+    // Preallocate arrays
+    int[] leftArray = new int[midpoint];
+    int[] rightArray = new int[array.length - midpoint];
+
+    // Split the array in half
+    System.arraycopy(array, 0, leftArray, 0, midpoint);
+    System.arraycopy(array, midpoint, rightArray, 0, array.length - midpoint);
+
+    // Recursively sort the array
+    leftArray = mergeSort(leftArray);
+    rightArray = mergeSort(rightArray);
+
+    // Merge the sorted arrays (starts by sorting arrays of size 1, then 2, then 3....)
+    return merge(leftArray, rightArray);
   }
 
-  private static void mergeHalvesG(int low, int mid, int high) {
+  private static int[] merge(int[] left, int[] right) {
+    // Preallocate memory
+    int[] result = new int[left.length + right.length];
 
-  }
+    // Set up pointers
+    int leftPointer = 0, rightPointer = 0, resultPointer = 0;
 
-  private static int[] mergeHalves(int[] array, int[] tempArray, int leftStart, int rightEnd) {
-    int leftEnd = (rightEnd + leftStart) / 2;
-    int rightStart = leftEnd + 1;
-    int size = rightEnd - leftStart + 1;
+    // While there are still unsorted numbers....
+    while (leftPointer < left.length || rightPointer < right.length) {
+      // If both pointers are valid
+      if (leftPointer < left.length && rightPointer < right.length) {
 
-    int left = leftStart;
-    int right = rightStart;
-    int index = leftStart;
+        // If the number in the first array is smaller than the right, add it to result and increase its pointer
+        if (left[leftPointer] < right[rightPointer]) {
+          result[resultPointer] = left[leftPointer];
+          leftPointer++;
 
-    while (left <= leftEnd && right < rightEnd) {
-      if (array[left] <= array[right]) {
-        tempArray[index] = array[left];
-        left++;
+          // Otherwise the number in the second array is smaller, so add it to the result and advange its pointer
+        } else {
+          result[resultPointer] = right[rightPointer];
+          rightPointer++;
+        }
 
-      } else {
-        tempArray[index] = array[right];
-        right++;
+        // Else if just left pointer is valid (right used up)
+      } else if (leftPointer < left.length) {
+        result[resultPointer] = left[leftPointer];
+        leftPointer++;
+
+        // Else if just right pointer is valid (left used up)
+      } else if (rightPointer < right.length) {
+        result[resultPointer] = right[rightPointer];
+        rightPointer++;
       }
-      index++;
-
+      resultPointer++;
     }
-
-    System.arraycopy(array, left, tempArray, index, leftEnd - left + 1);
-    System.arraycopy(array, right, tempArray, index, rightEnd - right + 1);
-    //System.arraycopy(tempArray, leftStart, array, leftStart, size);
-    return tempArray;
-
-  }
-
-
-  // -------- Searching --------
-
-  private int binarySearchForIndex(int[] array, int i) {
-    return -1;
+    return result;
   }
 
 
   // -------- Helpers --------
 
-  private static void printArray(int[] array) {
+  public static void printArray(int[] array) {
     System.out.print("[");
 
     for (int i = 0; i < array.length; i++) {
       if (i != array.length - 1) {
-        System.out.print(array[i] + ", ");
+        System.out.print(array[i] + " ");
       } else {
         System.out.print(array[i]);
       }
