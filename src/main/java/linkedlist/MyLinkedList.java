@@ -331,8 +331,22 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
   }
 
   @Override
-  public MyLinkedList quickSort() {
-    return null;
+  public void mergeSort() {
+
+  }
+
+  private Node getLastNode() {
+    if (head == null) {
+      throw new NullPointerException();
+    }
+
+    Node current = head;
+
+    while (current.getNext() != null) {
+      current = current.getNext();
+    }
+
+    return current;
   }
 
   @Override
@@ -351,8 +365,19 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
   }
 
   @Override
-  public int getMiddle() {
-    return 0;
+  public Node getMiddle() {
+    if (head == null) {
+      return head;
+    }
+
+    Node slow = head;
+    Node fast = head;
+
+    while (fast.getNext() != null && fast.getNext().getNext() != null) {
+      slow = slow.getNext();
+      fast = fast.getNext().getNext();
+    }
+    return slow;
   }
 
   @Override

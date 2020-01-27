@@ -6,7 +6,7 @@ public interface MyLinkedListExtras {
 
   void addAfterNode(MyLinkedList.Node node, int data);
 
-  MyLinkedList quickSort();
+  void mergeSort();
 
   void addInOrder();
 
@@ -14,7 +14,7 @@ public interface MyLinkedListExtras {
 
   void removeNthFromEnd(int n);
 
-  int getMiddle();
+  MyLinkedList.Node getMiddle();
 
   void detectLoopWithDictionary(); // See https://www.geeksforgeeks.org/detect-loop-in-a-linked-list/ for help
 
