@@ -10,6 +10,14 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
+    int[] array = {5,4,6,3,8,2,2};
+    System.out.println("Initial array: ");
+    ArraySorting.printArray(array);
+
+    array = ArraySorting.mergeSort(array);
+    System.out.println("Merge sorted array: ");
+    ArraySorting.printArray(array);
+
   }
 
   // -------- LinkedList --------
@@ -18,7 +26,7 @@ public class HelloWorld {
     if (size <= 0) {
       return null;
     }
-    
+
     Integer[] ints = new Integer[size];
     Random rand = new Random();
 

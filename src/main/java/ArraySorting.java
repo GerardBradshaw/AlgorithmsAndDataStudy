@@ -1,7 +1,14 @@
 public abstract class ArraySorting {
 
-  // -------- Sorting --------
 
+  // -------- Quick Sort --------
+
+  public static int[] quickSort(int[] array) {
+   return null;
+  }
+
+
+  // -------- Merge Sort --------
 
   public static int[] mergeSort(int[] array) {
     // Base case
@@ -9,6 +16,7 @@ public abstract class ArraySorting {
       return array;
     }
 
+    // Get the midpoint
     int midpoint = array.length / 2;
 
     // Preallocate arrays
