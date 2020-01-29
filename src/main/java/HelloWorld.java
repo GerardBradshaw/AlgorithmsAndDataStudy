@@ -10,11 +10,11 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    int[] array = {5,4,6,3,8,2,2};
+    int[] array = {5,4,6,3,7,1,2};
     System.out.println("Initial array: ");
     ArraySorting.printArray(array);
 
-    array = ArraySorting.mergeSort(array);
+    array = ArraySorting.quickSort(array);
     System.out.println("Merge sorted array: ");
     ArraySorting.printArray(array);
 
