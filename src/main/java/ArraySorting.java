@@ -3,55 +3,7 @@ public abstract class ArraySorting {
 
   // -------- Quick Sort --------
 
-  public static int[] quickSort(int[] array) {
-    return quickSort(array, 0, array.length-1);
-  }
 
-  private static int[] quickSort(int[] array, int leftIndex, int rightIndex) {
-    int index = partition(array, leftIndex, rightIndex);
-    if (leftIndex < index - 1) {
-      array = quickSort(array, leftIndex, index - 1);
-    }
-    if (index < rightIndex) {
-      array = quickSort(array, index, rightIndex);
-    }
-    return array;
-  }
-
-  private static int partition(int[] array, int leftIndex, int rightIndex) {
-    // Pick the pivot value (I'll use the midpoint)
-    int pivotValue = array[leftIndex + (rightIndex - leftIndex) / 2];
-
-    while (leftIndex <= rightIndex) {
-      // Find the element on the left that should be on the right
-      while (array[leftIndex] < pivotValue) {
-        leftIndex++;
-      }
-
-      // Find the element on the right that should be on the left
-      while (array[rightIndex] > pivotValue) {
-        rightIndex--;
-      }
-
-      // swap elements and move the indices
-      if (leftIndex <= rightIndex) {
-        swapElements(array, leftIndex, rightIndex);
-        leftIndex++;
-        rightIndex--;
-      }
-    }
-    return leftIndex;
-  }
-
-  private static int[] swapElements(int[] array, int firstIndex, int secondIndex) {
-    if (array.length < firstIndex || array.length < secondIndex || firstIndex < 0 || secondIndex <0) {
-      throw new IndexOutOfBoundsException();
-    }
-    int firstValue = array[firstIndex];
-    array[firstIndex] = array[secondIndex];
-    array[secondIndex] = firstValue;
-    return array;
-  }
 
 
   // -------- Merge Sort --------
