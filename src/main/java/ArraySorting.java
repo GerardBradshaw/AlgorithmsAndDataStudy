@@ -1,135 +1,40 @@
 public abstract class ArraySorting {
 
-  // -------- Quick Sort 2 --------
+  // -------- Quick Sort --------
 
-  public static int[] quickSort(int[] array) {
-    /*
-    Steps:
-      1. Call the recursive function quickSort(array, left, right). Initially, left is 0 and right is array.length - 1
-      2. Call partition(array, left, right) which will reorder the array so that all elements with values less than the
-         pivot come before it, and all elements with greater values come after it (equal values go either way). After
-         partitioning, the pivot is in its final position.
-      3. Recur left - call quickSort() on the array from zero to correctPivotIndex - 1
-      4. Recur right - call quickSort() on the array from correctPivotIndex + 1 to the end of the array
-      5. Return the array.
-     */
-
-    // 1. Call the recursive function quickSort(array, left, right) (quickSort(array) was a public wrapper).
-    return quickSort(array, 0, array.length - 1);
+  public static void quickSort(int[] array) {
+    quickSort(array, 0, array.length - 1);
   }
 
-  private static int[] quickSort(int[] array, int leftIndex, int rightIndex) {
-    /* 2. Call partition(array, left, right) which will reorder the array so that all elements with values less than the
-          pivot come before it, and all elements with greater values come after it (equal values go either way). After
-          partitioning, the pivot is in its final position.      */
-    int partitionIndex = partition(array, leftIndex, rightIndex);
-
-    // Print some stuff for me!
-    System.out.print("Left array: ");
-    if (partitionIndex - leftIndex >= 0) {
-      int[] tempLeftArray = new int[partitionIndex - leftIndex];
-      System.arraycopy(array, leftIndex, tempLeftArray, 0, tempLeftArray.length);
-      printArray(tempLeftArray);
-
-    } else {
-      System.out.println("empty");
-    }
-
-
-    System.out.print("Right array: ");
-    if (rightIndex - partitionIndex >= 0) {
-      int[] tempRightArray = new int[rightIndex - partitionIndex];
-      System.arraycopy(array, partitionIndex + 1, tempRightArray, 0, tempRightArray.length);
-      printArray(tempRightArray);
-
-    } else {
-      System.out.println("empty");
-    }
-
-    // 3. Recur left - call quickSort() on the array from zero to partitionIndex - 1
-    if (leftIndex < partitionIndex) array = quickSort(array, leftIndex, partitionIndex - 1);
-
-    // 4. Recur right - call quickSort() on the array from partitionIndex + 1 to the end of the array
-    if (rightIndex >= partitionIndex) array = quickSort(array, partitionIndex + 1, rightIndex);
-
-    // 5. Return the array.
-    return array;
+  private static void quickSort(int[] array, int left, int right) {
+    int index = partition(array, left, right);
+    if (left < index - 1) quickSort(array, left, index - 1);
+    if (index < right) quickSort(array, index, right);
   }
 
   private static int partition(int[] array, int leftIndex, int rightIndex) {
-    /*
-    The steps are:
-      1) Move the pivot to the last given index (right) of the array
-      2) From a given left index of the array, move a pointer right until you find a value greater than the pivot
-      3) From a given right index of the array, move a pointer left until you find a value less than the pivot
-      4) If the pointers haven't passed each other, swap the values they point to and update their counts
-      5) Repeat steps 2 to 4 until the pointers pass each other
-      6) Swap the value at the pointer from the left with the pivot value. The pivot is now in its final position!
-      7) Return the new index of the pivot.
-     */
-    int[] tempArray = new int[rightIndex - leftIndex + 1];
-    System.arraycopy(array, leftIndex, tempArray, 0, tempArray.length);
-    System.out.println("------------------------------------------");
-    System.out.print("partition() called on: ");
-    printArray(tempArray);
-    System.out.println("leftIndex = " + leftIndex + ", rightIndex = " + rightIndex);
-    if (rightIndex-leftIndex < 1) {
-      System.out.println("The array is empty! Exiting partition function.");
-      return 0;
-    }
-    int rightPointer = rightIndex;
+    int pivotValue = (array[leftIndex] + array[leftIndex + (rightIndex - leftIndex) / 2] + array[rightIndex])/3;
     int leftPointer = leftIndex;
-    int pivotIndex = leftIndex + (rightIndex - leftIndex) / 2;
-    int pivotValue = array[pivotIndex];
-    System.out.println("Selected pivot value " + pivotValue + " at index " + pivotIndex);
+    int rightPointer = rightIndex;
 
-    // 1) Move the pivot to the last given index (right) of the array
-    array[pivotIndex] = array[rightIndex];
-    array[rightIndex] = pivotValue;
-    rightPointer--;
+    while (leftPointer <= rightPointer) {
+      while (array[leftPointer] < pivotValue) leftPointer++;
+      while (array[rightPointer] > pivotValue) rightPointer--;
 
-    // 5) Repeat steps 2 to 4 until the pointers pass each other
-    System.out.println("\nStarting pointer walk...");
-    while (leftPointer < rightPointer) {
-      // 2) From a given left index of the array, move a pointer right until you find a value greater than the pivot
-      System.out.print("leftPointer: " + leftPointer);
-      while (array[leftPointer] < pivotValue) {
-        leftPointer++;
-      }
-      System.out.println(" -> " + leftPointer);
-
-      // 3) From a given right index of the array, move a pointer left until you find a value less than the pivot
-      System.out.print("rightPointer: " + rightPointer);
-      while (array[rightPointer] > pivotValue) {
-        rightPointer--;
-      }
-      System.out.println(" -> " + rightPointer);
-
-      // 4) If the pointers haven't passed each other, swap the values they point to and update their counts
       if (leftPointer <= rightPointer) {
-        int leftValue = array[leftPointer];
-        array[leftPointer] = array[rightPointer];
-        array[rightPointer] = leftValue;
+        swap(array, leftPointer, rightPointer);
         leftPointer++;
         rightPointer--;
-        System.out.println("The pointers met or passed and have been updated! leftPointer = " + leftPointer + ", rightPointer = " + rightPointer);
       }
     }
-    // 6) Swap the value at the pointer from the left with the pivot value. The pivot is now in its final position!
-    array[rightIndex] = array[leftPointer];
-    array[leftPointer] = pivotValue;
-    System.out.print("Pointer walk finished. Array is now more sorted: ");
-    System.arraycopy(array, leftIndex, tempArray, 0, tempArray.length);
-    printArray(tempArray);
-    System.out.println("The pivot (" + pivotValue + ") is at index " + leftPointer + "\n");
-
-    System.out.println("partition() finished");
-    System.out.println("------------------------------------------");
-
-    // 7) Return the new index of the pivot.
     return leftPointer;
   }
 
+  private static void swap(int[] array, int leftIndex, int rightIndex) {
+    int tempValue = array[leftIndex];
+    array[leftIndex] = array[rightIndex];
+    array[rightIndex] = tempValue;
+  }
 
 
   // -------- Merge Sort --------
