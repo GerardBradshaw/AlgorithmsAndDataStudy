@@ -10,14 +10,52 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    int[] array = {5,4,6,3,7,1,2};
-    System.out.println("Initial array: ");
-    ArraySorting.printArray(array);
+    boolean allSorted = true;
 
-    array = ArraySorting.quickSort(array);
-    System.out.println("Sorted array: ");
-    ArraySorting.printArray(array);
+    for (int i = 0; i < 100000; i++) {
+      int[] array = createRandIntArray(100, 100);
+      ArraySorting.quickSort(array);
 
+      if (!isSorted(array)) {
+        allSorted = false;
+      }
+    }
+
+    System.out.println("allSorted: " + allSorted);
+
+  }
+
+  // -------- Arrays --------
+
+  private static int[] createRandIntArray(int size, int maxData) {
+    if (size <= 0) {
+      return null;
+    }
+
+    int[] array = new int[size];
+    Random rand  = new Random();
+
+    if (maxData < 0) {
+      for (int i = 0; i < size; i++) {
+        array[i] = rand.nextInt();
+      }
+
+    } else {
+      for (int i = 0; i < size; i++) {
+        array[i] = rand.nextInt(maxData);
+      }
+    }
+    return array;
+  }
+
+  private static boolean isSorted(int[] array) {
+
+    for (int i = 0; i < array.length - 2; i++) {
+      if (array[i] <= array[i + 1]) continue;
+      return false;
+    }
+    if (array[array.length - 2] <= array[array.length - 1]) return true;
+    return false;
   }
 
   // -------- LinkedList --------
