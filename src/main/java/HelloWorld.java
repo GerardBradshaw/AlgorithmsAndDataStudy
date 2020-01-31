@@ -15,7 +15,7 @@ public class HelloWorld {
     ArraySorting.printArray(array);
 
     array = ArraySorting.quickSort(array);
-    System.out.println("Merge sorted array: ");
+    System.out.println("Sorted array: ");
     ArraySorting.printArray(array);
 
   }
