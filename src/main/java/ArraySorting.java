@@ -1,5 +1,89 @@
 public abstract class ArraySorting {
 
+  // -------- Quick Sort 3 --------
+
+  public static void quickSort3(int[] array) {
+    quickSort3(array, 0, array.length - 1);
+  }
+
+  private static void quickSort3(int[] array, int left, int right) {
+    // Sort around index point
+    int index = partition3(array, left, right);
+    //System.out.print("Index is " + index + " in: ");
+    //printArray(array);
+
+    // Recur sub arrays (if statements deflect base case)
+    if (left < index-1) quickSort3(array, left, index-1);
+    if (right > index) quickSort3(array, index, right);
+  }
+
+  private static int partition3(int[] array, int left, int right) {
+    // Select pivot (we'll use middle)
+    int pivot = array[left + (right - left) / 2];
+    //String message = "\nRunning partition3() with pivot " + pivot + " at i = " + (left + (right - left) / 2) + " between i = " + left + " and " + right + " on ";
+    //System.out.print(message);
+    //printArray(array);
+
+
+    // Sort
+    // Use equal-to check to ensure something??
+    while (left <= right) {
+      // Move pointers until they find value on the wrong side of pivot
+      //System.out.print("  Left (greater): " + left);
+      while (array[left] < pivot) left++;
+      //System.out.println(" -> " + left);
+
+      //System.out.print("  Right (lesser): " + right);
+      while (array[right] > pivot) right--;
+      //System.out.println(" -> " + right);
+
+      // Swap values if left and right haven't passed each other
+      // Use equal-to check to prevent infinite loop!
+      if (left <= right) {
+        swap(array, left, right);
+        //System.out.print("Values swapped: ");
+        //printArray(array);
+        left++;
+        right--;
+      }
+    }
+    //System.out.println("Partition ended");
+    return left;
+  }
+
+  // -------- Quick Sort 2 --------
+
+  public static void quickSort2(int[] array) {
+    quickSort2(array, 0, array.length - 1);
+  }
+
+  private static void quickSort2(int[] array, int left, int right) {
+    int index = partition2(array, left, right);
+    if (left < index-1) quickSort2(array, left, index-1);
+    if (right > index) quickSort2(array, index, right);
+  }
+
+  private static int partition2(int[] array, int left, int right) {
+    // Get the pivot value
+    int pivotValue = array[left + (right - left) / 2];
+
+    // Loop through and swap values
+    while (left <= right) {
+      // Make 'left' point to first value greater than pivot from left, 'right' to first lesser from right
+      while (array[left] < pivotValue) left++;
+      while (array[right] > pivotValue) right--;
+
+      // Swap values at left and right if they haven't passed each other
+      if (left <= right) {
+        swap(array, left, right);
+        left++;
+        right--;
+      }
+    }
+    return left;
+  }
+
+
   // -------- Quick Sort --------
 
   public static void quickSort(int[] array) {
@@ -12,28 +96,26 @@ public abstract class ArraySorting {
     if (index < right) quickSort(array, index, right);
   }
 
-  private static int partition(int[] array, int leftIndex, int rightIndex) {
-    int pivotValue = (array[leftIndex] + array[leftIndex + (rightIndex - leftIndex) / 2] + array[rightIndex])/3;
-    int leftPointer = leftIndex;
-    int rightPointer = rightIndex;
+  private static int partition(int[] array, int left, int right) {
+    int pivotValue = (array[left] + array[left + (right - left) / 2] + array[right])/3;
 
-    while (leftPointer <= rightPointer) {
-      while (array[leftPointer] < pivotValue) leftPointer++;
-      while (array[rightPointer] > pivotValue) rightPointer--;
+    while (left <= right) {
+      while (array[left] < pivotValue) left++;
+      while (array[right] > pivotValue) right--;
 
-      if (leftPointer <= rightPointer) {
-        swap(array, leftPointer, rightPointer);
-        leftPointer++;
-        rightPointer--;
+      if (left <= right) {
+        swap(array, left, right);
+        left++;
+        right--;
       }
     }
-    return leftPointer;
+    return left;
   }
 
-  private static void swap(int[] array, int leftIndex, int rightIndex) {
-    int tempValue = array[leftIndex];
-    array[leftIndex] = array[rightIndex];
-    array[rightIndex] = tempValue;
+  private static void swap(int[] array, int index1, int index2) {
+    int tempValue = array[index1];
+    array[index1] = array[index2];
+    array[index2] = tempValue;
   }
 
 

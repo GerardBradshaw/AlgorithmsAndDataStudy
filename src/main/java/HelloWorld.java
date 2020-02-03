@@ -10,22 +10,29 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    boolean allSorted = true;
 
-    for (int i = 0; i < 100000; i++) {
-      int[] array = createRandIntArray(100, 100);
-      ArraySorting.quickSort(array);
-
-      if (!isSorted(array)) {
-        allSorted = false;
-      }
-    }
-
-    System.out.println("allSorted: " + allSorted);
 
   }
 
   // -------- Arrays --------
+
+  private static void testQuickSortArray() {
+    boolean isAllSorted = true;
+    boolean isAllSumPreserved = true;
+    Random random = new Random();
+
+    for (int i = 0; i < 1; i++) {
+      int[] array = createRandIntArray(random.nextInt(10) + 2, 10);
+      int arraySum = sumArray(array);
+      ArraySorting.quickSort3(array);
+
+      if (arraySum != sumArray(array)) isAllSumPreserved = false;
+      if (!isSorted(array)) isAllSorted = false;
+    }
+
+    System.out.println("All sorted: " + isAllSorted);
+    System.out.println("Sum preserved: "+ isAllSumPreserved);
+  }
 
   private static int[] createRandIntArray(int size, int maxData) {
     if (size <= 0) {
@@ -56,6 +63,14 @@ public class HelloWorld {
     }
     if (array[array.length - 2] <= array[array.length - 1]) return true;
     return false;
+  }
+
+  private static int sumArray(int[] array) {
+    int sum = 0;
+    for (int i : array) {
+      sum += i;
+    }
+    return sum;
   }
 
   // -------- LinkedList --------
