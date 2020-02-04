@@ -6,7 +6,7 @@ public interface MyLinkedListExtras {
 
   void addAfterNode(MyLinkedList.Node node, int data);
 
-  void mergeSort();
+  void quickSort();
 
   void addInOrder();
 
