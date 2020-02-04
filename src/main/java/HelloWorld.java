@@ -1,3 +1,4 @@
+import linkedlist.MyDoubleLinkedList;
 import linkedlist.MyLinkedList;
 import tree.MyBinarySearchTree;
 
@@ -9,9 +10,10 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-
-
-
+    MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>(0,1,2,3,4,5,6,7,8);
+    System.out.println(list);
+    list.pairwiseSwap();
+    System.out.println(list);
   }
 
   // -------- Arrays --------
@@ -75,7 +77,7 @@ public class HelloWorld {
 
   // -------- LinkedList --------
 
-  private static MyLinkedList createRandLinkedList(int size, int maxData) {
+  private static MyDoubleLinkedList<Integer> createRandLinkedList(int size, int maxData) {
     if (size <= 0) {
       return null;
     }
@@ -94,11 +96,32 @@ public class HelloWorld {
       }
     }
 
-    return new MyLinkedList(ints);
+    return new MyDoubleLinkedList<>(ints);
   }
 
-  private static MyLinkedList createRandLinkedList(int size) {
+  private static MyDoubleLinkedList<Integer> createRandLinkedList(int size) {
     return createRandLinkedList(size, -1);
+  }
+
+  private static void detectLoop() {
+    MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>(0,1,2,3,4,5,6,7,8,9);
+    System.out.println(list);
+
+    int replacementIndex = 9;
+
+    for (int i = 0; i <= 9; i++) {
+      MyDoubleLinkedList.Node<Integer> loopStartNode = list.getNodeAtIndex(i);
+      MyDoubleLinkedList.Node<Integer> replacementNode = new MyDoubleLinkedList.Node<>(9);
+      MyDoubleLinkedList.Node<Integer> replacedNode = list.getNodeAtIndex(replacementIndex);
+
+      replacementNode.setNext(loopStartNode);
+      replacementNode.setPrev(replacedNode.getPrev());
+
+      if (replacedNode.equals(loopStartNode)) loopStartNode.setNext(replacementNode);
+      else replacedNode.getPrev().setNext(replacementNode);
+
+      System.out.println("Loop size (from " + list.getAtIndex(i) + " to end): " + list.detectLoopSizeWithDictionary());
+    }
   }
 
   private static void createTree() {
@@ -150,7 +173,7 @@ public class HelloWorld {
 
       // Created using addAtEnd
       long startTimeNs = System.nanoTime();
-      MyLinkedList list = createRandLinkedList(i);
+      MyDoubleLinkedList<Integer> list = createRandLinkedList(i);
       long endTimeNs = System.nanoTime();
       long timeElapsedNs = (endTimeNs - startTimeNs);
 
