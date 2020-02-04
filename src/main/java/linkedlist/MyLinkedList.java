@@ -331,8 +331,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
   }
 
   @Override
-  public void mergeSort() {
-
+  public void quickSort() {
   }
 
   private Node getLastNode() {
@@ -501,16 +500,6 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
         return currentData;
       }
     };
-  }
-
-  @Override
-  public void forEach(Consumer<? super Integer> action) {
-
-  }
-
-  @Override
-  public Spliterator<Integer> spliterator() {
-    return null;
   }
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
