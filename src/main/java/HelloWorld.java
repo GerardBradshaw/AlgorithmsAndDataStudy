@@ -1,6 +1,5 @@
 import linkedlist.MyDoubleLinkedList;
-import linkedlist.MyLinkedList;
-import tree.MyBinarySearchTree;
+import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -125,7 +124,7 @@ public class HelloWorld {
   }
 
   private static void createTree() {
-    MyBinarySearchTree myTree = new MyBinarySearchTree();
+    XMyBinarySearchTree myTree = new XMyBinarySearchTree();
 
     myTree.add(6);
     myTree.add(99);
