@@ -1,4 +1,5 @@
 import linkedlist.MyDoubleLinkedList;
+import tree.Node;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -9,10 +10,13 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>(0,1,2,3,4,5,6,7,8);
-    System.out.println(list);
-    list.pairwiseSwap();
-    System.out.println(list);
+    Node tree = new Node(10,4,2,1,0,3,6,5,7,15,12,20,18);
+    System.out.println("In order:");
+    tree.printInOrder();
+    System.out.println("Post order:");
+    tree.printPostOrder();
+    System.out.println("Pre order:");
+    tree.printPreOrder();
   }
 
   // -------- Arrays --------
