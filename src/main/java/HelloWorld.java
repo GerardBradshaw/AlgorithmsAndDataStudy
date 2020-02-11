@@ -1,3 +1,5 @@
+import array.ArraySorting;
+import hashtable.MyHashTable;
 import linkedlist.MyDoubleLinkedList;
 import tree.Node;
 import tree.XMyBinarySearchTree;
@@ -10,13 +12,18 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    Node tree = new Node(10,4,2,1,0,3,6,5,7,15,12,20,18);
-    System.out.println("In order:");
-    tree.printInOrder();
-    System.out.println("Post order:");
-    tree.printPostOrder();
-    System.out.println("Pre order:");
-    tree.printPreOrder();
+
+    MyHashTable<Integer, String> hashTable = new MyHashTable<>(5);
+
+    hashTable.insert(1, "Gerard");
+    hashTable.insert(3, "Bae");
+    hashTable.insert(7, "Mr. O");
+    hashTable.insert(5, "Lewie");
+    hashTable.insert(567, "Cuddles");
+
+    String test = hashTable.get(55);
+    System.out.println(test);
+
   }
 
   // -------- Arrays --------
