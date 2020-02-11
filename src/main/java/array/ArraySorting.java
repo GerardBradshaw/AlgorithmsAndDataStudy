@@ -1,3 +1,5 @@
+package array;
+
 public abstract class ArraySorting {
 
   // -------- Quick Sort 3 --------
