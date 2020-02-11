@@ -1,6 +1,6 @@
 package linkedlist
 
-interface GLinkedListK<T> {
+interface GKLinkedList<T> {
 
   // ------- Add
   fun addFirst(data: T)

@@ -3,7 +3,7 @@ package linkedlist
 import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
 
-class MyLinkedListK() : GLinkedListK<Int>, Iterable<Int> {
+class MyKLinkedList() : GKLinkedList<Int>, Iterable<Int> {
 
   constructor(vararg ints: Int) : this() {
     for (index in (ints.size - 1) downTo 0) {
@@ -276,7 +276,7 @@ class MyLinkedListK() : GLinkedListK<Int>, Iterable<Int> {
   // - - - - - - - - - - - - - - - Object callbacks - - - - - - - - - - - - - - -
 
   override fun equals(other: Any?): Boolean {
-    if (other is MyLinkedListK) {
+    if (other is MyKLinkedList) {
       val thisIterator = this.iterator()
       val otherIterator = other.iterator()
 
