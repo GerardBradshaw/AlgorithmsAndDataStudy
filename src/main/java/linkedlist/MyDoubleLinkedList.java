@@ -339,6 +339,8 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
   }
 
 
+
+
   // -------- Extra methods! --------
 
   public void deleteNodeNotLast(Node<T> node) {
