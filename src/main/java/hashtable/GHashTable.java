@@ -3,9 +3,9 @@ package hashtable;
 public interface GHashTable<K, V> {
 
   void insert(K key, V value);
-  V get(K key);
-  void remove(K key);
+  V get(Object key);
+  void remove(Object key);
   void set(K key, V value);
-  boolean contains(K key);
-  Object[] keySet();
+  boolean contains(Object key);
+  int size();
 }
