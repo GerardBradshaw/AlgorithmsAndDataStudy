@@ -7,4 +7,5 @@ public interface GHashTable<K, V> {
   void remove(K key);
   void set(K key, V value);
   boolean contains(K key);
+  Object[] keySet();
 }
