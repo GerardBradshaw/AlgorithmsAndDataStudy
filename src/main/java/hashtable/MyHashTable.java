@@ -78,6 +78,8 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
 
   @Override
   public void remove(Object key) {
+    if (key == null) return;
+
     int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
@@ -145,15 +147,22 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
       MyHashTable<?,?> other = (MyHashTable<?,?>) obj;
 
       // First check they're the same size
-      if (other.size() != size()) return false;
+      if (other.size() != keyCount) return false;
+
+      // If keyCount == 0, they're both empty and therefore the same
+      if (keyCount == 0) return true;
 
       // For each LinkedList of KVPairs in this...
       for (LinkedList<KVPair<K,V>> pairList : data) {
+
+        if (pairList == null) continue;
 
         // For each KVPair in the LinkedLists...
         for (KVPair<K,V> pair : pairList) {
 
           // If the other list does not return the correct value for the key, return false
+          if (pair.getValue() == null && other.get(pair.getKey()) == null) continue;
+
           if (!other.get(pair.getKey()).equals(pair.getValue())) return false;
         }
       }
