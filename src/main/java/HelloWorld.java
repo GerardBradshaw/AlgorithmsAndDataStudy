@@ -18,30 +18,8 @@ public class HelloWorld {
     hashTable.insert(5, "Lewie");
     hashTable.insert(567, "Cuddles");
     hashTable.insert(4, "Jay");
-    hashTable.insert(3, "Kevin");
+    hashTable.insert(33, "Kevin");
 
-    Object[] keySet = hashTable.keySet();
-
-    for (Object o : keySet) {
-      Integer key = (Integer) o;
-      System.out.println(key);
-    }
-
-
-    /*
-    MyHashTable<Integer, String> hashTable2 = new MyHashTable<>(5);
-    hashTable2.insert(1, "Gerard");
-    hashTable2.insert(3, "Kevin");
-    hashTable2.insert(7, "Mr. O");
-    hashTable2.insert(5, "Lewie");
-    hashTable2.insert(567, "Cuddles");
-    hashTable2.insert(4, "Jay");
-    hashTable2.insert(3, "Bae");
-
-    boolean test = hashTable.equals(hashTable2);
-
-    System.out.println(test);
-     */
   }
 
   // -------- Arrays --------
