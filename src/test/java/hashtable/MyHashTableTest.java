@@ -30,8 +30,6 @@ public class MyHashTableTest {
 
   private KVPair<String, String> newKeyNewValue = new KVPair<>(newKey, newValue);
   private KVPair<String, String> newKeyDuplicateValue = new KVPair<>(newKey, duplicateValue);
-  private KVPair<String, String> duplicateKeyNewValue = new KVPair<>(duplicateKey, newValue);
-  private KVPair<String, String> duplicateKeyDuplicateValue = new KVPair<>(duplicateKey, duplicateValue);
 
   private int hashTableSize = 3;
   private int emptyTableSize = 50;
@@ -59,16 +57,14 @@ public class MyHashTableTest {
     assertThat(hashTable, is(equalTo(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, newKeyDuplicateValue))));
   }
 
-  @Test
+  @Test (expected = IllegalArgumentException.class)
   public void testInsert_duplicateKeyDuplicateValue() {
     hashTable.insert(duplicateKey, duplicateValue);
-    assertThat(hashTable, is(equalTo(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, duplicateKeyDuplicateValue))));
   }
 
-  @Test
+  @Test (expected = IllegalArgumentException.class)
   public void testInsert_duplicateKeyNewValue() {
     hashTable.insert(duplicateKey, newValue);
-    assertThat(hashTable, is(equalTo(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, duplicateKeyNewValue))));
   }
 
   @Test
@@ -78,7 +74,7 @@ public class MyHashTableTest {
   }
 
   @Test
-  public void testInsert_null() {
+  public void testInsert_newKeyNullValue() {
     hashTable.insert(newKey, null);
     assertThat(hashTable, is(equalTo(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, new KVPair<>(newKey, null)))));
   }
@@ -160,7 +156,9 @@ public class MyHashTableTest {
 
   @Test
   public void testEquals_tableInDifferentOrder() {
-    assertThat(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, duplicateKeyNewValue),
-        is(equalTo(new MyHashTable<>(hashTableSize, duplicateKeyNewValue, pair2, pair1, pair0))));
+    KVPair<String, String> repeatIndex = new KVPair<>(key1.toUpperCase(), newValue);
+
+    assertThat(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, repeatIndex),
+        is(equalTo(new MyHashTable<>(hashTableSize, repeatIndex, pair2, pair1, pair0))));
   }
 }
