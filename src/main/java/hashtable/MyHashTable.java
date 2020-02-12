@@ -1,5 +1,6 @@
 package hashtable;
 
+import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -29,7 +30,7 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
 
   // -------- Helpers --------
 
-  private int convertKeyToIndex(K key) {
+  private int convertKeyToIndex(Object key) {
     return Math.abs(key.hashCode() % data.length);
   }
 
@@ -39,13 +40,25 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
   @Override
   public void insert(K key, V value) {
     int index = convertKeyToIndex(key);
-    if (data[index] == null) data[index] = new LinkedList<>();
+
+    // If it's the first entry, just add and move on
+    if (data[index] == null) {
+      data[index] = new LinkedList<>();
+
+    } else {
+      LinkedList<KVPair<K,V>> pairList = data[index];
+      for (KVPair<K,V> pair : pairList) {
+        if (pair.getKey().equals(key)) {
+          throw new IllegalArgumentException();
+        }
+      }
+    }
     data[index].add(new KVPair<>(key, value));
     keyCount++;
   }
 
   @Override
-  public V get(K key) {
+  public V get(Object key) {
     int index = convertKeyToIndex(key);
     LinkedList<KVPair<K, V>> pairList = data[index];
 
@@ -64,7 +77,7 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
   }
 
   @Override
-  public void remove(K key) {
+  public void remove(Object key) {
     int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
@@ -102,7 +115,8 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
   }
 
   @Override
-  public boolean contains(K key) {
+  public boolean contains(Object key) {
+    // First confirm that the object is type K
     int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
@@ -116,49 +130,34 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
   }
 
   @Override
-  public Object[] keySet() {
-    Object[] keyArray = new Object[keyCount];
-
-    LinkedList<KVPair<K,V>> currentPairList;
-    int count = 0;
-
-    for (LinkedList<KVPair<K, V>> datum : data) {
-      currentPairList = datum;
-
-      if (currentPairList == null) continue;
-
-      for (KVPair<K, V> pair : currentPairList) {
-        keyArray[count] = pair.getKey();
-        count++;
-      }
-    }
-
-    return keyArray;
+  public int size() {
+    return keyCount;
   }
 
   // -------- Object callbacks --------
 
   @Override
   public boolean equals(Object obj) {
+    // First confirm that the object is a MyHashTable
     if (obj instanceof MyHashTable) {
+
+      // Cast the object to MyHashTable to help compiler
       MyHashTable<?,?> other = (MyHashTable<?,?>) obj;
 
-      Iterator<KVPair<K,V>> thisIterator = iterator();
-      Iterator<?> otherIterator = other.iterator();
+      // First check they're the same size
+      if (other.size() != size()) return false;
 
-      while (thisIterator.hasNext() && otherIterator.hasNext()) {
-        KVPair<K,V> thisPair = thisIterator.next();
-        Object otherObject = otherIterator.next();
+      // For each LinkedList of KVPairs in this...
+      for (LinkedList<KVPair<K,V>> pairList : data) {
 
-        if (otherObject.getClass() == thisPair.getClass()) {
-          KVPair<?,?> otherPair = (KVPair<?,?>) otherObject;
+        // For each KVPair in the LinkedLists...
+        for (KVPair<K,V> pair : pairList) {
 
-          if (thisPair.equals(otherPair)) continue;
+          // If the other list does not return the correct value for the key, return false
+          if (!other.get(pair.getKey()).equals(pair.getValue())) return false;
         }
-        return false;
       }
-
-      return !thisIterator.hasNext() && !otherIterator.hasNext();
+      return true;
     }
     return false;
   }
