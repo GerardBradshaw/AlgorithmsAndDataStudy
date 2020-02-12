@@ -1,7 +1,6 @@
 import array.ArraySorting;
 import hashtable.MyHashTable;
 import linkedlist.MyDoubleLinkedList;
-import tree.Node;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -12,18 +11,37 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-
     MyHashTable<Integer, String> hashTable = new MyHashTable<>(5);
-
     hashTable.insert(1, "Gerard");
     hashTable.insert(3, "Bae");
     hashTable.insert(7, "Mr. O");
     hashTable.insert(5, "Lewie");
     hashTable.insert(567, "Cuddles");
+    hashTable.insert(4, "Jay");
+    hashTable.insert(3, "Kevin");
 
-    String test = hashTable.get(55);
+    Object[] keySet = hashTable.keySet();
+
+    for (Object o : keySet) {
+      Integer key = (Integer) o;
+      System.out.println(key);
+    }
+
+
+    /*
+    MyHashTable<Integer, String> hashTable2 = new MyHashTable<>(5);
+    hashTable2.insert(1, "Gerard");
+    hashTable2.insert(3, "Kevin");
+    hashTable2.insert(7, "Mr. O");
+    hashTable2.insert(5, "Lewie");
+    hashTable2.insert(567, "Cuddles");
+    hashTable2.insert(4, "Jay");
+    hashTable2.insert(3, "Bae");
+
+    boolean test = hashTable.equals(hashTable2);
+
     System.out.println(test);
-
+     */
   }
 
   // -------- Arrays --------
