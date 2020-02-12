@@ -1,14 +1,15 @@
 package hashtable;
 
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
-public class MyHashTable<K,V> implements GHashTable<K,V> {
+import java.util.*;
+
+public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.KVPair<K,V>> {
 
   // -------- Member variables --------
 
-  LinkedList<KVPair<K,V>>[] data;
-  int keyCount;
+  private LinkedList<KVPair<K,V>>[] data;
+  private int keyCount = 0;
 
 
   // -------- Constructor --------
@@ -17,25 +18,35 @@ public class MyHashTable<K,V> implements GHashTable<K,V> {
     data = new LinkedList[size];
   }
 
+  @SafeVarargs
+  public MyHashTable(int size, KVPair<K,V>... pairs) {
+    data = new LinkedList[size];
+    for (KVPair<K,V> pair : pairs) {
+      insert(pair.key, pair.value);
+    }
+  }
+
 
   // -------- Helpers --------
 
-  private int convertKeyHashToIndex(int hashCode) {
-    return hashCode % data.length;
+  private int convertKeyToIndex(K key) {
+    return Math.abs(key.hashCode() % data.length);
   }
 
 
   // -------- GHashTable callbacks --------
+
   @Override
   public void insert(K key, V value) {
-    int index = convertKeyHashToIndex(key.hashCode());
+    int index = convertKeyToIndex(key);
     if (data[index] == null) data[index] = new LinkedList<>();
     data[index].add(new KVPair<>(key, value));
+    keyCount++;
   }
 
   @Override
   public V get(K key) {
-    int index = convertKeyHashToIndex(key.hashCode());
+    int index = convertKeyToIndex(key);
     LinkedList<KVPair<K, V>> pairList = data[index];
 
     // If pairList is null or empty, return null (invalid key)
@@ -54,19 +65,22 @@ public class MyHashTable<K,V> implements GHashTable<K,V> {
 
   @Override
   public void remove(K key) {
-    int index = convertKeyHashToIndex(key.hashCode());
+    int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
     // If pairList is null or empty, return null (invalid key)
     if (pairList == null || pairList.size() == 0) return;
 
+    int initialSize = pairList.size();
+
     // Go through pairList and remove if the key matches
     pairList.removeIf(p -> p.getKey().equals(key));
+    keyCount += pairList.size() - initialSize;
   }
 
   @Override
   public void set(K key, V value) {
-    int index = convertKeyHashToIndex(key.hashCode());
+    int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
     // If pairList is null or empty, just add a new value
@@ -89,15 +103,11 @@ public class MyHashTable<K,V> implements GHashTable<K,V> {
 
   @Override
   public boolean contains(K key) {
-    int index = convertKeyHashToIndex(key.hashCode());
+    int index = convertKeyToIndex(key);
     LinkedList<KVPair<K,V>> pairList = data[index];
 
-    // Check to see if pairList has any data. If there isn't catch the exception and return false.
-    try {
-      pairList.getFirst();
-    } catch (NoSuchElementException e) {
-      return false;
-    }
+    // Return false if pairList has no pairs
+    if (pairList == null || pairList.size() == 0) return false;
 
     for (KVPair<K,V> pair : pairList) {
       if (pair.getKey().equals(key)) return true;
@@ -105,10 +115,116 @@ public class MyHashTable<K,V> implements GHashTable<K,V> {
     return false;
   }
 
+  @Override
+  public Object[] keySet() {
+    Object[] keyArray = new Object[keyCount];
+
+    LinkedList<KVPair<K,V>> currentPairList;
+    int count = 0;
+
+    for (LinkedList<KVPair<K, V>> datum : data) {
+      currentPairList = datum;
+
+      if (currentPairList == null) continue;
+
+      for (KVPair<K, V> pair : currentPairList) {
+        keyArray[count] = pair.getKey();
+        count++;
+      }
+    }
+
+    return keyArray;
+  }
+
+  // -------- Object callbacks --------
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof MyHashTable) {
+      MyHashTable<?,?> other = (MyHashTable<?,?>) obj;
+
+      Iterator<KVPair<K,V>> thisIterator = iterator();
+      Iterator<?> otherIterator = other.iterator();
+
+      while (thisIterator.hasNext() && otherIterator.hasNext()) {
+        KVPair<K,V> thisPair = thisIterator.next();
+        Object otherObject = otherIterator.next();
+
+        if (otherObject.getClass() == thisPair.getClass()) {
+          KVPair<?,?> otherPair = (KVPair<?,?>) otherObject;
+
+          if (thisPair.equals(otherPair)) continue;
+        }
+        return false;
+      }
+
+      return !thisIterator.hasNext() && !otherIterator.hasNext();
+    }
+    return false;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder output = new StringBuilder();
+
+    int currentIndex = 0;
+    LinkedList<KVPair<K,V>> currentList = null;
+
+    while (currentIndex < data.length) {
+      currentList = data[currentIndex];
+      if (currentList != null) {
+        for (KVPair<K,V> pair : currentList) {
+          output.append("\n").append(pair.getKey().toString()).append(", ").append(pair.getValue().toString());
+        }
+      }
+      currentIndex++;
+    }
+
+    return output.toString();
+  }
+
+  // -------- Iterable callbacks --------
+
+  @NotNull
+  @Override
+  public Iterator<KVPair<K,V>> iterator() {
+    return new Iterator<KVPair<K,V>>() {
+
+      int currentIndex = 0;
+      int currentListIndex = 0;
+
+      @Override
+      public boolean hasNext() {
+        // Iterate through data until out of bounds
+        while (currentIndex < data.length) {
+
+          // If there is a LL at the current index, iterate on that LL
+          LinkedList<KVPair<K,V>> currentList = data[currentIndex];
+          if (currentList != null) {
+            if (currentListIndex < currentList.size()) {
+              if (currentList.get(currentListIndex) != null) {
+                return true;
+              }
+            }
+            currentListIndex = 0;
+          }
+          currentIndex++;
+        }
+        return false;
+      }
+
+      @Override
+      public KVPair<K,V> next() {
+        currentListIndex++;
+        return data[currentIndex].get(currentListIndex - 1);
+      }
+    };
+  }
+
 
   // -------- KV Pair class ---------
 
-  private static class KVPair<K,V> {
+  public static class KVPair<K,V> {
     private K key;
     private V value;
 
@@ -131,6 +247,20 @@ public class MyHashTable<K,V> implements GHashTable<K,V> {
 
     public void setValue(V value) {
       this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj instanceof KVPair) {
+        KVPair<?,?> other = (KVPair<?,?>) obj;
+
+        if (other.getValue() == null) {
+          return value == null && key.equals(other.getKey());
+        }
+
+        return key.equals(other.getKey()) && value.equals(other.getValue());
+      }
+      return false;
     }
   }
 }
