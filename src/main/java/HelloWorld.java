@@ -11,15 +11,9 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyHashTable<Integer, String> hashTable = new MyHashTable<>(5);
-    hashTable.insert(1, "Gerard");
-    hashTable.insert(3, "Bae");
-    hashTable.insert(7, "Mr. O");
-    hashTable.insert(5, "Lewie");
-    hashTable.insert(567, "Cuddles");
-    hashTable.insert(4, "Jay");
-    hashTable.insert(33, "Kevin");
+    MyHashTable<Integer, Integer> hashTable = createRandomHashTable(100,100);
 
+    
   }
 
   // -------- Arrays --------
@@ -221,6 +215,24 @@ public class HelloWorld {
 
     System.out.print("Writing to file...");
     writeToFile("LinkedListEfficiency.txt", timeList);
+  }
+
+
+  // -------- HashTables --------
+
+  private static MyHashTable<Integer, Integer> createRandomHashTable(int size, int entries) {
+    if (size <= 0) return null;
+
+    Random rand = new Random();
+    int[] keys = new int[entries];
+    int[] values = new int[entries];
+    MyHashTable<Integer, Integer> table = new MyHashTable<>(size);
+
+    for (int i = 0; i < entries; i++) {
+      table.insert(rand.nextInt(), rand.nextInt());
+    }
+
+    return table;
   }
 
 }
