@@ -34,6 +34,32 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
     return Math.abs(key.hashCode() % data.length);
   }
 
+  public K getRandomKey() {
+    if (keyCount == 0) return null;
+
+    Random rand = new Random();
+    int randomKeyNumber = rand.nextInt(keyCount);
+    int count = 0;
+
+    // For each LinkedList of KVPairs in this...
+    for (LinkedList<KVPair<K,V>> pairList : data) {
+
+      // If the LL is null, move on to the next one
+      if (pairList == null) continue;
+
+      // For each KVPair in the LL...
+      for (KVPair<K,V> pair : pairList) {
+
+        // If we're up to the randomly selected key and the pair isn't null, return the key
+        if (pair != null && count == randomKeyNumber) return pair.getKey();
+
+        // Otherwise, continue counting
+        count++;
+      }
+    }
+    return null;
+  }
+
 
   // -------- GHashTable callbacks --------
 
@@ -49,7 +75,8 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
       LinkedList<KVPair<K,V>> pairList = data[index];
       for (KVPair<K,V> pair : pairList) {
         if (pair.getKey().equals(key)) {
-          throw new IllegalArgumentException();
+          pair.setValue(value);
+          return;
         }
       }
     }
