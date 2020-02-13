@@ -57,14 +57,18 @@ public class MyHashTableTest {
     assertThat(hashTable, is(equalTo(new MyHashTable<>(hashTableSize, pair0, pair1, pair2, newKeyDuplicateValue))));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test
   public void testInsert_duplicateKeyDuplicateValue() {
     hashTable.insert(duplicateKey, duplicateValue);
+    assertThat(hashTable, is(equalTo(
+        new MyHashTable<>(hashTableSize, pair0, pair2, new KVPair<>(duplicateKey, duplicateValue)))));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test
   public void testInsert_duplicateKeyNewValue() {
     hashTable.insert(duplicateKey, newValue);
+    assertThat(hashTable, is(equalTo(
+        new MyHashTable<>(hashTableSize, pair0, pair2, new KVPair<>(duplicateKey, newValue)))));
   }
 
   @Test
