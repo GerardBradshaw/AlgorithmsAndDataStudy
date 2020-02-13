@@ -11,9 +11,9 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyHashTable<Integer, Integer> hashTable = createRandomHashTable(100,100);
 
-    
+    outputHashTableEfficiency(1000, 50000);
+
   }
 
   // -------- Arrays --------
@@ -224,15 +224,71 @@ public class HelloWorld {
     if (size <= 0) return null;
 
     Random rand = new Random();
-    int[] keys = new int[entries];
-    int[] values = new int[entries];
     MyHashTable<Integer, Integer> table = new MyHashTable<>(size);
 
-    for (int i = 0; i < entries; i++) {
-      table.insert(rand.nextInt(), rand.nextInt());
-    }
+    for (int i = 0; i < entries; i++) table.insert(rand.nextInt(), rand.nextInt());
 
     return table;
+  }
+
+  private static void outputHashTableEfficiency(int numberOfTables, int size) {
+    List<String> timeList = new ArrayList<>();
+    timeList.add("MapSize,AddToStartTime,GetAtEndTime,RemoveFromEndTime,FindRandomValueTime,RandomValueFound");
+    System.out.print("Running...");
+
+    for (int currentSize = 2; currentSize <= size; currentSize = currentSize + (size / numberOfTables)) {
+      String timeListString = Integer.toString(currentSize);
+
+      // Created using addAtEnd
+      long startTimeNs = System.nanoTime();
+      MyHashTable<Integer, Integer> table = createRandomHashTable(currentSize,currentSize);
+      long endTimeNs = System.nanoTime();
+      long timeElapsedNs = (endTimeNs - startTimeNs);
+
+      timeListString += "," + timeElapsedNs;
+
+
+      if (table != null) {
+        // First, get a valid key from the table
+        int randomKey;
+        if (table.getRandomKey() == null) randomKey = 0;
+        else randomKey = table.getRandomKey();
+
+        // get()
+        startTimeNs = System.nanoTime();
+        table.get(randomKey);
+        endTimeNs = System.nanoTime();
+        timeElapsedNs = (endTimeNs - startTimeNs);
+
+        timeListString += "," + timeElapsedNs;
+
+
+        // remove()
+        startTimeNs = System.nanoTime();
+        table.remove(randomKey);
+        endTimeNs = System.nanoTime();
+        timeElapsedNs = (endTimeNs - startTimeNs);
+
+        timeListString += "," + timeElapsedNs;
+
+
+        // contains()
+        startTimeNs = System.nanoTime();
+        int randomInt = new Random().nextInt();
+        boolean found = table.contains(randomInt);
+        endTimeNs = System.nanoTime();
+        timeElapsedNs = (endTimeNs - startTimeNs);
+
+        timeListString += "," + timeElapsedNs + "," + found;
+
+        timeList.add(timeListString);
+      }
+    }
+
+    System.out.println("done!");
+
+    System.out.print("Writing to file...");
+    writeToFile("HashTableEfficiency.txt", timeList);
   }
 
 }
