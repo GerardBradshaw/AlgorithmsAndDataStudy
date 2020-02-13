@@ -12,7 +12,7 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    outputHashTableEfficiency(1000, 50000);
+    outputHashTableEfficiency(100, 5000);
 
   }
 
@@ -233,7 +233,7 @@ public class HelloWorld {
 
   private static void outputHashTableEfficiency(int numberOfTables, int size) {
     List<String> timeList = new ArrayList<>();
-    timeList.add("MapSize,AddToStartTime,GetAtEndTime,RemoveFromEndTime,FindRandomValueTime,RandomValueFound");
+    timeList.add("Table Size, insert() time, get() time, remove() time, contains() time, contains() result");
     System.out.print("Running...");
 
     for (int currentSize = 2; currentSize <= size; currentSize = currentSize + (size / numberOfTables)) {
@@ -288,7 +288,7 @@ public class HelloWorld {
     System.out.println("done!");
 
     System.out.print("Writing to file...");
-    writeToFile("HashTableEfficiency.txt", timeList);
+    writeToFile("HashTableEfficiency.csv", timeList);
   }
 
 }
