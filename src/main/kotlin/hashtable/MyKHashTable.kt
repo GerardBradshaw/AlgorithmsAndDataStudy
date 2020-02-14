@@ -11,7 +11,7 @@ class MyKHashTable<K,V>(val size: Int) : GKHashTable<K,V> {
 
   // -------- Helpers --------
 
-  fun convertKeyToIndex(key: K): Int {
+  fun convertKeyToIndex(key: Any): Int {
     val keyHashCode = key.hashCode()
     return keyHashCode % data.size;
   }
@@ -20,13 +20,10 @@ class MyKHashTable<K,V>(val size: Int) : GKHashTable<K,V> {
   // -------- GKHashTable callbacks --------
 
   override fun insert(key: K, value: V) {
-    val index = convertKeyToIndex(key)
-
-    if (data[index] == null) data[index] = LinkedList()
-    data[index]?.add(KVPair(key, value))
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun get(key: K): V? {
+  override fun get(key: Any): V? {
     val index = convertKeyToIndex(key)
     val pairList = data[index] ?: return null
 
@@ -37,28 +34,22 @@ class MyKHashTable<K,V>(val size: Int) : GKHashTable<K,V> {
     return null
   }
 
-  override fun remove(key: K) {
+  override fun remove(key: Any) {
     val index = convertKeyToIndex(key)
     val pairList = data[index] ?: return
 
     pairList.removeIf {p -> p?.key?.equals(key)!! }
   }
 
-  override fun set(key: K, value: V) {
-    val index = convertKeyToIndex(key)
-    val pairList: LinkedList<KVPair<K,V>?>?
-
-    pairList = if (data[index] == null) LinkedList() else data[index]
-
-    pairList?.let {
-      for (pair in pairList) {
-        pair?.let {
-          pair.key?.let { if (pair.key.equals(key)) pair.value = value } }
-      }
-    }
+  override fun size(): Int {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun contains(key: K): Boolean {
+  override fun set(key: K, value: V) {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun contains(key: Any): Boolean {
     val index = convertKeyToIndex(key)
     val pairList = data[index] ?: return false
 
