@@ -1,5 +1,0 @@
-package hashtable
-
-class MyKHashTable {
-
-}
