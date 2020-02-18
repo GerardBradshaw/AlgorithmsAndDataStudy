@@ -31,6 +31,9 @@ public class HelloWorld {
     System.out.println("  there are " + table.size() + " words");
     System.out.println("  memory size = " + table.memorySize());
 
+    System.out.println();
+    System.out.println(table.equals(new WordTable(getWords())));
+
   }
 
   // -------- Arrays --------
