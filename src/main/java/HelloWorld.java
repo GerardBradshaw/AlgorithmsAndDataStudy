@@ -1,5 +1,8 @@
 import array.ArraySorting;
 import hashtable.MyHashTable;
+import hashtable.MyHashTable2;
+import hashtable.Word;
+import hashtable.WordTable;
 import linkedlist.MyDoubleLinkedList;
 import tree.XMyBinarySearchTree;
 
@@ -11,8 +14,22 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
+    WordTable table = new WordTable(getWords());
+    System.out.println("Table created:");
+    System.out.println("  there are " + table.size() + " words");
+    System.out.println("  memory size = " + table.memorySize());
 
-    outputHashTableEfficiency(100, 5000);
+    table.insertWords(getMoreWords());
+    System.out.println("More words added:");
+    System.out.println("  there are " + table.size() + " words");
+    System.out.println("  memory size = " + table.memorySize());
+
+    for (Word word : getWords()) {
+      table.remove(word.getWord());
+    }
+    System.out.println("First 10 words removed:");
+    System.out.println("  there are " + table.size() + " words");
+    System.out.println("  memory size = " + table.memorySize());
 
   }
 
@@ -289,6 +306,51 @@ public class HelloWorld {
 
     System.out.print("Writing to file...");
     writeToFile("HashTableEfficiency.csv", timeList);
+  }
+
+  private static void showDistributionWhenUsingDoubleHash() {
+    String[] array = new String[]{
+        "100", "510", "170", "214", "268", "398", "235", "802", "900", "723",
+        "699", "1", "16", "999", "890", "725", "998", "978", "988", "990",
+        "989", "984", "320", "321", "400", "415", "450", "50", "660", "624"};
+
+    MyHashTable2 hashTable = new MyHashTable2(60);
+
+    hashTable.addToArrayUsingModHash(array);
+    System.out.println(hashTable.toString());
+
+    hashTable = new MyHashTable2(60);
+    hashTable.addToArrayUsingDoubModHash(array);
+    System.out.println(hashTable.toString());
+
+  }
+
+  private static Word[] getWords() {
+    return new Word[]{
+        new Word("pin", "a sharp thing"),
+        new Word("use", "to use"),
+        new Word("bad", "not good"),
+        new Word("eat", "to consume"),
+        new Word("nap", "a mini-sleep"),
+        new Word("ask", "to inquire"),
+        new Word("joy", "happiness"),
+        new Word("far", "not close"),
+        new Word("top", "the highest point of something"),
+        new Word("tin", "a metal container")};
+  }
+
+  private static Word[] getMoreWords() {
+    return new Word[] {
+        new Word("cat", "a feline"),
+        new Word("bow", "a fancy knot"),
+        new Word("gun", "pew pew"),
+        new Word("car", "a personal motor vehicle"),
+        new Word("war", "what is it good for?"),
+        new Word("oak", "a type of tree"),
+        new Word("dry", "not wet"),
+        new Word("pot", "a vessel for cooking"),
+        new Word("bad", "a soft place for sleeping"),
+        new Word("tog", "bathers")};
   }
 
 }
