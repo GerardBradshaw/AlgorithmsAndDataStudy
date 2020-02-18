@@ -3,17 +3,17 @@ package hashtable
 import java.lang.StringBuilder
 import java.util.*
 
-class WordTable {
+class WordTable() {
 
   // -------- Properties --------
 
-  private var wordLists: Array<LinkedList<Word>?>
+  private var wordLists: Array<LinkedList<Word>?> = arrayOfNulls(1)
   private var wordCount = 0
 
 
   // -------- Secondary Constructor --------
 
-  constructor(words: Array<Word?>) {
+  constructor(words: Array<Word?>) : this() {
     // Create a table of null values
     wordLists = arrayOfNulls(nextPrime(words.size * 2))
 
