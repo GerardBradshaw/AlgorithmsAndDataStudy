@@ -33,20 +33,21 @@ class WordTable() {
     val index = convertWordToIndex(word)
 
     // Get the list at the index or create a new one. Also add the new word to the list
-    wordLists[index] = (wordLists[index] ?: LinkedList()).also { it.add(word) }
+    val list = wordLists[index] ?: LinkedList()
+    wordLists[index] = list
+    if (list.contains(word)) return
+    list.add(word)
 
     /*
     The above statement can also be written as:
 
-    val list = wordListTable[index] ?: MyDoubleLinkedList()
-    wordListTable[index] = list
-    list.addFirst(word)
+    wordLists[index] = (wordLists[index] ?: LinkedList()).also { it.add(word) }
 
     OR
 
-    val listAtIndex = wordListTable[index]
+    val listAtIndex = wordLists[index]
     if (listAtIndex == null)
-      wordListTable[index] = MyDoubleLinkedList(word)
+      wordLists[index] = LinkedList(word)
     else
       listAtIndex.addFirst(word)
      */
@@ -68,7 +69,10 @@ class WordTable() {
         val index = convertWordToIndex(word)
 
         // Get the list at the index or create a new one. Also add the new word to the list
-        wordLists[index] = (wordLists[index] ?: LinkedList()).also { it.add(word) }
+        val list = wordLists[index] ?: LinkedList()
+        wordLists[index] = list
+        if (list.contains(word)) continue
+        list.add(word)
 
         // Increase the word count
         wordCount++
