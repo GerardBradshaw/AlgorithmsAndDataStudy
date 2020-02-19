@@ -4,6 +4,7 @@ import hashtable.MyHashTable2;
 import hashtable.Word;
 import hashtable.WordTable;
 import linkedlist.MyDoubleLinkedList;
+import stack.MyStack;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -14,26 +15,18 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    WordTable table = new WordTable(getWords());
-    System.out.println("Table created:");
-    System.out.println("  there are " + table.size() + " words");
-    System.out.println("  memory size = " + table.memorySize());
 
-    table.insertWords(getMoreWords());
-    System.out.println("More words added:");
-    System.out.println("  there are " + table.size() + " words");
-    System.out.println("  memory size = " + table.memorySize());
+    MyStack<Integer> stack = new MyStack<>();
 
-    for (Word word : getWords()) {
-      table.remove(word.getWord());
-    }
-    System.out.println("First 10 words removed:");
-    System.out.println("  there are " + table.size() + " words");
-    System.out.println("  memory size = " + table.memorySize());
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    stack.push(4);
+    stack.push(5);
+    System.out.println(stack);
 
-    System.out.println();
-    System.out.println(table.equals(new WordTable(getWords())));
-
+    System.out.println(stack.peek());
+    System.out.println(stack);
   }
 
   // -------- Arrays --------
