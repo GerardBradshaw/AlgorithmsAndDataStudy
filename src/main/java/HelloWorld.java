@@ -2,10 +2,8 @@ import array.ArraySorting;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
-import hashtable.WordTable;
 import linkedlist.MyDoubleLinkedList;
-import queue.MyQueue;
-import stack.MyStack;
+import queue.MyKQueue;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -17,21 +15,15 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyQueue<Integer> queue = new MyQueue<>();
-    MyQueue<Integer> queueTwo = new MyQueue<>();
+    MyKQueue<Integer> queue = new MyKQueue<>();
 
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);
-    queue.enqueue(4);
     queue.enqueue(5);
+    queue.enqueue(4);
 
-    queueTwo.enqueue(1);
-    queueTwo.enqueue(2);
-    queueTwo.enqueue(3);
-    queueTwo.enqueue(4);
-
-    System.out.println(queue.equals(queueTwo));
+    System.out.println(queue.hashCode());
   }
 
   // -------- Arrays --------
