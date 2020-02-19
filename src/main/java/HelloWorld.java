@@ -4,6 +4,7 @@ import hashtable.MyHashTable2;
 import hashtable.Word;
 import hashtable.WordTable;
 import linkedlist.MyDoubleLinkedList;
+import queue.MyQueue;
 import stack.MyStack;
 import tree.XMyBinarySearchTree;
 
@@ -16,17 +17,21 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyStack<Integer> stack = new MyStack<>();
+    MyQueue<Integer> queue = new MyQueue<>();
+    MyQueue<Integer> queueTwo = new MyQueue<>();
 
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-    stack.push(4);
-    stack.push(5);
-    System.out.println(stack);
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+    queue.enqueue(4);
+    queue.enqueue(5);
 
-    System.out.println(stack.peek());
-    System.out.println(stack);
+    queueTwo.enqueue(1);
+    queueTwo.enqueue(2);
+    queueTwo.enqueue(3);
+    queueTwo.enqueue(4);
+
+    System.out.println(queue.equals(queueTwo));
   }
 
   // -------- Arrays --------
