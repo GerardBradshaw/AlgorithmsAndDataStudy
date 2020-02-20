@@ -4,6 +4,7 @@ import hashtable.MyHashTable2;
 import hashtable.Word;
 import linkedlist.MyDoubleLinkedList;
 import queue.MyKQueue;
+import stack.MyKStack;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,15 +16,15 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKQueue<Integer> queue = new MyKQueue<>();
+    MyKStack<Integer> stack = new MyKStack<>();
 
-    queue.enqueue(1);
-    queue.enqueue(2);
-    queue.enqueue(3);
-    queue.enqueue(5);
-    queue.enqueue(4);
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    stack.push(4);
+    stack.push(5);
 
-    System.out.println(queue.hashCode());
+    System.out.println(stack.toString());
   }
 
   // -------- Arrays --------
