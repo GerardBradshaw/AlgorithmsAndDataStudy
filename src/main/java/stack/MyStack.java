@@ -44,7 +44,7 @@ public class MyStack<T> {
     Node<T> currentNode = top;
 
     while (currentNode != null) {
-      builder.append("<- [" + currentNode.toString() + "] ");
+      builder.append("<- [").append(currentNode.toString()).append("] ");
       currentNode = currentNode.previous;
     }
 
