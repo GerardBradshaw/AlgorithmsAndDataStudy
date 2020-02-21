@@ -33,7 +33,7 @@ public class MyHeap {
   }
 
   public void insert(int i) {
-    // Resize array if required
+    // Resize array if data is full
     if (data.length == size)
       resizeArray();
 
@@ -118,7 +118,6 @@ public class MyHeap {
 
   private void moveUpToCorrectIndex(int startingIndex) {
     int currentIndex = startingIndex;
-    int marker = data[currentIndex];
 
     // Loop while the number is larger than its parent
     while (currentIndex != 0 && data[currentIndex] > data[parentIndex(currentIndex)]) {
@@ -132,39 +131,29 @@ public class MyHeap {
   }
 
   private void moveDownToCorrectIndex(int startingIndex) {
-    // Setup variables
     int currentIndex = startingIndex;
     int leftIndex = leftChildIndex(currentIndex);
     int rightIndex = rightChildIndex(currentIndex);
+    int maxIndex = size - 1;
 
-    // Loop until we reach the last filled index
-    while (leftIndex <= size - 1 && rightIndex <= size - 1) {
+    while (leftIndex <= maxIndex && rightIndex <= maxIndex) {
 
-      // If left side larger...
-      if (data[currentIndex] < data[leftIndex]) {
-
-        // ... and right side larger
-        if (data[currentIndex] < data[rightIndex]) {
-
-          // If left is larger than right...
-          if (data[leftIndex] > data[rightIndex])
-            swap(currentIndex, leftIndex);
-
-          // ... else the right is larger than left (or equal)
-          else
-            swap(currentIndex, rightIndex);
+      if (data[leftIndex] > data[rightIndex]) {
+        if (data[currentIndex] < data[leftIndex]) {
+          swap(leftIndex, currentIndex);
+          currentIndex = leftIndex;
         }
+        else return;
+      }
+      else if (data[rightIndex] > data[leftIndex]) {
+        if (data[currentIndex] < data[rightIndex]) {
+          swap(rightIndex, currentIndex);
+          currentIndex = rightIndex;
+        }
+        else return;
+      }
+      else return;
 
-        // Else if right side larger (but left side not)
-      } else if (data[currentIndex] < data[rightIndex])
-        swap(currentIndex, rightIndex);
-
-      // Else it's the same as left and right so do nothing
-      else
-        return;
-
-      // Update indices
-      currentIndex++;
       leftIndex = leftChildIndex(currentIndex);
       rightIndex = rightChildIndex(currentIndex);
     }
