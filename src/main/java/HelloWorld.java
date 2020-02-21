@@ -9,6 +9,7 @@ import tree.XMyBinarySearchTree;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.*;
 
 public class HelloWorld {
@@ -16,12 +17,6 @@ public class HelloWorld {
   public static void main(String[] args) {
 
     MyHeap heap = new MyHeap(new int[]{1,2,3,4,5,6,7,8,9,10});
-
-    System.out.println(heap);
-
-    heap.deleteMax();
-
-    System.out.println(heap);
   }
 
   // -------- Arrays --------
