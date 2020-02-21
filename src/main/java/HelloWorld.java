@@ -3,6 +3,7 @@ import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
 import heap.MyHeap;
+import heap.MyKHeap;
 import linkedlist.MyDoubleLinkedList;
 import tree.XMyBinarySearchTree;
 
@@ -16,7 +17,10 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyHeap heap = new MyHeap(new int[]{1,2,3,4,5,6,7,8,9,10});
+    MyKHeap heap = new MyKHeap(new Integer[]{10,9,8,7,6,5,4,3,2,1});
+
+    System.out.println(heap);
+
   }
 
   // -------- Arrays --------
