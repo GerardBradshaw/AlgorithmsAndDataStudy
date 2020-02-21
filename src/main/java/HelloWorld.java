@@ -2,9 +2,8 @@ import array.ArraySorting;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
+import heap.MyHeap;
 import linkedlist.MyDoubleLinkedList;
-import queue.MyKQueue;
-import stack.MyKStack;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -16,15 +15,13 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKStack<Integer> stack = new MyKStack<>();
+    MyHeap heap = new MyHeap(new int[]{1,2,3,4,5,6,7,8,9,10});
 
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-    stack.push(4);
-    stack.push(5);
+    System.out.println(heap);
 
-    System.out.println(stack.toString());
+    heap.deleteMax();
+
+    System.out.println(heap);
   }
 
   // -------- Arrays --------
