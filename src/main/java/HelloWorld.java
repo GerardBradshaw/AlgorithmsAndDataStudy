@@ -5,6 +5,8 @@ import hashtable.Word;
 import heap.MyHeap;
 import heap.MyKHeap;
 import linkedlist.MyDoubleLinkedList;
+import tree.BinaryTreePrinter;
+import tree.MyKAvlTree;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -17,9 +19,15 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKHeap heap = new MyKHeap(new Integer[]{10,9,8,7,6,5,4,3,2,1});
-
-    System.out.println(heap);
+    MyKAvlTree tree = new MyKAvlTree();
+    tree.insert(40);
+    tree.insert(20);
+    tree.insert(10);
+    tree.insert(25);
+    tree.insert(30);
+    tree.insert(22);
+    tree.insert(50);
+    KAvlTreePrinter.printNode(tree.getHead());
 
   }
 
