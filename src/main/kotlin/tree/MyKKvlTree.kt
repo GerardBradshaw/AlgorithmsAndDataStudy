@@ -2,7 +2,7 @@ package tree
 
 import java.lang.NullPointerException
 
-class MyKBinaryTree {
+class MyKKvlTree {
 
   // ---------------- Member variables ----------------
 
