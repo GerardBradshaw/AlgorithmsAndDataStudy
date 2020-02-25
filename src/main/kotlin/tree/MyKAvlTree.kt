@@ -1,6 +1,6 @@
 package tree
 
-import com.sun.javaws.exceptions.InvalidArgumentException
+import java.io.InvalidObjectException
 import java.lang.NullPointerException
 
 class MyKAvlTree {
@@ -296,7 +296,7 @@ while (b != null && a != null) {
 
   private fun deleteNodeWithOnlyRightChild(node: Node, right: Node) {
     if (node.right != right)
-      throw InvalidArgumentException(null)
+      throw InvalidObjectException()
 
     val parent = node.parent
 
@@ -311,7 +311,7 @@ while (b != null && a != null) {
 
   private fun deleteNodeWithOnlyLeftChild(node: Node, left: Node) {
     if (node.left != left)
-      throw InvalidArgumentException(null)
+      throw InvalidObjectException()
 
     val parent = node.parent
 
