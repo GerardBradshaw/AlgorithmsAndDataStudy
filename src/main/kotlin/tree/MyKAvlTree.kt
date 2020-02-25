@@ -1,5 +1,6 @@
 package tree
 
+import com.sun.javaws.exceptions.InvalidArgumentException
 import java.lang.NullPointerException
 
 class MyKAvlTree {
@@ -303,6 +304,73 @@ while (b != null && a != null) {
 
   private fun deleteRightNodeOf(node: Node) {
     println(node.value)
+    TODO()
+  }
+
+  private fun deleteLeaf(node: Node) {
+    val parent = node.parent
+
+    if (parent != null) {
+      if (parent.left == node)
+        parent.left = null
+      else if (parent.right == node)
+        parent.right = null
+    }
+    else head = null
+  }
+
+  private fun deleteNodeWithOnlyRightChild(node: Node, right: Node) {
+    if (node.right != right)
+      throw InvalidArgumentException(null)
+
+    val parent = node.parent
+
+    if (parent != null) {
+      if (parent.left == node)
+        parent.left = right
+      else if (parent.right == node)
+        parent.right = right
+    }
+    else head = right
+  }
+
+  private fun deleteNodeWithOnlyLeftChild(node: Node, left: Node) {
+    if (node.left != left)
+      throw InvalidArgumentException(null)
+
+    val parent = node.parent
+
+    if (parent != null) {
+      if (parent.left == node)
+        parent.left = left
+      else if (parent.right == node)
+        parent.right = left
+    }
+    else head = left
+  }
+
+  private fun deleteNodeWithTwoChildren(node: Node) {
+    
+  }
+
+  private fun deleteNode(node: Node) {
+    val left = node.left
+    val right = node.right
+
+    if (left == null)
+      if (right == null)
+        deleteLeaf(node)
+      else
+        deleteNodeWithOnlyRightChild(node, right)
+
+    else if (right == null)
+      deleteNodeWithOnlyLeftChild(node, left)
+
+    else {
+      deleteNodeWithTwoChildren(node)
+    }
+
+    node.parent = null
     TODO()
   }
 
