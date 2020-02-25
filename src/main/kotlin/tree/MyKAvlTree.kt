@@ -62,25 +62,14 @@ class MyKAvlTree {
     if (current == null)
       throw NullPointerException()
 
-    if (current.value == value)
-      deleteHead()
-
     while (current != null) {
-      if (value < current.value) {
-        val left = current.left ?: return
+      if (current.value == value)
+        deleteNode(current)
 
-        if (value == left.value)
-          deleteLeftNodeOf(current)
-        else current = left
-      }
-
-      else if (value > current.value) {
-        val right = current.right ?: return
-
-        if (value == right.value)
-          deleteRightNodeOf(current)
-        else current = right
-      }
+      current = if (value > current.value)
+        current.right
+      else
+        current.left
     }
   }
 
@@ -293,20 +282,6 @@ while (b != null && a != null) {
     cR?.parent = b
   }
 
-  private fun deleteHead() {
-    TODO()
-  }
-
-  private fun deleteLeftNodeOf(node: Node) {
-    println(node.value)
-    TODO()
-  }
-
-  private fun deleteRightNodeOf(node: Node) {
-    println(node.value)
-    TODO()
-  }
-
   private fun deleteLeaf(node: Node) {
     val parent = node.parent
 
@@ -350,7 +325,7 @@ while (b != null && a != null) {
   }
 
   private fun deleteNodeWithTwoChildren(node: Node) {
-    
+
   }
 
   private fun deleteNode(node: Node) {
@@ -371,7 +346,6 @@ while (b != null && a != null) {
     }
 
     node.parent = null
-    TODO()
   }
 
   // ---------------- Any callbacks ----------------
