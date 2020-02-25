@@ -108,7 +108,7 @@ class MyKAvlTree {
 
   // ---------------- Helpers ----------------
 
-  private fun balanceTree(insertedNode: Node) {
+  private fun balanceTree(insertedNode: Node, fullBalance: Boolean = false) {
     val c = insertedNode
     val b: Node? = c.parent
     val a: Node? = b?.parent
@@ -119,71 +119,39 @@ class MyKAvlTree {
     while (current != null) {
       val balanceFactor = current.getBalanceFactor()
 
-      // Left-heavy if balanceFactor == 2
-      if (balanceFactor == 2) {
-        val childBalFactor = currentChild?.getBalanceFactor()
+      if (balanceFactor >= 2) {
+        val childBalanceFactor = currentChild?.getBalanceFactor()
 
-        if (childBalFactor == 1) {
-          println("LL rotation to insert ${insertedNode.value}")
+        if (childBalanceFactor == 1) {
           rotationLL(current)
-          return
-        } else if (childBalFactor == -1) {
-          println("LR rotation to insert ${insertedNode.value}")
+          if (!fullBalance) return
+        }
+        else if (childBalanceFactor == -1) {
           rotationLR(current)
-          return
-        } else return
+          if (!fullBalance) return
+        }
+        else
+          if (!fullBalance) return
       }
 
-      // Right-heavy if balanceFactor == -2
-      else if (balanceFactor == -2) {
+      else if (balanceFactor <= -2) {
         val childBalFactor = currentChild?.getBalanceFactor()
 
         if (childBalFactor == 1) {
-          println("RL rotation to insert ${insertedNode.value}")
           rotationRL(current)
-          return
-        } else if (childBalFactor == -1) {
-          println("RR rotation to insert ${insertedNode.value}")
+          if (!fullBalance) return
+        }
+        else if (childBalFactor == -1) {
           rotationRR(current)
-          return
-        } else return
+          if (!fullBalance) return
+        }
+        else
+          if (!fullBalance) return
       }
+
       currentChild = current
       current = current.parent
     }
-
-    /*
-while (b != null && a != null) {
-  val aBal = a.getBalanceFactor()
-  val bBal = b.getBalanceFactor()
-
-  if (aBal + bBal == -2) {
-    doRRRotation(a)
-    println("RR rotation")
-    return
-  }
-  else if (aBal + bBal == 2) {
-    doLLRotation(a)
-    println("LL rotation")
-    return
-  }
-  else if (aBal - bBal == 2) {
-    doLRRotation(a)
-    println("LR rotation")
-    return
-  }
-  else if (-aBal + bBal == 2) {
-    doRLRotation(a)
-    println("RL rotation")
-    return
-  }
-  else if (aBal + bBal == 0)
-    return
-
-  b = b.parent
-  a = b?.parent
-}
- */
   }
 
   private fun rotationLL(a: Node) {
@@ -296,7 +264,7 @@ while (b != null && a != null) {
 
   private fun deleteNodeWithOnlyRightChild(node: Node, right: Node) {
     if (node.right != right)
-      throw InvalidObjectException()
+      throw InvalidObjectException("Tried to delete node with only right child, but provided child node was not to the right of provided parent node.")
 
     val parent = node.parent
 
@@ -311,7 +279,7 @@ while (b != null && a != null) {
 
   private fun deleteNodeWithOnlyLeftChild(node: Node, left: Node) {
     if (node.left != left)
-      throw InvalidObjectException()
+      throw InvalidObjectException("Tried to delete node with only left child, but provided child node was not to the left of provided parent node.")
 
     val parent = node.parent
 
