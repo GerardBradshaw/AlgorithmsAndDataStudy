@@ -126,12 +126,10 @@ class MyKAvlTree {
           rotationLL(current)
           if (!fullBalance) return
         }
-        else if (childBalanceFactor == -1) {
+        else {
           rotationLR(current)
           if (!fullBalance) return
         }
-        else
-          if (!fullBalance) return
       }
 
       else if (balanceFactor <= -2) {
@@ -141,16 +139,15 @@ class MyKAvlTree {
           rotationRL(current)
           if (!fullBalance) return
         }
-        else if (childBalFactor == -1) {
+        else {
           rotationRR(current)
           if (!fullBalance) return
         }
-        else
-          if (!fullBalance) return
       }
-
-      currentChild = current
-      current = current.parent
+      else {
+        currentChild = current
+        current = current.parent
+      }
     }
   }
 
@@ -262,7 +259,7 @@ class MyKAvlTree {
     else head = null
   }
 
-  private fun deleteNodeWithOnlyRightChild(node: Node, right: Node) {
+  private fun deleteNodeWithRightChildOnly(node: Node, right: Node) {
     if (node.right != right)
       throw InvalidObjectException("Tried to delete node with only right child, but provided child node was not to the right of provided parent node.")
 
@@ -277,7 +274,7 @@ class MyKAvlTree {
     else head = right
   }
 
-  private fun deleteNodeWithOnlyLeftChild(node: Node, left: Node) {
+  private fun deleteNodeWithLeftChildOnly(node: Node, left: Node) {
     if (node.left != left)
       throw InvalidObjectException("Tried to delete node with only left child, but provided child node was not to the left of provided parent node.")
 
@@ -292,8 +289,67 @@ class MyKAvlTree {
     else head = left
   }
 
-  private fun deleteNodeWithTwoChildren(node: Node) {
+  private fun connectParentAndChild(parent: Node?, child: Node) {
+    if (parent == null) {
+      head = child
+      child.parent = null
+    }
+    else {
+      child.parent = parent
+      if (child.value < parent.value)
+        parent.left = child
+      else
+        parent.right = child
+    }
+  }
 
+  private fun removeReferencesFromNode(xNode: Node) {
+    xNode.parent = null
+    xNode.left = null
+    xNode.right = null
+  }
+
+  private fun deleteNodeWithTwoChildren(xNode: Node) {
+    val parent = xNode.parent
+    val inheritor = xNode.left
+    val right = xNode.right
+
+    if (inheritor == null) {
+      if (right != null)
+        connectParentAndChild(parent, right)
+    }
+    else {
+      connectParentAndChild(parent, inheritor)
+      inheritor.right = right
+      right?.parent = inheritor
+
+      if (right == null)
+        balanceTree(inheritor, true)
+
+      else
+        insertSubTree(right, inheritor)
+    }
+    removeReferencesFromNode(xNode)
+  }
+
+  private fun insertSubTree(subTree: Node, start: Node? = null) {
+    var current: Node? = start
+    val value = subTree.value
+
+    while (current != null) {
+      current = if (value > current.value) {
+        if (current.left != null)
+          current.left
+        else break
+      } else {
+        if (current.right != null)
+          current.right
+        else break
+      }
+    }
+
+    connectParentAndChild(current, subTree)
+    balanceTree(subTree, true)
   }
 
   private fun deleteNode(node: Node) {
@@ -304,10 +360,10 @@ class MyKAvlTree {
       if (right == null)
         deleteLeaf(node)
       else
-        deleteNodeWithOnlyRightChild(node, right)
+        deleteNodeWithRightChildOnly(node, right)
 
     else if (right == null)
-      deleteNodeWithOnlyLeftChild(node, left)
+      deleteNodeWithLeftChildOnly(node, left)
 
     else {
       deleteNodeWithTwoChildren(node)
