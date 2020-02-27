@@ -1,4 +1,5 @@
 import array.ArraySorting;
+import array.MyStringBuilder;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
@@ -15,17 +16,17 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKAvlTree tree = new MyKAvlTree();
-    tree.insert(3);
-    tree.insert(1);
-    tree.insert(7);
-    tree.insert(5);
-    tree.insert(8);
-    tree.insert(4);
-    tree.insert(6);
-    KAvlTreePrinter.printNode(tree.getHead());
+    MyStringBuilder builder = new MyStringBuilder();
 
-    System.out.println(tree.toString());
+    builder.report();
+
+    builder.append("");
+
+    System.out.println(builder.toString());
+
+    builder.reverse();
+
+    System.out.println(builder.toString());
   }
 
   // -------- Arrays --------
