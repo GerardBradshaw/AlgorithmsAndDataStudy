@@ -1,8 +1,9 @@
 package tree
 
 import java.lang.NullPointerException
+import java.util.*
 
-class MyKAvlTree {
+class MyKAvlTree : Iterable<Int> {
 
   // ---------------- Member variables ----------------
 
@@ -101,6 +102,20 @@ class MyKAvlTree {
 
   fun getHead(): Node? {
     return head
+  }
+
+  fun printInOrder() {
+    return printInOrder(head)
+  }
+
+  fun printInOrder(node: Node?) {
+    val left = node?.left
+    if (left != null) return printInOrder(left)
+
+    println(node?.value)
+
+    val right = node?.right
+    if (right != null) return printInOrder(right)
   }
 
 
@@ -436,10 +451,23 @@ class MyKAvlTree {
     if (right != null) insertSubTree(right)
   }
 
+
   // ---------------- Any callbacks ----------------
 
   override fun equals(other: Any?): Boolean {
-    TODO()
+    if (other is MyKAvlTree) {
+      if (other.size() != size) return false
+
+      val otherIterator = other.iterator()
+      val thisIterator = iterator()
+
+      while (otherIterator.hasNext() && thisIterator.hasNext()) {
+        if (otherIterator.next() != thisIterator.next()) return false
+      }
+
+      return otherIterator.hasNext() == thisIterator.hasNext()
+    }
+    return false
   }
 
   override fun hashCode(): Int {
@@ -449,6 +477,45 @@ class MyKAvlTree {
   override fun toString(): String {
     TODO()
   }
+
+
+  // ---------------- Iterator callbacks ----------------
+
+  override fun iterator(): Iterator<Int> {
+    return object : Iterator<Int> {
+      val stack: Stack<Node> = Stack()
+
+      init {
+        var current = head
+        while (current != null) {
+          stack.push(current)
+          current = current.left
+        }
+      }
+
+      override fun hasNext(): Boolean {
+        return !stack.isEmpty()
+      }
+
+      override fun next(): Int {
+        val node = stack.pop()
+        val result = node.value
+
+        val right = node.right
+
+        if (right != null) {
+          var current = right
+          while (current != null) {
+            stack.push(current)
+            current = current!!.left
+          }
+        }
+        return result
+      }
+    }
+  }
+
+
 
   // ---------------- Node class ----------------
 
