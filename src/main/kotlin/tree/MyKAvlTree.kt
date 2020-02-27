@@ -109,16 +109,6 @@ class MyKAvlTree : Iterable<Int> {
     return printInOrder(head)
   }
 
-  fun printInOrder(node: Node?) {
-    val left = node?.left
-    if (left != null) return printInOrder(left)
-
-    println(node?.value)
-
-    val right = node?.right
-    if (right != null) return printInOrder(right)
-  }
-
 
   // ---------------- Helpers ----------------
 
@@ -452,6 +442,16 @@ class MyKAvlTree : Iterable<Int> {
     if (right != null) insertSubTree(right)
   }
 
+  private fun printInOrder(node: Node?) {
+    val left = node?.left
+    if (left != null) return printInOrder(left)
+
+    println(node?.value)
+
+    val right = node?.right
+    if (right != null) return printInOrder(right)
+  }
+
 
   // ---------------- Any callbacks ----------------
 
@@ -525,7 +525,6 @@ class MyKAvlTree : Iterable<Int> {
       }
     }
   }
-
 
 
   // ---------------- Node class ----------------
