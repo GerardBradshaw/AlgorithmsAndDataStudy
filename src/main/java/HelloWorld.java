@@ -2,17 +2,13 @@ import array.ArraySorting;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
-import heap.MyHeap;
-import heap.MyKHeap;
 import linkedlist.MyDoubleLinkedList;
-import tree.BinaryTreePrinter;
 import tree.MyKAvlTree;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.*;
 
 public class HelloWorld {
@@ -20,37 +16,16 @@ public class HelloWorld {
   public static void main(String[] args) {
 
     MyKAvlTree tree = new MyKAvlTree();
-    tree.insert(20);
-    tree.insert(2);
-    tree.insert(50);
+    tree.insert(3);
     tree.insert(1);
-    tree.insert(10);
-    tree.insert(30);
-    tree.insert(70);
+    tree.insert(7);
     tree.insert(5);
-    tree.insert(15);
-    tree.insert(25);
-    tree.insert(35);
-    tree.insert(60);
-    tree.insert(80);
-    tree.insert(40);
-    tree.insert(90);
-    tree.insert(100);
-
+    tree.insert(8);
+    tree.insert(4);
+    tree.insert(6);
     KAvlTreePrinter.printNode(tree.getHead());
 
-    tree.delete(5);
-    KAvlTreePrinter.printNode(tree.getHead());
-
-    tree.delete(1);
-    KAvlTreePrinter.printNode(tree.getHead());
-
-    tree.delete(50);
-    KAvlTreePrinter.printNode(tree.getHead());
-
-    //tree.delete(5);
-    //KAvlTreePrinter.printNode(tree.getHead());
-
+    System.out.println(tree.toString());
   }
 
   // -------- Arrays --------
