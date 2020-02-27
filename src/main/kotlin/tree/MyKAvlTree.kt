@@ -1,6 +1,7 @@
 package tree
 
 import java.lang.NullPointerException
+import java.lang.StringBuilder
 import java.util.*
 
 class MyKAvlTree : Iterable<Int> {
@@ -471,11 +472,21 @@ class MyKAvlTree : Iterable<Int> {
   }
 
   override fun hashCode(): Int {
-    TODO()
+    return toString().hashCode()
   }
 
   override fun toString(): String {
-    TODO()
+    val iterator: Iterator<Int> = iterator()
+    val builder = StringBuilder()
+
+    if (iterator.hasNext()) builder.append("[").append(iterator.next())
+    else return builder.append("empty").toString()
+
+    while (iterator.hasNext()) {
+      builder.append(", ").append(iterator.next())
+    }
+
+    return builder.append("]").toString()
   }
 
 
