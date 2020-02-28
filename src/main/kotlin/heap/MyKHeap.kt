@@ -1,43 +1,43 @@
 package heap
 
-class MyKHeap() {
+class MyKHeap<T : Comparable<T>>() {
 
   // -------- Member variables --------
 
-  var data: Array<Int?> = arrayOfNulls(3)
-  var size = 0
+  private var data: Array<Any?> = arrayOfNulls<Any?>(3)
+  private var size = 0
 
 
   // -------- Constructor --------
 
-  constructor(data: Array<Int?>) : this() {
-    for (int in data) {
-      insert(int)
+  constructor(data: Array<T?>) : this() {
+    for (obj in data) {
+      insert(obj)
     }
   }
 
 
   // -------- Public methods --------
 
-  fun findMin(): Int {
-    val min = data[0] ?: throw NullPointerException()
-    return min
-  }
-
-  fun insert(int: Int?) {
-    if (int == null)
+  fun insert(data: T?) {
+    if (data == null)
       return
 
     if (!isEnoughSpace())
       resizeArray()
 
-    addToData(int)
+    addToData(data)
   }
 
-  fun popMin(): Int {
+  fun findMin(): T {
+    val min = data[0] ?: throw NullPointerException()
+    return min as T
+  }
+
+  fun popMin(): T {
     val min = data[0] ?: throw NullPointerException()
     deleteMin()
-    return min
+    return min as T
   }
 
   fun deleteMin() {
@@ -80,14 +80,14 @@ class MyKHeap() {
     return data.size >= size + 1
   }
 
-  private fun addToData(int: Int) {
-    data[size] = int
+  private fun addToData(data: T) {
+    this.data[size] = data
     size++;
     moveUpToCorrectPosition(size - 1)
   }
 
   private fun resizeArray() {
-    val tempData: Array<Int?> = arrayOfNulls(size * 2)
+    val tempData: Array<Any?> = arrayOfNulls(size * 2)
     System.arraycopy(data, 0, tempData, 0, size)
     data = tempData
   }
@@ -96,17 +96,17 @@ class MyKHeap() {
     var currentIndex = index
     var leftIndex = leftIndexOf(currentIndex)
     var rightIndex = rightIndexOf(currentIndex)
-    var currentValue: Int
-    var leftValue: Int
-    var rightValue: Int
+    var currentValue: T
+    var leftValue: T
+    var rightValue: T?
     val maxIndex = size - 1
 
     while (leftIndex < maxIndex && rightIndex < maxIndex) {
-      currentValue = data[currentIndex] ?: break
-      leftValue = data[leftIndex] ?: break
-      rightValue = data[rightIndex] ?: Int.MAX_VALUE
+      currentValue = data[currentIndex] as T? ?: break
+      leftValue = data[leftIndex] as T? ?: break
+      rightValue = data[rightIndex] as T?
 
-      if (leftValue < rightValue) {
+      if (rightValue == null || leftValue < rightValue) {
         if (currentValue > leftValue) {
           swap(currentIndex, leftIndex)
           currentIndex = leftIndex
@@ -128,21 +128,20 @@ class MyKHeap() {
   }
 
   private fun moveUpToCorrectPosition(index: Int) {
-    val value = data[index] ?: return
+    val value = data[index] as T? ?: return
     var newIndex = index
     var parentIndex: Int
-    var parentValue: Int
+    var parentValue: T?
 
     while (newIndex > 0) {
-      parentIndex = parentOf(newIndex)
-      parentValue = data[parentIndex] ?: Int.MIN_VALUE
+      parentIndex = parentIndexOf(newIndex)
+      parentValue = data[parentIndex] as T?
 
-      if (parentValue > value) {
+      if (parentValue != null && parentValue > value) {
         swap(newIndex, parentIndex)
         newIndex = parentIndex
       }
-      else
-        return
+      else return
     }
   }
 
@@ -154,7 +153,7 @@ class MyKHeap() {
     return 2 * index + 2
   }
 
-  private fun parentOf(index: Int): Int {
+  private fun parentIndexOf(index: Int): Int {
     return if (index % 2 != 0) ((index - 1) / 2) else ((index - 2) / 2)
   }
 
@@ -170,12 +169,12 @@ class MyKHeap() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKHeap) return false
+    if (other !is MyKHeap<*>) return false
     if (other.size() != size) return false
 
     var isEqual = false
     val saveSize = size
-    val saveData: Array<Int?> = arrayOfNulls(data.size)
+    val saveData: Array<Any?> = arrayOfNulls(data.size)
     System.arraycopy(data, 0, this, 0, data.size)
 
     while (!other.isEmpty() && size > 0)
@@ -192,21 +191,13 @@ class MyKHeap() {
   }
 
   override fun toString(): String {
-    if (size == 0)
-      return "empty"
+    if (size == 0) return "empty"
 
-    val builder = StringBuilder().append("[")
+    val builder = StringBuilder().append("[").append(data[0])
 
-    for (i in 0..(size - 2))
-      builder
-        .append(data[i])
-        .append(", ")
+    for (i in 1..(size - 1)) builder.append(", ").append(data[i].toString())
 
-    builder
-      .append(data[size - 1])
-      .append("]")
-
-    return builder.toString()
+    return builder.append("]").toString()
   }
 
   override fun hashCode(): Int {
