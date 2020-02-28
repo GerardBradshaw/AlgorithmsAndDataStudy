@@ -1,34 +1,32 @@
 import array.ArraySorting;
+import array.MyStringBuilder;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
-import heap.MyHeap;
-import heap.MyKHeap;
 import linkedlist.MyDoubleLinkedList;
-import tree.BinaryTreePrinter;
 import tree.MyKAvlTree;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.*;
 
 public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKAvlTree tree = new MyKAvlTree();
-    tree.insert(40);
-    tree.insert(20);
-    tree.insert(10);
-    tree.insert(25);
-    tree.insert(30);
-    tree.insert(22);
-    tree.insert(50);
-    KAvlTreePrinter.printNode(tree.getHead());
+    MyStringBuilder builder = new MyStringBuilder();
 
+    builder.report();
+
+    builder.append("");
+
+    System.out.println(builder.toString());
+
+    builder.reverse();
+
+    System.out.println(builder.toString());
   }
 
   // -------- Arrays --------
