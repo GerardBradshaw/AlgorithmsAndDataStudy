@@ -1,33 +1,25 @@
 package queue
 
-import heap.MyKHeap
-import heap.MyKTHeap
+import heap.MyKMaxHeap
 
-class MyKPriorityQueue {
+class MyKPriorityQueue<T> {
 
-  val heap: MyKTHeap<Item> = MyKTHeap()
+  val heap: MyKMaxHeap<Item<T>> = MyKMaxHeap()
 
   fun isEmpty(): Boolean {
     TODO()
   }
 
-  fun insert(value: Int) {
+  fun insert(value: T, priority: Int = 0) {
+    val newItem = Item(value, priority)
+    heap.insert(newItem)
+  }
+
+  fun pull(priority: Int = 0) {
     TODO()
   }
 
-  fun pull() {
-    TODO()
-  }
-
-  fun peek(): Int {
-    TODO()
-  }
-
-  fun insertPriority(value: Int) {
-    TODO()
-  }
-
-  fun pullPriority(): Int {
+  fun peek(priority: Int = 0): Int {
     TODO()
   }
 
@@ -35,12 +27,12 @@ class MyKPriorityQueue {
     TODO()
   }
 
-  data class Item(val value: Int, var priority: Int = 0) : Comparable<Item> {
+  data class Item<T>(val value: T, var priority: Int = 0) : Comparable<Item<T>> {
     override fun toString(): String {
       return value.toString()
     }
 
-    override fun compareTo(other: Item): Int {
+    override fun compareTo(other: Item<T>): Int {
       val otherPriority = other.priority
 
       return when {
