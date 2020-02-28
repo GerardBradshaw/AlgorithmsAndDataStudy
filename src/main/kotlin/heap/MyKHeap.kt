@@ -1,6 +1,6 @@
 package heap
 
-class MyKHeap {
+class MyKHeap() {
 
   // -------- Member variables --------
 
@@ -10,7 +10,7 @@ class MyKHeap {
 
   // -------- Constructor --------
 
-  constructor(data: Array<Int?>) {
+  constructor(data: Array<Int?>) : this() {
     for (int in data) {
       insert(int)
     }
