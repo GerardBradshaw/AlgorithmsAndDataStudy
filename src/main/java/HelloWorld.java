@@ -1,10 +1,10 @@
 import array.ArraySorting;
-import array.MyStringBuilder;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
+import heap.MyKHeap;
+import heap.MyKTHeap;
 import linkedlist.MyDoubleLinkedList;
-import tree.MyKAvlTree;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -16,17 +16,17 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyStringBuilder builder = new MyStringBuilder();
+    MyKTHeap<Integer> heap = new MyKTHeap<>();
 
-    builder.report();
+    heap.insert(5);
+    heap.insert(4);
+    heap.insert(3);
+    heap.insert(2);
+    heap.insert(1);
 
-    builder.append("");
+    System.out.println(heap.toString());
 
-    System.out.println(builder.toString());
 
-    builder.reverse();
-
-    System.out.println(builder.toString());
   }
 
   // -------- Arrays --------
