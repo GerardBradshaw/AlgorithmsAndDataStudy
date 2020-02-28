@@ -1,0 +1,4 @@
+package queue
+
+class MyKPriorityQueue {
+}
