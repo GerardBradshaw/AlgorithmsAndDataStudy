@@ -1,10 +1,11 @@
 package queue
 
 import heap.MyKHeap
+import heap.MyKTHeap
 
 class MyKPriorityQueue {
 
-  val heap: MyKHeap = MyKHeap()
+  val heap: MyKTHeap<Item> = MyKTHeap()
 
   fun isEmpty(): Boolean {
     TODO()
@@ -34,9 +35,19 @@ class MyKPriorityQueue {
     TODO()
   }
 
-  data class Item(val value: Int, var priority: Int = 0) {
+  data class Item(val value: Int, var priority: Int = 0) : Comparable<Item> {
     override fun toString(): String {
       return value.toString()
+    }
+
+    override fun compareTo(other: Item): Int {
+      val otherPriority = other.priority
+
+      return when {
+        priority > otherPriority -> 1
+        priority < otherPriority -> -1
+        else -> 0
+      }
     }
   }
 }
