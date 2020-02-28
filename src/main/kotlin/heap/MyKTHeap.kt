@@ -1,5 +1,6 @@
 package heap
 
+@Suppress("UNCHECKED_CAST") // Type safe because insert(data) only accepts type T
 class MyKTHeap<T : Comparable<T>>() {
 
   // -------- Member variables --------
@@ -169,7 +170,7 @@ class MyKTHeap<T : Comparable<T>>() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKHeap<*>) return false
+    if (other !is MyKTHeap<*>) return false
     if (other.size() != size) return false
 
     var isEqual = false
