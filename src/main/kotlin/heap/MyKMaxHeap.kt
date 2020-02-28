@@ -1,7 +1,7 @@
 package heap
 
 @Suppress("UNCHECKED_CAST") // Type safe because insert(data) only accepts type T
-class MyKTHeap<T : Comparable<T>>() {
+class MyKMaxHeap<T : Comparable<T>>() {
 
   // -------- Member variables --------
 
@@ -30,18 +30,18 @@ class MyKTHeap<T : Comparable<T>>() {
     addToData(data)
   }
 
-  fun findMin(): T {
+  fun findMax(): T {
     val min = data[0] ?: throw NullPointerException()
     return min as T
   }
 
-  fun popMin(): T {
+  fun popMax(): T {
     val min = data[0] ?: throw NullPointerException()
-    deleteMin()
+    deleteMax()
     return min as T
   }
 
-  fun deleteMin() {
+  fun deleteMax() {
     if (data[0] == null)
       throw NullPointerException()
 
@@ -108,14 +108,14 @@ class MyKTHeap<T : Comparable<T>>() {
       rightValue = data[rightIndex] as T?
 
       if (rightValue == null || leftValue < rightValue) {
-        if (currentValue > leftValue) {
+        if (currentValue < leftValue) {
           swap(currentIndex, leftIndex)
           currentIndex = leftIndex
         }
         else return
       }
       else if (rightValue < leftValue) {
-        if (currentValue > rightValue) {
+        if (currentValue < rightValue) {
           swap(currentIndex, rightIndex)
           currentIndex = rightIndex
         }
@@ -138,7 +138,7 @@ class MyKTHeap<T : Comparable<T>>() {
       parentIndex = parentIndexOf(newIndex)
       parentValue = data[parentIndex] as T?
 
-      if (parentValue != null && parentValue > value) {
+      if (parentValue != null && parentValue < value) {
         swap(newIndex, parentIndex)
         newIndex = parentIndex
       }
@@ -170,7 +170,7 @@ class MyKTHeap<T : Comparable<T>>() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKTHeap<*>) return false
+    if (other !is MyKMaxHeap<*>) return false
     if (other.size() != size) return false
 
     var isEqual = false
@@ -179,7 +179,7 @@ class MyKTHeap<T : Comparable<T>>() {
     System.arraycopy(data, 0, this, 0, data.size)
 
     while (!other.isEmpty() && size > 0)
-      if (other.popMin() != popMin())
+      if (other.popMax() != popMax())
         break
 
     if (other.isEmpty() && size == 0)

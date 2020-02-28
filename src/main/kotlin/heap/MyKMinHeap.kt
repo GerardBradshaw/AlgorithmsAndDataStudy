@@ -1,6 +1,6 @@
 package heap
 
-class MyKHeap() {
+class MyKMinHeap() {
 
   // -------- Member variables --------
 
@@ -170,7 +170,7 @@ class MyKHeap() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKHeap) return false
+    if (other !is MyKMinHeap) return false
     if (other.size() != size) return false
 
     var isEqual = false
