@@ -1,12 +1,9 @@
 import array.ArraySorting;
+import array.MyKString;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
-import heap.MyKMaxHeap;
-import heap.MyKMinHeap;
-import heap.MyKMinIntHeap;
 import linkedlist.MyDoubleLinkedList;
-import queue.MyKPriorityQueue;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -17,7 +14,17 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    
+
+    char[] charArray = {'a','b','c'};
+
+    MyKString string0 = new MyKString(charArray);
+
+    MyKString string = new MyKString("abc");
+
+    System.out.println(string.compareTo(string0));
+
+    System.out.println(string.hashCode());
+    System.out.println("abc".hashCode());
 
   }
 
