@@ -25,6 +25,8 @@ class MyKPriorityQueue<T> {
   }
 
   override fun toString(): String {
+    // TODO Change to an array heap sort
+
     if (heap.isEmpty()) return "empty"
 
     val heapCopy = MyKMinHeap<Item<T>>()
