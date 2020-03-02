@@ -31,33 +31,31 @@ class MyKMaxHeap<T : Comparable<T>>() {
   }
 
   fun findMax(): T {
-    val min = data[0] ?: throw NullPointerException()
-    return min as T
+    val max = data[0] ?: throw NullPointerException()
+    return max as T
   }
 
   fun popMax(): T {
-    val min = data[0] ?: throw NullPointerException()
+    val max = data[0] ?: throw NullPointerException()
     deleteMax()
-    return min as T
+    return max as T
   }
 
   fun deleteMax() {
-    if (data[0] == null)
-      throw NullPointerException()
+    if (data[0] == null) throw NullPointerException()
 
-    if (size == 0) {
-      return
-    }
-    else if (size == 1) {
-      data[0] = null
-      size--
-    }
-    else {
-      data[0] = data[size - 1]
-      data[size - 1] = null
-      size--
-
-      moveDownToCorrectPosition(0)
+    when (size) {
+      0 -> return
+      1 -> {
+        data[0] = null
+        size--
+      }
+      else -> {
+        data[0] = data[size - 1]
+        data[size - 1] = null
+        size--
+        moveDownToCorrectPosition(0)
+      }
     }
 
     if (data.size > 3 * size)
@@ -102,19 +100,25 @@ class MyKMaxHeap<T : Comparable<T>>() {
     var rightValue: T?
     val maxIndex = size - 1
 
-    while (leftIndex < maxIndex && rightIndex < maxIndex) {
+    if (size == 2) {
+      currentValue = data[currentIndex] as T
+      leftValue = data[leftIndex] as T
+      if (currentValue < leftValue) swap(currentIndex, leftIndex)
+    }
+
+    while (leftIndex < maxIndex && rightIndex <= maxIndex) {
       currentValue = data[currentIndex] as T? ?: break
       leftValue = data[leftIndex] as T? ?: break
       rightValue = data[rightIndex] as T?
 
-      if (rightValue == null || leftValue < rightValue) {
+      if (rightValue == null || leftValue >= rightValue) {
         if (currentValue < leftValue) {
           swap(currentIndex, leftIndex)
           currentIndex = leftIndex
         }
         else return
       }
-      else if (rightValue < leftValue) {
+      else if (rightValue > leftValue) {
         if (currentValue < rightValue) {
           swap(currentIndex, rightIndex)
           currentIndex = rightIndex
