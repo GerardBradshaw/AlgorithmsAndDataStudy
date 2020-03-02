@@ -2,9 +2,11 @@ import array.ArraySorting;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
-import heap.MyKHeap;
-import heap.MyKTHeap;
+import heap.MyKMaxHeap;
+import heap.MyKMinHeap;
+import heap.MyKMinIntHeap;
 import linkedlist.MyDoubleLinkedList;
+import queue.MyKPriorityQueue;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,17 +17,7 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-
-    MyKTHeap<Integer> heap = new MyKTHeap<>();
-
-    heap.insert(5);
-    heap.insert(4);
-    heap.insert(3);
-    heap.insert(2);
-    heap.insert(1);
-
-    System.out.println(heap.toString());
-
+    
 
   }
 
