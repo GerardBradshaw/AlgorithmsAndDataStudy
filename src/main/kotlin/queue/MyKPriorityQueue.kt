@@ -1,33 +1,47 @@
 package queue
 
 import heap.MyKMaxHeap
+import heap.MyKMinHeap
+import java.lang.StringBuilder
 
 class MyKPriorityQueue<T> {
 
-  val heap: MyKMaxHeap<Item<T>> = MyKMaxHeap()
+  private var heap: MyKMinHeap<Item<T>> = MyKMinHeap()
 
   fun isEmpty(): Boolean {
-    TODO()
+    return heap.isEmpty()
   }
 
-  fun insert(value: T, priority: Int = 0) {
-    val newItem = Item(value, priority)
-    heap.insert(newItem)
+  fun insert(value: T, priority: Int = Int.MAX_VALUE) {
+    heap.insert(Item(value, priority))
   }
 
-  fun pull(priority: Int = 0) {
-    TODO()
+  fun pull(): T? {
+    return heap.popMin().value
   }
 
-  fun peek(priority: Int = 0): Int {
-    TODO()
+  fun peek(): T {
+    return heap.getMin().value
   }
 
-  fun peekPriority(): Int {
-    TODO()
+  override fun toString(): String {
+    if (heap.isEmpty()) return "empty"
+
+    val heapCopy = MyKMinHeap<Item<T>>()
+    heapCopy.insert(heap.popMin())
+    val builder = StringBuilder().append("[").append(heapCopy.getMin())
+
+    while (!heap.isEmpty()) {
+      builder.append(", ").append(heap.getMin())
+      heapCopy.insert(heap.popMin())
+    }
+
+    heap = heapCopy
+
+    return builder.append("]").toString()
   }
 
-  data class Item<T>(val value: T, var priority: Int = 0) : Comparable<Item<T>> {
+  data class Item<T>(val value: T, var priority: Int = Int.MAX_VALUE) : Comparable<Item<T>> {
     override fun toString(): String {
       return value.toString()
     }
