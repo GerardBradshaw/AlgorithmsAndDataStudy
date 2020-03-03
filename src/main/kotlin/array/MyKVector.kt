@@ -1,0 +1,4 @@
+package array
+
+class MyKVector {
+}
