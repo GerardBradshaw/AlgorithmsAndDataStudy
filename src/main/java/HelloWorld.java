@@ -1,4 +1,5 @@
 import array.ArraySorting;
+import array.MyKArrayList;
 import array.MyKString;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
@@ -15,17 +16,20 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    char[] charArray = {'a','b','c'};
+    MyKArrayList<String> list = new MyKArrayList<>();
 
-    MyKString string0 = new MyKString(charArray);
+    list.add("A");
+    list.add("B");
+    list.add("C");
+    list.add("D");
 
-    MyKString string = new MyKString("abc");
+    System.out.println(list.containsAll(Arrays.asList("A", "F", "C")));
 
-    System.out.println(string.compareTo(string0));
+    Iterator<String> iterator = list.iterator();
 
-    System.out.println(string.hashCode());
-    System.out.println("abc".hashCode());
-
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+    }
   }
 
   // -------- Arrays --------
