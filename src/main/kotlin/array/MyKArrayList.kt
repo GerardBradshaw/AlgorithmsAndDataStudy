@@ -52,7 +52,7 @@ class MyKArrayList<T> : Collection<T>, Iterable<T> {
     data[dataPoints - 1] = null
     dataPoints--
 
-    if (dataPoints > 2 * this.data.size) resizeArray()
+    if (dataPoints < 2 * this.data.size) resizeArray()
   }
 
 
