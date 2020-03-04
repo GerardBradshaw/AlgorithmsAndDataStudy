@@ -1,19 +1,20 @@
-import tree.MyKAvlTree.Node;
+import tree.MyKrbTree.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class KAvlTreePrinter {
+@SuppressWarnings("ALL")
+public class KArbTreePrinter {
 
   public static <Integer extends Comparable<?>> void printNode(Node root) {
-    int maxLevel = KAvlTreePrinter.maxLevel(root);
+    int maxLevel = KArbTreePrinter.maxLevel(root);
 
     printNodeInternal(Collections.singletonList(root), 1, maxLevel);
   }
 
   private static <Integer extends Comparable<?>> void printNodeInternal(List<Node> nodes, int level, int maxLevel) {
-    if (nodes.isEmpty() || KAvlTreePrinter.isAllElementsNull(nodes))
+    if (nodes.isEmpty() || KArbTreePrinter.isAllElementsNull(nodes))
       return;
 
     int floor = maxLevel - level;
@@ -21,12 +22,12 @@ public class KAvlTreePrinter {
     int firstSpaces = (int) Math.pow(2, (floor)) - 1;
     int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-    KAvlTreePrinter.printWhitespaces(firstSpaces);
+    KArbTreePrinter.printWhitespaces(firstSpaces);
 
     List<Node> newNodes = new ArrayList<Node>();
     for (Node node : nodes) {
       if (node != null) {
-        System.out.print(node.getValue());
+        System.out.print(node.toString());
         newNodes.add(node.getLeft());
         newNodes.add(node.getRight());
       } else {
@@ -35,31 +36,31 @@ public class KAvlTreePrinter {
         System.out.print(" ");
       }
 
-      KAvlTreePrinter.printWhitespaces(betweenSpaces);
+      KArbTreePrinter.printWhitespaces(betweenSpaces);
     }
     System.out.println("");
 
     for (int i = 1; i <= endgeLines; i++) {
       for (int j = 0; j < nodes.size(); j++) {
-        KAvlTreePrinter.printWhitespaces(firstSpaces - i);
+        KArbTreePrinter.printWhitespaces(firstSpaces - i);
         if (nodes.get(j) == null) {
-          KAvlTreePrinter.printWhitespaces(endgeLines + endgeLines + i + 1);
+          KArbTreePrinter.printWhitespaces(endgeLines + endgeLines + i + 1);
           continue;
         }
 
         if (nodes.get(j).getLeft() != null)
           System.out.print("/");
         else
-          KAvlTreePrinter.printWhitespaces(1);
+          KArbTreePrinter.printWhitespaces(1);
 
-        KAvlTreePrinter.printWhitespaces(i + i - 1);
+        KArbTreePrinter.printWhitespaces(i + i - 1);
 
         if (nodes.get(j).getRight() != null)
           System.out.print("\\");
         else
-          KAvlTreePrinter.printWhitespaces(1);
+          KArbTreePrinter.printWhitespaces(1);
 
-        KAvlTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
+        KArbTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
       }
 
       System.out.println("");
@@ -77,7 +78,7 @@ public class KAvlTreePrinter {
     if (node == null)
       return 0;
 
-    return Math.max(KAvlTreePrinter.maxLevel(node.getLeft()), KAvlTreePrinter.maxLevel(node.getRight())) + 1;
+    return Math.max(KArbTreePrinter.maxLevel(node.getLeft()), KArbTreePrinter.maxLevel(node.getRight())) + 1;
   }
 
   private static boolean isAllElementsNull(List list) {
