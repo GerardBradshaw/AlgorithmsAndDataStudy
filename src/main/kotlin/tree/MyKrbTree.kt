@@ -1,7 +1,7 @@
 package tree
 
 import array.MyKStringBuilder
-import java.lang.Exception
+import stack.MyKStack
 
 class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
@@ -18,47 +18,12 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
   }
 
   fun insert(element: T) {
-    val newNode = Node(element)
-
-    if (root == null) {
-      root = newNode
-      newNode.isRed = false
-      nodeCount++
-      return
-    }
-
-    var current = root
-    var currentElement: T
-    var currentLeft: Node<T>?
-    var currentRight: Node<T>?
-
-    while (current != null) {
-      currentElement = current.element
-      currentLeft = current.left
-      currentRight = current.right
-
-      if (element >= currentElement) {
-        if (currentRight != null) current = currentRight
-        else {
-          linkParentAndChild(current, newNode)
-          nodeCount++
-          balance(newNode)
-          return
-        }
-      }
-      else if (element < currentElement) {
-        if (currentLeft != null) current = currentLeft
-        else {
-          linkParentAndChild(current, newNode)
-          nodeCount++
-          balance(newNode)
-          return
-        }
-      }
-    }
+    if (root == null) insertNodeEmptyTree(element)
+    else insertNodeNotEmptyTree(element)
   }
 
-  fun remove(element: T) {
+  // TODO make this a public working function
+  private fun remove(element: T) {
     if (root == null) return
 
     var current = root
@@ -75,8 +40,63 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     }
   }
 
+  // TODO make this a public print-in-order function
+  private fun toStringBuilder(node: Node<T>, builder: MyKStringBuilder): MyKStringBuilder {
+    val left = node.left
+    val right = node.right
+
+    if (left != null) toStringBuilder(left, builder)
+    builder.append(node.toString()).append(", ")
+    if (right != null) toStringBuilder(right, builder)
+    return builder
+  }
+
 
   // ---------------- Helpers ----------------
+
+  // Insert & related rotation helpers
+
+  private fun insertNodeEmptyTree(element: T) {
+    val newNode = Node(element)
+    root = newNode
+    newNode.isRed = false
+    nodeCount++
+  }
+
+  private fun insertNodeNotEmptyTree(element: T) {
+    var current = root
+    var currentElement: T
+    var currentLeft: Node<T>?
+    var currentRight: Node<T>?
+
+    while (current != null) {
+      currentElement = current.element
+      currentLeft = current.left
+      currentRight = current.right
+
+      if (element >= currentElement) {
+        if (currentRight != null) current = currentRight
+        else {
+          addLeaf(current, element)
+          return
+        }
+      }
+      else if (element < currentElement) {
+        if (currentLeft != null) current = currentLeft
+        else {
+          addLeaf(current, element)
+          return
+        }
+      }
+    }
+  }
+
+  private fun addLeaf(parent: Node<T>, newElement: T) {
+    val newNode = Node(newElement)
+    linkParentAndChild(parent, newNode)
+    nodeCount++
+    balance(newNode)
+  }
 
   private fun balance(node: Node<T>) {
     val parent = node.parent
@@ -260,6 +280,8 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     node.isRed = false
   }
 
+  // General helpers
+
   private fun getGrandparent(node: Node<T>): Node<T>? {
     return node.parent?.parent
   }
@@ -269,9 +291,11 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     val grandparent = getGrandparent(node)
 
     if (grandparent != null) {
-      if (grandparent.left == parent) return grandparent.right
-      else if (grandparent.right == parent) return grandparent.left
-      else println("Error retrieving uncle of inserted node. Balance not guaranteed.")
+      when {
+        grandparent.left == parent -> return grandparent.right
+        grandparent.right == parent -> return grandparent.left
+        else -> println("Error retrieving uncle of inserted node. Balance not guaranteed.")
+      }
     }
     return null
   }
@@ -288,8 +312,45 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     child.parent = parent
   }
 
+  // TODO Delete & related rotation helpers
+
   private fun deleteNode(node: Node<T>) {
-    TODO()
+    if (node.isRed) deleteRedNode(node)
+    else deleteBlackNode(node)
+  }
+
+  private fun deleteBlackNode(node: Node<T>) {
+    val parent = node.parent
+    val left = node.left
+    val right = node.right
+
+    if (left == null && right != null) moveOnlyChildUpToReplaceBlackNode(node, parent, right)
+    else if (left != null && right == null) moveOnlyChildUpToReplaceBlackNode(node, parent, left)
+    else if (left == null && right == null) deleteBlackLeaf(node, parent)
+    else {
+      TODO("Need to implement deletion of black node with 2 children")
+    }
+  }
+
+  private fun moveOnlyChildUpToReplaceBlackNode(node: Node<T>, parent: Node<T>?, onlyChild: Node<T>) {
+    unlinkParentAndChild(node, onlyChild)
+    unlinkParentAndChild(parent, node)
+
+    if (parent != null) linkParentAndChild(parent, onlyChild)
+    else root = onlyChild
+
+    onlyChild.isRed = false
+    TODO("Need to fix height imbalance caused by this!!")
+  }
+
+  private fun deleteBlackLeaf(node: Node<T>, parent: Node<T>?) {
+    if (parent == null) root = null
+    else unlinkParentAndChild(parent, node)
+    TODO("Need to fix height imbalance caused by this!!")
+  }
+
+  private fun deleteRedNode(node: Node<T>) {
+    TODO("Need to implement deletion of red node")
   }
 
 
@@ -332,37 +393,33 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
   override fun equals(other: Any?): Boolean {
     if (other !is MyKrbTree<*>) return false
-    // Recursively go through the tree?
-    // TODO
-    return false
+
+    val iterator = iterator()
+    val otherIterator = other.iterator()
+
+    while (iterator.hasNext() && otherIterator.hasNext()) {
+      if (iterator.next() != otherIterator.next()) return false
+    }
+    return iterator.hasNext() == otherIterator.hasNext()
   }
 
   override fun hashCode(): Int {
-    // Recursively go through the tree?
-    // TODO
-    return 0
+    return toString().hashCode()
   }
 
   override fun toString(): String {
-    val node = root
-    if (node == null) return "empty"
+    val iterator = iterator()
 
+    return if (!iterator.hasNext()) "empty"
     else {
-      var builder = MyKStringBuilder().append("[")
-      builder = toStringBuilder(node, builder)
-      builder.append("]")
-      return builder.toString()
+      val builder = MyKStringBuilder().append("[").append(iterator.next().toString())
+
+      while (iterator.hasNext()) {
+        builder.append(", ").append(iterator.next().toString())
+      }
+
+      builder.append("]").toString()
     }
-  }
-
-  private fun toStringBuilder(node: Node<T>, builder: MyKStringBuilder): MyKStringBuilder {
-    val left = node.left
-    val right = node.right
-
-    if (left != null) toStringBuilder(left, builder)
-    builder.append(node.toString()).append(", ")
-    if (right != null) toStringBuilder(right, builder)
-    return builder
   }
 
 
@@ -370,15 +427,34 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
   override fun iterator(): Iterator<T> {
     return object : Iterator<T> {
-      // Use a stack???
+      val stack: MyKStack<Node<T>> = MyKStack()
+
+      init {
+        var current = root
+        while (current != null) {
+          stack.push(current)
+          current = current.left
+        }
+      }
+
       override fun hasNext(): Boolean {
-        //TODO
-        return false
+        return !stack.isEmpty()
       }
 
       override fun next(): T {
-        // TODO
-        throw Exception()
+        val node = stack.pop()
+        val result = node.element
+
+        val right = node.right
+
+        if (right != null) {
+          var current = right
+          while (current != null) {
+            stack.push(current)
+            current = current!!.left
+          }
+        }
+        return result
       }
     }
   }
@@ -386,14 +462,24 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
   // ---------------- Node class ----------------
 
-  data class Node<T>(var element: T,
-                             var parent: Node<T>? = null,
-                             var left: Node<T>? = null,
-                             var right: Node<T>? = null,
-                             var isRed: Boolean = true) {
+  data class Node<T>(var element: T) {
+
+    var parent: Node<T>? = null
+    var left: Node<T>? = null
+    var right: Node<T>? = null
+    var isRed: Boolean = true
 
     override fun toString(): String {
       return element.toString() + if (isRed) "r" else ""
+    }
+
+    override fun equals(other: Any?): Boolean {
+      if (other !is Node<*>) return false
+      return element == other.element
+    }
+
+    override fun hashCode(): Int {
+      return element.hashCode()
     }
   }
 }
