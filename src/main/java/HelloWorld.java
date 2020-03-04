@@ -1,10 +1,9 @@
 import array.ArraySorting;
-import array.MyKArrayList;
-import array.MyKString;
 import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
 import linkedlist.MyDoubleLinkedList;
+import tree.MyKrbTree;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -16,20 +15,18 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyKArrayList<String> list = new MyKArrayList<>();
+    MyKrbTree<Integer> tree = new MyKrbTree<>();
+    tree.insert(5);
+    tree.insert(9);
+    tree.insert(15);
+    tree.insert(23);
+    tree.insert(13);
+    tree.insert(8);
+    tree.insert(12);
+    tree.insert(9);
+    KArbTreePrinter.printNode(tree.getRoot());
+    System.out.println(tree.toString());
 
-    list.add("A");
-    list.add("B");
-    list.add("C");
-    list.add("D");
-
-    System.out.println(list.containsAll(Arrays.asList("A", "F", "C")));
-
-    Iterator<String> iterator = list.iterator();
-
-    while (iterator.hasNext()) {
-      System.out.println(iterator.next());
-    }
   }
 
   // -------- Arrays --------
