@@ -24,9 +24,13 @@ public class HelloWorld {
     tree.insert(8);
     tree.insert(12);
     tree.insert(9);
-    KArbTreePrinter.printNode(tree.getRoot());
-    System.out.println(tree.toString());
-
+    //KArbTreePrinter.printNode(tree.getRoot());
+    //System.out.println(tree.toString());
+    tree.printInOrder();
+    System.out.println();
+    tree.printPreOrder();
+    System.out.println();
+    tree.printPostOrder();
   }
 
   // -------- Arrays --------
