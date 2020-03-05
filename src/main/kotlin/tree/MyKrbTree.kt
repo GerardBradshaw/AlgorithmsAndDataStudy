@@ -40,15 +40,49 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     }
   }
 
-  // TODO make this a public print-in-order function
-  private fun toStringBuilder(node: Node<T>, builder: MyKStringBuilder): MyKStringBuilder {
+  fun printInOrder() {
+    val node = root
+    if (node == null) println("empty")
+    else printInOrderHelper(node)
+  }
+
+  private fun printInOrderHelper(node: Node<T>) {
     val left = node.left
     val right = node.right
 
-    if (left != null) toStringBuilder(left, builder)
-    builder.append(node.toString()).append(", ")
-    if (right != null) toStringBuilder(right, builder)
-    return builder
+    if (left != null) printInOrderHelper(left)
+    println(node.toString())
+    if (right != null) printInOrderHelper(right)
+  }
+
+  fun printPreOrder() {
+    val node = root
+    if (node == null) println("empty")
+    else printPreOrderHelper(node)
+  }
+
+  private fun printPreOrderHelper(node: Node<T>) {
+    val left = node.left
+    val right = node.right
+
+    println(node.toString())
+    if (left != null) printInOrderHelper(left)
+    if (right != null) printInOrderHelper(right)
+  }
+
+  fun printPostOrder() {
+    val node = root
+    if (node == null) println("empty")
+    else printPostOrderHelper(node)
+  }
+
+  private fun printPostOrderHelper(node: Node<T>) {
+    val left = node.left
+    val right = node.right
+
+    println(node.toString())
+    if (right != null) printInOrderHelper(right)
+    if (left != null) printInOrderHelper(left)
   }
 
 
