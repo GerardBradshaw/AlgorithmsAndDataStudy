@@ -46,28 +46,10 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     else printInOrderHelper(node)
   }
 
-  private fun printInOrderHelper(node: Node<T>) {
-    val left = node.left
-    val right = node.right
-
-    if (left != null) printInOrderHelper(left)
-    println(node.toString())
-    if (right != null) printInOrderHelper(right)
-  }
-
   fun printPreOrder() {
     val node = root
     if (node == null) println("empty")
     else printPreOrderHelper(node)
-  }
-
-  private fun printPreOrderHelper(node: Node<T>) {
-    val left = node.left
-    val right = node.right
-
-    println(node.toString())
-    if (left != null) printInOrderHelper(left)
-    if (right != null) printInOrderHelper(right)
   }
 
   fun printPostOrder() {
@@ -76,17 +58,29 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     else printPostOrderHelper(node)
   }
 
-  private fun printPostOrderHelper(node: Node<T>) {
-    val left = node.left
-    val right = node.right
-
-    println(node.toString())
-    if (right != null) printInOrderHelper(right)
-    if (left != null) printInOrderHelper(left)
-  }
-
 
   // ---------------- Helpers ----------------
+
+  // Traversal helpers
+
+  private fun printInOrderHelper(node: Node<T>) {
+    node.left?.let { printInOrderHelper(it) }
+    println(node.toString())
+    node.right?.let { printInOrderHelper(it) }
+  }
+
+  private fun printPreOrderHelper(node: Node<T>) {
+    println(node.toString())
+    node.left?.let { printPreOrderHelper(it) }
+    node.right?.let { printPreOrderHelper(it) }
+  }
+
+  private fun printPostOrderHelper(node: Node<T>) {
+    println(node.toString())
+    node.right?.let { printPostOrderHelper(it) }
+    node.left?.let { printPostOrderHelper(it) }
+  }
+
 
   // Insert & related rotation helpers
 
