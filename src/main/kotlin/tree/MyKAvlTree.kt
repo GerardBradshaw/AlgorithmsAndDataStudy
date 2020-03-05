@@ -106,11 +106,46 @@ class MyKAvlTree : Iterable<Int> {
   }
 
   fun printInOrder() {
-    return printInOrder(head)
+    val node = head
+    if (node != null) printInOrderHelper(node)
+    else println("empty")
   }
 
+  fun printPostOrder() {
+    val node = head
+    if (node != null) printPostOrderHelper(node)
+    else println("empty")
+  }
+
+  fun printPreOrder() {
+    val node = head
+    if (node != null) printPreOrderHelper(node)
+    else println("empty")
+  }
 
   // ---------------- Helpers ----------------
+
+  // Traversal helpers
+
+  private fun printInOrderHelper(node: Node) {
+    node.left?.let { printInOrderHelper(it) }
+    println(node.value)
+    node.right?.let { printInOrderHelper(it) }
+  }
+
+  private fun printPostOrderHelper(node: Node) {
+    println(node.value)
+    node.right?.let { printPostOrderHelper(it) }
+    node.left?.let { printPostOrderHelper(it) }
+  }
+
+  private fun printPreOrderHelper(node: Node) {
+    println(node.value)
+    node.left?.let { printPreOrderHelper(it) }
+    node.right?.let { printPreOrderHelper(it) }
+  }
+
+  // Insertion helpers
 
   private fun balanceTree(node: Node?, fullBalance: Boolean = false) {
     /*
@@ -314,6 +349,8 @@ class MyKAvlTree : Iterable<Int> {
     cR?.parent = b
   }
 
+  // General helpers
+
   private fun linkParentToChild(parent: Node?, child: Node) {
     if (parent == null) {
       head = child
@@ -329,6 +366,8 @@ class MyKAvlTree : Iterable<Int> {
 
     balanceTree(child, true)
   }
+
+  // Deletion helpers
 
   private fun removeReferencesFromNode(xNode: Node) {
     xNode.parent = null
@@ -440,16 +479,6 @@ class MyKAvlTree : Iterable<Int> {
 
     if (left != null) insertSubTree(left)
     if (right != null) insertSubTree(right)
-  }
-
-  private fun printInOrder(node: Node?) {
-    val left = node?.left
-    if (left != null) return printInOrder(left)
-
-    println(node?.value)
-
-    val right = node?.right
-    if (right != null) return printInOrder(right)
   }
 
 
