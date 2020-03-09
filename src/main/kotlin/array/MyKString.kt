@@ -7,7 +7,7 @@ class MyKString : Comparable<MyKString> {
 
   // ---------------- Member variables ----------------
 
-  private lateinit var chars: CharArray
+  private var chars: CharArray
   private val length: Int
     get() = chars.size
 
