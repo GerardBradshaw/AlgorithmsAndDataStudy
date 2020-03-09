@@ -140,7 +140,7 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     val uncle = getUncle(node)
 
     if (grandparent == null) return
-    else if (uncle == null || !uncle.isRed) blackUncleCorrection(node, parent, grandparent, uncle)
+    else if (uncle == null || !uncle.isRed) blackUncleCorrection(node, parent, grandparent)
     else {
       redUncleCorrection(parent, grandparent, uncle)
       balance(grandparent)
@@ -153,7 +153,7 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
     uncle.isRed = false
   }
 
-  private fun blackUncleCorrection(node: Node<T>, parent: Node<T>, grandparent: Node<T>, uncle: Node<T>?) {
+  private fun blackUncleCorrection(node: Node<T>, parent: Node<T>, grandparent: Node<T>) {
     if (grandparent.left == parent && parent.left == node) {
       parentAndNodeAreBothLeftOrRightRotation(parent.right, parent, grandparent)
     }
@@ -378,6 +378,8 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
   }
 
   private fun deleteRedNode(node: Node<T>) {
+    // random call to calm down compiler
+    node.left = null
     TODO("Need to implement deletion of red node")
   }
 
