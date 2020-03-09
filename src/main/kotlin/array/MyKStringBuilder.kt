@@ -1,25 +1,45 @@
 package array
 
-class MyKStringBuilder {
+class MyKStringBuilder() {
 
-  var charArray = CharArray(1)
-  var numberOfChars = 0
+  private var charArray = CharArray(1)
+  private var numberOfChars = 0
 
-  fun append(char: Char): MyKStringBuilder {
-    if (numberOfChars == charArray.size) {
-      resizeArray()
-    }
-    charArray[numberOfChars] = char
-    numberOfChars++
-
-    return this
-  }
-
-  fun append(string: String): MyKStringBuilder {
+  constructor(string: String) : this() {
     for (char in string) {
       append(char)
     }
+  }
+
+  fun append(char: Char?): MyKStringBuilder {
+    if (char != null) {
+      if (numberOfChars == charArray.size) {
+        resizeArray()
+      }
+      charArray[numberOfChars] = char
+      numberOfChars++
+    }
     return this
+  }
+
+  fun append(string: String?): MyKStringBuilder {
+    if (string != null) {
+      for (char in string) append(char)
+    }
+    return this
+  }
+
+  fun removeEnd(numberOfChars: Int) {
+    if (this.numberOfChars < numberOfChars) {
+      charArray = CharArray(1)
+      this.numberOfChars = 0
+    }
+    else {
+      val startIndex = this.numberOfChars - numberOfChars
+      for (i in startIndex until this.numberOfChars) charArray[i] = '\u0000'
+      this.numberOfChars = startIndex
+    }
+    resizeArray()
   }
 
   fun length(): Int {
@@ -51,6 +71,7 @@ class MyKStringBuilder {
   }
 
   override fun toString(): String {
+    if (numberOfChars == 0) return ""
     return String(charArray.copyOfRange(0, numberOfChars))
   }
 }
