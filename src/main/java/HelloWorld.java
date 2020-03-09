@@ -3,8 +3,8 @@ import hashtable.MyHashTable;
 import hashtable.MyHashTable2;
 import hashtable.Word;
 import linkedlist.MyDoubleLinkedList;
-import tree.MyKrbTree;
 import tree.XMyBinarySearchTree;
+import trie.MyKTrie;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -14,23 +14,22 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
+    MyKTrie trie = new MyKTrie();
 
-    MyKrbTree<Integer> tree = new MyKrbTree<>();
-    tree.insert(5);
-    tree.insert(9);
-    tree.insert(15);
-    tree.insert(23);
-    tree.insert(13);
-    tree.insert(8);
-    tree.insert(12);
-    tree.insert(9);
-    //KArbTreePrinter.printNode(tree.getRoot());
-    //System.out.println(tree.toString());
-    tree.printInOrder();
-    System.out.println();
-    tree.printPreOrder();
-    System.out.println();
-    tree.printPostOrder();
+    trie.insert("CAR");
+    trie.insert("CARD");
+    trie.insert("CARRY");
+    trie.insert("CARRIER");
+    trie.insert("CARDS");
+    trie.insert("CARDED");
+    trie.insert("CARDIGAN");
+    System.out.println("  Count: " + trie.getWordCount());
+    trie.printWordList();
+
+    trie.delete("CAR");
+    trie.delete("CARRY");
+    System.out.println("  Count: " + trie.getWordCount());
+    trie.printWordList();
   }
 
   // -------- Arrays --------
