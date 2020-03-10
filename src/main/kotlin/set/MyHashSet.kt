@@ -1,0 +1,4 @@
+package set
+
+class MyHashSet {
+}
