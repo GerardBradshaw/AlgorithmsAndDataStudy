@@ -1,6 +1,6 @@
 package hashtable;
 
-public interface GHashTable<K, V> {
+public interface GJHashTable<K, V> {
 
   void insert(K key, V value);
   V get(Object key);

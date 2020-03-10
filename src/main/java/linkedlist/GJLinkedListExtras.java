@@ -1,20 +1,20 @@
 package linkedlist;
 
-public interface MyLinkedListExtras {
+public interface GJLinkedListExtras {
 
-  void deleteNodeNotLast(MyLinkedList.Node node);
+  void deleteNodeNotLast(MyJLinkedList.Node node);
 
-  void addAfterNode(MyLinkedList.Node node, int data);
+  void addAfterNode(MyJLinkedList.Node node, int data);
 
   void quickSort();
 
   void addInOrder();
 
-  MyLinkedList mergeWithSorted(MyLinkedList sortedList);
+  MyJLinkedList mergeWithSorted(MyJLinkedList sortedList);
 
   void removeNthFromEnd(int n);
 
-  MyLinkedList.Node getMiddle();
+  MyJLinkedList.Node getMiddle();
 
   void detectLoopWithDictionary(); // See https://www.geeksforgeeks.org/detect-loop-in-a-linked-list/ for help
 
@@ -26,9 +26,9 @@ public interface MyLinkedListExtras {
 
   void swapNode(int index1, int index2); // Do this without swapping data
 
-  MyLinkedList pairwiseSwap();
+  MyJLinkedList pairwiseSwap();
 
-  MyLinkedList intersectionOfLinkedLists(MyLinkedList sortedList);
+  MyJLinkedList intersectionOfLinkedLists(MyJLinkedList sortedList);
 
-  MyLinkedList reverseList();
+  MyJLinkedList reverseList();
 }

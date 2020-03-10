@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MyHashTable2 {
+public class MyJHashTable2 {
 
   String[] data;
   int arraySize;
@@ -12,7 +12,7 @@ public class MyHashTable2 {
 
   // -------- Constructor --------
 
-  public MyHashTable2(int size) {
+  public MyJHashTable2(int size) {
     arraySize = size;
     data = new String[size];
     fillDataWithDash();

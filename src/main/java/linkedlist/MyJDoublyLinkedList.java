@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
+public class MyJDoublyLinkedList<T> implements GJLinkedList<T>, Iterable<T> {
 
   // -------- Member variables --------
   private Node<T> head;
@@ -14,12 +14,12 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
   // -------- Constructor(s) --------
 
   @SafeVarargs
-  public MyDoubleLinkedList(T... data) {
+  public MyJDoublyLinkedList(T... data) {
 
     for (int i = (data.length - 1); i >= 0; i--) addFirst(data[i]);
   }
 
-  public MyDoubleLinkedList(Node<T> head) {
+  public MyJDoublyLinkedList(Node<T> head) {
     this.head = head;
   }
 
@@ -314,8 +314,8 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof MyDoubleLinkedList) {
-      MyDoubleLinkedList<?> other = (MyDoubleLinkedList<?>) obj;
+    if (obj instanceof MyJDoublyLinkedList) {
+      MyJDoublyLinkedList<?> other = (MyJDoublyLinkedList<?>) obj;
 
       Iterator<T> thisIterator = iterator();
       Iterator<?> otherIterator = other.iterator();
@@ -373,7 +373,7 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
   }
 
   //TODO
-  public void mergeWithSorted(MyDoubleLinkedList<T> sortedList) {
+  public void mergeWithSorted(MyJDoublyLinkedList<T> sortedList) {
 
   }
 
@@ -491,7 +491,7 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
   public boolean detectPalindrome() {
     Node<T> mid = getMiddle();
 
-    MyDoubleLinkedList<T> tempList = new MyDoubleLinkedList<T>(mid.getNext());
+    MyJDoublyLinkedList<T> tempList = new MyJDoublyLinkedList<T>(mid.getNext());
     tempList.reverseList();
 
     Node<T> currentLeftNode = head;
@@ -560,7 +560,7 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
   }
 
   // TODO
-  public MyDoubleLinkedList<T> intersectionOfLinkedLists(MyDoubleLinkedList<T> sortedList) {
+  public MyJDoublyLinkedList<T> intersectionOfLinkedLists(MyJDoublyLinkedList<T> sortedList) {
     return null;
   }
 
@@ -584,7 +584,7 @@ public class MyDoubleLinkedList<T> implements GLinkedList<T>, Iterable<T> {
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
 
-  public static class Node<T> extends GLinkedListNode<Node<T>, T> {
+  public static class Node<T> extends MyJLinkedListNode<Node<T>, T> {
 
     public Node(T data) {
       super(data);

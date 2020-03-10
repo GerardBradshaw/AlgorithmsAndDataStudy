@@ -1,11 +1,10 @@
 package hashtable;
 
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.KVPair<K,V>> {
+public class MyJHashTable<K,V> implements GJHashTable<K,V>, Iterable<MyJHashTable.KVPair<K,V>> {
 
   // -------- Member variables --------
 
@@ -15,12 +14,12 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
 
   // -------- Constructor --------
 
-  public MyHashTable(int size) {
+  public MyJHashTable(int size) {
     data = new LinkedList[size];
   }
 
   @SafeVarargs
-  public MyHashTable(int size, KVPair<K,V>... pairs) {
+  public MyJHashTable(int size, KVPair<K,V>... pairs) {
     data = new LinkedList[size];
     for (KVPair<K,V> pair : pairs) {
       insert(pair.key, pair.value);
@@ -168,10 +167,10 @@ public class MyHashTable<K,V> implements GHashTable<K,V>, Iterable<MyHashTable.K
   @Override
   public boolean equals(Object obj) {
     // First confirm that the object is a MyHashTable
-    if (obj instanceof MyHashTable) {
+    if (obj instanceof MyJHashTable) {
 
       // Cast the object to MyHashTable to help compiler
-      MyHashTable<?,?> other = (MyHashTable<?,?>) obj;
+      MyJHashTable<?,?> other = (MyJHashTable<?,?>) obj;
 
       // First check they're the same size
       if (other.size() != keyCount) return false;

@@ -1,6 +1,6 @@
 package array;
 
-public abstract class ArraySorting {
+public abstract class JArraySorting {
 
   // -------- Quick Sort 3 --------
 

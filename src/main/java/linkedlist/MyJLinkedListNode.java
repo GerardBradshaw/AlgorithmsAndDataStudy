@@ -1,13 +1,13 @@
 package linkedlist;
 
-public abstract class GLinkedListNode<N extends GLinkedListNode<N, T>, T> {
+public abstract class MyJLinkedListNode<N extends MyJLinkedListNode<N, T>, T> {
 
   // ------- Member variables
   private T data;
   private N next;
 
   // ------- Constructor
-  public GLinkedListNode(T data) {
+  public MyJLinkedListNode(T data) {
     this.data = data;
   }
 

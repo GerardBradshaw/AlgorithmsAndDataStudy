@@ -3,16 +3,14 @@ package linkedlist;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
-public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, MyLinkedListExtras {
+public class MyJLinkedList implements GJLinkedList<Integer>, Iterable<Integer>, GJLinkedListExtras {
 
   private Node head;
 
   // ------- Constructor -------
 
-  public MyLinkedList(Integer... ints) {
+  public MyJLinkedList(Integer... ints) {
     for (int i = (ints.length - 1); i >= 0; i--) {
       addFirst(ints[i]);
     }
@@ -354,7 +352,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
   }
 
   @Override
-  public MyLinkedList mergeWithSorted(MyLinkedList sortedList) {
+  public MyJLinkedList mergeWithSorted(MyJLinkedList sortedList) {
     return null;
   }
 
@@ -405,17 +403,17 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
   }
 
   @Override
-  public MyLinkedList pairwiseSwap() {
+  public MyJLinkedList pairwiseSwap() {
     return null;
   }
 
   @Override
-  public MyLinkedList intersectionOfLinkedLists(MyLinkedList sortedList) {
+  public MyJLinkedList intersectionOfLinkedLists(MyJLinkedList sortedList) {
     return null;
   }
 
   @Override
-  public MyLinkedList reverseList() {
+  public MyJLinkedList reverseList() {
     return null;
   }
 
@@ -452,9 +450,9 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof MyLinkedList) {
+    if (obj instanceof MyJLinkedList) {
       // Cast the obj to MyLinkedList
-      MyLinkedList other = (MyLinkedList) obj;
+      MyJLinkedList other = (MyJLinkedList) obj;
 
       Iterator<Integer> otherIterator = other.iterator();
       Iterator<Integer> thisIterator = this.iterator();
@@ -504,7 +502,7 @@ public class MyLinkedList implements GLinkedList<Integer>, Iterable<Integer>, My
 
   // - - - - - - - - - - - - - - - Node class - - - - - - - - - - - - - - -
 
-  static class Node extends GLinkedListNode<Node, Integer> {
+  static class Node extends MyJLinkedListNode<Node, Integer> {
 
     public Node(Integer data) {
       super(data);

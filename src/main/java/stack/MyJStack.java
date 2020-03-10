@@ -1,6 +1,6 @@
 package stack;
 
-public class MyStack<T> {
+public class MyJStack<T> {
 
   private Node<T> top = null;
   private Node<T> base = null;

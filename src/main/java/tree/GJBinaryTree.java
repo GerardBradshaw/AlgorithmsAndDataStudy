@@ -1,6 +1,6 @@
 package tree;
 
-public interface GBinaryTree<T> {
+public interface GJBinaryTree<T> {
 
   // -------- Insert
   void insert(T data);

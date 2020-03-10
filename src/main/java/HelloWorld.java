@@ -1,8 +1,8 @@
-import array.ArraySorting;
-import hashtable.MyHashTable;
-import hashtable.MyHashTable2;
+import array.JArraySorting;
+import hashtable.MyJHashTable;
+import hashtable.MyJHashTable2;
 import hashtable.Word;
-import linkedlist.MyDoubleLinkedList;
+import linkedlist.MyJDoublyLinkedList;
 import tree.XMyBinarySearchTree;
 import trie.MyKTrie;
 
@@ -42,7 +42,7 @@ public class HelloWorld {
     for (int i = 0; i < 1; i++) {
       int[] array = createRandIntArray(random.nextInt(10) + 2, 10);
       int arraySum = sumArray(array);
-      ArraySorting.quickSort3(array);
+      JArraySorting.quickSort3(array);
 
       if (arraySum != sumArray(array)) isAllSumPreserved = false;
       if (!isSorted(array)) isAllSorted = false;
@@ -93,7 +93,7 @@ public class HelloWorld {
 
   // -------- LinkedList --------
 
-  private static MyDoubleLinkedList<Integer> createRandLinkedList(int size, int maxData) {
+  private static MyJDoublyLinkedList<Integer> createRandLinkedList(int size, int maxData) {
     if (size <= 0) {
       return null;
     }
@@ -112,23 +112,23 @@ public class HelloWorld {
       }
     }
 
-    return new MyDoubleLinkedList<>(ints);
+    return new MyJDoublyLinkedList<>(ints);
   }
 
-  private static MyDoubleLinkedList<Integer> createRandLinkedList(int size) {
+  private static MyJDoublyLinkedList<Integer> createRandLinkedList(int size) {
     return createRandLinkedList(size, -1);
   }
 
   private static void detectLoop() {
-    MyDoubleLinkedList<Integer> list = new MyDoubleLinkedList<>(0,1,2,3,4,5,6,7,8,9);
+    MyJDoublyLinkedList<Integer> list = new MyJDoublyLinkedList<>(0,1,2,3,4,5,6,7,8,9);
     System.out.println(list);
 
     int replacementIndex = 9;
 
     for (int i = 0; i <= 9; i++) {
-      MyDoubleLinkedList.Node<Integer> loopStartNode = list.getNodeAtIndex(i);
-      MyDoubleLinkedList.Node<Integer> replacementNode = new MyDoubleLinkedList.Node<>(9);
-      MyDoubleLinkedList.Node<Integer> replacedNode = list.getNodeAtIndex(replacementIndex);
+      MyJDoublyLinkedList.Node<Integer> loopStartNode = list.getNodeAtIndex(i);
+      MyJDoublyLinkedList.Node<Integer> replacementNode = new MyJDoublyLinkedList.Node<>(9);
+      MyJDoublyLinkedList.Node<Integer> replacedNode = list.getNodeAtIndex(replacementIndex);
 
       replacementNode.setNext(loopStartNode);
       replacementNode.setPrev(replacedNode.getPrev());
@@ -189,7 +189,7 @@ public class HelloWorld {
 
       // Created using addAtEnd
       long startTimeNs = System.nanoTime();
-      MyDoubleLinkedList<Integer> list = createRandLinkedList(i);
+      MyJDoublyLinkedList<Integer> list = createRandLinkedList(i);
       long endTimeNs = System.nanoTime();
       long timeElapsedNs = (endTimeNs - startTimeNs);
 
@@ -236,11 +236,11 @@ public class HelloWorld {
 
   // -------- HashTables --------
 
-  private static MyHashTable<Integer, Integer> createRandomHashTable(int size, int entries) {
+  private static MyJHashTable<Integer, Integer> createRandomHashTable(int size, int entries) {
     if (size <= 0) return null;
 
     Random rand = new Random();
-    MyHashTable<Integer, Integer> table = new MyHashTable<>(size);
+    MyJHashTable<Integer, Integer> table = new MyJHashTable<>(size);
 
     for (int i = 0; i < entries; i++) table.insert(rand.nextInt(), rand.nextInt());
 
@@ -257,7 +257,7 @@ public class HelloWorld {
 
       // Created using addAtEnd
       long startTimeNs = System.nanoTime();
-      MyHashTable<Integer, Integer> table = createRandomHashTable(currentSize,currentSize);
+      MyJHashTable<Integer, Integer> table = createRandomHashTable(currentSize,currentSize);
       long endTimeNs = System.nanoTime();
       long timeElapsedNs = (endTimeNs - startTimeNs);
 
@@ -313,12 +313,12 @@ public class HelloWorld {
         "699", "1", "16", "999", "890", "725", "998", "978", "988", "990",
         "989", "984", "320", "321", "400", "415", "450", "50", "660", "624"};
 
-    MyHashTable2 hashTable = new MyHashTable2(60);
+    MyJHashTable2 hashTable = new MyJHashTable2(60);
 
     hashTable.addToArrayUsingModHash(array);
     System.out.println(hashTable.toString());
 
-    hashTable = new MyHashTable2(60);
+    hashTable = new MyJHashTable2(60);
     hashTable.addToArrayUsingDoubModHash(array);
     System.out.println(hashTable.toString());
 

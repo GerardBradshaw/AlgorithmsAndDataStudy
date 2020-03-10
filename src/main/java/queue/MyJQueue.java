@@ -1,6 +1,6 @@
 package queue;
 
-public class MyQueue<T> {
+public class MyJQueue<T> {
 
   private Node<T> front;
   private Node<T> back;
@@ -71,8 +71,8 @@ public class MyQueue<T> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof MyQueue) {
-      MyQueue<?> other = (MyQueue<?>) obj;
+    if (obj instanceof MyJQueue) {
+      MyJQueue<?> other = (MyJQueue<?>) obj;
 
       Node<T> currentNode = front;
       while (currentNode != null) {

@@ -1,6 +1,6 @@
 package heap;
 
-public class MyHeap {
+public class MyJHeap {
 
   // ---------------- Member variables ----------------
 
@@ -11,14 +11,14 @@ public class MyHeap {
 
   // ---------------- Constructors ----------------
 
-  public MyHeap(int[] data) {
+  public MyJHeap(int[] data) {
     capacity = data.length;
     this.data = new int[capacity];
     for (int i : data)
       insert(i);
   }
 
-  public MyHeap() {
+  public MyJHeap() {
     data = new int[capacity];
   }
 

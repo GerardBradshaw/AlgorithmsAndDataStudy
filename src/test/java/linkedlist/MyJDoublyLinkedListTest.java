@@ -10,14 +10,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-public class MyDoubleLinkedListTest {
+public class MyJDoublyLinkedListTest {
 
-  private MyDoubleLinkedList<Integer> linkedList = new MyDoubleLinkedList<>();
-  private MyDoubleLinkedList<Integer> nullList = new MyDoubleLinkedList<>();
+  private MyJDoublyLinkedList<Integer> linkedList = new MyJDoublyLinkedList<>();
+  private MyJDoublyLinkedList<Integer> nullList = new MyJDoublyLinkedList<>();
 
   @Before
   public void setUp() throws Exception {
-    linkedList = new MyDoubleLinkedList<>(6, 7, 0); // [6] -> [7] -> [0] -> null
+    linkedList = new MyJDoublyLinkedList<>(6, 7, 0); // [6] -> [7] -> [0] -> null
   }
 
 
@@ -26,31 +26,31 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testAddLast_negativeValue() {
     linkedList.addLast(-4);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7, 0, -4))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7, 0, -4))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexInMiddle() {
     linkedList.addAtIndex(33, 1);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 33, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 33, 7, 0))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexLast() {
     linkedList.addAtIndex(99, 3);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7, 0, 99))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7, 0, 99))));
   }
 
   @Test
   public void testAddFirst_positiveValue() {
     linkedList.addFirst(5);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(5, 6, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(5, 6, 7, 0))));
   }
 
   @Test
   public void testAddFirst_positiveValueNullList() {
     nullList.addFirst(5);
-    assertThat(nullList, is(equalTo(new MyDoubleLinkedList<>(5))));
+    assertThat(nullList, is(equalTo(new MyJDoublyLinkedList<>(5))));
   }
 
 
@@ -59,7 +59,7 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testSetFirst_validList() {
     linkedList.setFirst(9);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(9, 7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -70,7 +70,7 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testSetLast_validList() {
     linkedList.setLast(9);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7, 9))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -81,19 +81,19 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testSetAtIndex_indexFirst() {
     linkedList.setAtIndex(9, 0);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(9, 7, 0))));
   }
 
   @Test
   public void testSetAtIndex_indexLast() {
     linkedList.setAtIndex(9, 2);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7, 9))));
   }
 
   @Test
   public void testSetAtIndex_indexMiddle() {
     linkedList.setAtIndex(9, 1);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 9, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 9, 0))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -117,19 +117,19 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testRemoveItem_firstItem() {
     linkedList.remove(6);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(7, 0))));
   }
 
   @Test
   public void testRemoveItem_middleItem() {
     linkedList.remove(7);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 0))));
   }
 
   @Test
   public void testRemoveItem_lastItem() {
     linkedList.remove(0);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -150,19 +150,19 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testRemoveAtIndex_indexZero() {
     linkedList.removeAtIndex(0);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(7, 0))));
   }
 
   @Test
   public void testRemoveAtIndex_indexInMiddle() {
     linkedList.removeAtIndex(1);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 0))));
   }
 
   @Test
   public void testRemoveAtIndex_indexLast() {
     linkedList.removeAtIndex(2);
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -173,7 +173,7 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testRemoveLast_validList() {
     linkedList.removeLast();
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -184,7 +184,7 @@ public class MyDoubleLinkedListTest {
   @Test
   public void testRemoveFirst_validList() {
     linkedList.removeFirst();
-    assertThat(linkedList, is(equalTo(new MyDoubleLinkedList<>(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyJDoublyLinkedList<>(7, 0))));
   }
 
   @Test(expected = NullPointerException.class)

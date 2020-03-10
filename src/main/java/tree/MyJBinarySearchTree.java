@@ -1,6 +1,6 @@
 package tree;
 
-public class MyBinarySearchTree implements GBinaryTree<Integer> {
+public class MyJBinarySearchTree implements GJBinaryTree<Integer> {
 
   private Node head;
 

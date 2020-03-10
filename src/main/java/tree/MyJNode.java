@@ -1,21 +1,21 @@
 package tree;
 
-public class Node {
+public class MyJNode {
 
   // -------- Member variables --------
 
   int value;
-  Node left;
-  Node right;
+  MyJNode left;
+  MyJNode right;
 
 
   // -------- Constructor --------
 
-  public Node(int value) {
+  public MyJNode(int value) {
     this.value = value;
   }
 
-  public Node(int... values) {
+  public MyJNode(int... values) {
     value = values[0];
     for (int i = 1; i < values.length; i++) {
       insert(values[i]);
@@ -28,12 +28,12 @@ public class Node {
   public void insert(int value) {
     // Less than value case
     if (value < this.value) {
-      if (left == null) left = new Node(value);
+      if (left == null) left = new MyJNode(value);
       else left.insert(value);
 
     // Greater than value case
     } else {
-      if (right == null) right = new Node(value);
+      if (right == null) right = new MyJNode(value);
       else right.insert(value);
     }
   }
@@ -58,8 +58,8 @@ public class Node {
     delete(this, value);
   }
 
-  private void delete(Node parent, int value) {
-    Node deleteNode;
+  private void delete(MyJNode parent, int value) {
+    MyJNode deleteNode;
 
     // Node to delete is to the left of parent
     if (parent.left.value == value) {
@@ -86,7 +86,7 @@ public class Node {
 
         // ... child does exist on right -> it gets complicated!
         } else {
-          Node nodeToMove = deleteNode.left.right;
+          MyJNode nodeToMove = deleteNode.left.right;
           parent.left = deleteNode.left;
           parent.left.right = deleteNode.right;
           insertNodeLeftMost(nodeToMove, parent.left.right);
@@ -122,7 +122,7 @@ public class Node {
 
           // ... child does exist on right -> it gets complicated!
         } else {
-          Node nodeToMove = deleteNode.left.right;
+          MyJNode nodeToMove = deleteNode.left.right;
           parent.right = deleteNode.left;
           parent.right.right = deleteNode.right;
           insertNodeLeftMost(nodeToMove, parent.left.right);
@@ -132,10 +132,10 @@ public class Node {
     }
   }
 
-  private void insertNodeLeftMost(Node insert, Node parent) {
+  private void insertNodeLeftMost(MyJNode insert, MyJNode parent) {
     if (parent.left == null) parent.left = insert;
     else {
-      Node currentNode = parent;
+      MyJNode currentNode = parent;
       while (currentNode.left != null) currentNode = currentNode.left;
       currentNode.left = insert;
     }

@@ -1,6 +1,6 @@
 package linkedlist;
 
-public interface GLinkedList<T> {
+public interface GJLinkedList<T> {
 
   // ------- Add
   void addFirst(T data);
