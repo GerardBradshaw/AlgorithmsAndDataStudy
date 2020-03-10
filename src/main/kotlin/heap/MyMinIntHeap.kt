@@ -1,68 +1,63 @@
 package heap
 
-@Suppress("UNCHECKED_CAST") // Type safe because insert(data) only accepts type T
-class MyKMinHeap<T : Comparable<T>>() {
+class MyMinIntHeap() {
 
   // -------- Member variables --------
 
-  private var data: Array<Any?> = arrayOfNulls<Any?>(3)
-  private var size = 0
+  var data: Array<Int?> = arrayOfNulls(3)
+  var size = 0
 
 
   // -------- Constructor --------
 
-  constructor(data: Array<T?>) : this() {
-    for (obj in data) {
-      insert(obj)
+  constructor(data: Array<Int?>) : this() {
+    for (int in data) {
+      insert(int)
     }
   }
 
 
   // -------- Public methods --------
 
-  fun insert(data: T?) {
-    if (data == null)
+  fun findMin(): Int {
+    val min = data[0] ?: throw NullPointerException()
+    return min
+  }
+
+  fun insert(int: Int?) {
+    if (int == null)
       return
 
     if (!isEnoughSpace())
       resizeArray()
 
-    addToData(data)
+    addToData(int)
   }
 
-  fun getMin(): T {
-    val max = data[0] ?: throw NullPointerException()
-    return max as T
-  }
-
-  fun popMin(): T {
-    val max = data[0] ?: throw NullPointerException()
+  fun popMin(): Int {
+    val min = data[0] ?: throw NullPointerException()
     deleteMin()
-    return max as T
+    return min
   }
 
   fun deleteMin() {
-    if (data[0] == null)
-      throw NullPointerException()
+    if (data[0] == null) throw NullPointerException()
 
-    if (size == 0) {
-      return
-    }
-    else if (size == 1) {
-      data[0] = null
-      size--
-    }
-    else {
-      data[0] = data[size - 1]
-      data[size - 1] = null
-      size--
-
-      moveDownToCorrectPosition(0)
+    when (size) {
+      0 -> return
+      1 -> {
+        data[0] = null
+        size--
+      }
+      else -> {
+        data[0] = data[size - 1]
+        data[size - 1] = null
+        size--
+        moveDownToCorrectPosition(0)
+      }
     }
 
-    if (data.size > 3 * size)
-      resizeArray()
-
+    if (data.size > 3 * size) resizeArray()
   }
 
   fun size(): Int {
@@ -81,14 +76,14 @@ class MyKMinHeap<T : Comparable<T>>() {
     return data.size >= size + 1
   }
 
-  private fun addToData(data: T) {
-    this.data[size] = data
+  private fun addToData(int: Int) {
+    data[size] = int
     size++;
     moveUpToCorrectPosition(size - 1)
   }
 
   private fun resizeArray() {
-    val tempData: Array<Any?> = arrayOfNulls(size * 2)
+    val tempData: Array<Int?> = arrayOfNulls(size * 2)
     System.arraycopy(data, 0, tempData, 0, size)
     data = tempData
   }
@@ -97,23 +92,23 @@ class MyKMinHeap<T : Comparable<T>>() {
     var currentIndex = index
     var leftIndex = leftIndexOf(currentIndex)
     var rightIndex = rightIndexOf(currentIndex)
-    var currentValue: T
-    var leftValue: T
-    var rightValue: T?
+    var currentValue: Int
+    var leftValue: Int
+    var rightValue: Int
     val maxIndex = size - 1
 
     if (size == 2) {
-      currentValue = data[currentIndex] as T
-      leftValue = data[leftIndex] as T
+      currentValue = data[currentIndex] ?: return
+      leftValue = data[leftIndex] ?: return
       if (currentValue > leftValue) swap(currentIndex, leftIndex)
     }
 
     while (leftIndex < maxIndex && rightIndex <= maxIndex) {
-      currentValue = data[currentIndex] as T? ?: break
-      leftValue = data[leftIndex] as T? ?: break
-      rightValue = data[rightIndex] as T?
+      currentValue = data[currentIndex] ?: break
+      leftValue = data[leftIndex] ?: break
+      rightValue = data[rightIndex] ?: Int.MAX_VALUE
 
-      if (rightValue == null || leftValue <= rightValue) {
+      if (leftValue <= rightValue) {
         if (currentValue > leftValue) {
           swap(currentIndex, leftIndex)
           currentIndex = leftIndex
@@ -135,20 +130,21 @@ class MyKMinHeap<T : Comparable<T>>() {
   }
 
   private fun moveUpToCorrectPosition(index: Int) {
-    val value = data[index] as T? ?: return
+    val value = data[index] ?: return
     var newIndex = index
     var parentIndex: Int
-    var parentValue: T?
+    var parentValue: Int
 
     while (newIndex > 0) {
-      parentIndex = parentIndexOf(newIndex)
-      parentValue = data[parentIndex] as T?
+      parentIndex = parentOf(newIndex)
+      parentValue = data[parentIndex] ?: Int.MIN_VALUE
 
-      if (parentValue != null && parentValue > value) {
+      if (parentValue > value) {
         swap(newIndex, parentIndex)
         newIndex = parentIndex
       }
-      else return
+      else
+        return
     }
   }
 
@@ -160,7 +156,7 @@ class MyKMinHeap<T : Comparable<T>>() {
     return 2 * index + 2
   }
 
-  private fun parentIndexOf(index: Int): Int {
+  private fun parentOf(index: Int): Int {
     return if (index % 2 != 0) ((index - 1) / 2) else ((index - 2) / 2)
   }
 
@@ -176,16 +172,16 @@ class MyKMinHeap<T : Comparable<T>>() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKMaxHeap<*>) return false
+    if (other !is MyMinIntHeap) return false
     if (other.size() != size) return false
 
     var isEqual = false
     val saveSize = size
-    val saveData: Array<Any?> = arrayOfNulls(data.size)
+    val saveData: Array<Int?> = arrayOfNulls(data.size)
     System.arraycopy(data, 0, this, 0, data.size)
 
     while (!other.isEmpty() && size > 0)
-      if (other.popMax() != popMin())
+      if (other.popMin() != popMin())
         break
 
     if (other.isEmpty() && size == 0)
@@ -198,13 +194,21 @@ class MyKMinHeap<T : Comparable<T>>() {
   }
 
   override fun toString(): String {
-    if (size == 0) return "empty"
+    if (size == 0)
+      return "empty"
 
-    val builder = StringBuilder().append("[").append(data[0])
+    val builder = StringBuilder().append("[")
 
-    for (i in 1..(size - 1)) builder.append(", ").append(data[i].toString())
+    for (i in 0..(size - 2))
+      builder
+        .append(data[i])
+        .append(", ")
 
-    return builder.append("]").toString()
+    builder
+      .append(data[size - 1])
+      .append("]")
+
+    return builder.toString()
   }
 
   override fun hashCode(): Int {

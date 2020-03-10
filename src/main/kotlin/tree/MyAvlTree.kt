@@ -4,7 +4,7 @@ import java.lang.NullPointerException
 import java.lang.StringBuilder
 import java.util.*
 
-class MyKAvlTree : Iterable<Int> {
+class MyAvlTree : Iterable<Int> {
 
   // ---------------- Member variables ----------------
 
@@ -485,7 +485,7 @@ class MyKAvlTree : Iterable<Int> {
   // ---------------- Any callbacks ----------------
 
   override fun equals(other: Any?): Boolean {
-    if (other is MyKAvlTree) {
+    if (other is MyAvlTree) {
       if (other.size() != size) return false
 
       val otherIterator = other.iterator()

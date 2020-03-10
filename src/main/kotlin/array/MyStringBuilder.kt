@@ -1,6 +1,6 @@
 package array
 
-class MyKStringBuilder() {
+class MyStringBuilder() {
 
   private var charArray = CharArray(1)
   private var numberOfChars = 0
@@ -11,7 +11,7 @@ class MyKStringBuilder() {
     }
   }
 
-  fun append(char: Char?): MyKStringBuilder {
+  fun append(char: Char?): MyStringBuilder {
     if (char != null) {
       if (numberOfChars == charArray.size) {
         resizeArray()
@@ -22,7 +22,7 @@ class MyKStringBuilder() {
     return this
   }
 
-  fun append(string: String?): MyKStringBuilder {
+  fun append(string: String?): MyStringBuilder {
     if (string != null) {
       for (char in string) append(char)
     }

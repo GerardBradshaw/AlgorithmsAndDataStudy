@@ -1,6 +1,6 @@
 package hashtable
 
-interface GKHashTable<K,V> {
+interface GHashTable<K,V> {
 
   fun insert(key: K, value: V)
   fun get(key: Any): V?

@@ -4,7 +4,7 @@ import java.lang.IndexOutOfBoundsException
 
 // Type safe as add(T) and set(Int, T) only allow type T & it cannot be otherwise modified
 @Suppress("UNCHECKED_CAST")
-class MyKArrayList<T> : Collection<T>, Iterable<T> {
+class MyArrayList<T> : Collection<T>, Iterable<T> {
 
   // ---------------- Member variables ----------------
 
@@ -109,7 +109,7 @@ class MyKArrayList<T> : Collection<T>, Iterable<T> {
   // ---------------- Any callbacks ----------------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKArrayList<*> || other.size != size) return false
+    if (other !is MyArrayList<*> || other.size != size) return false
 
     val otherIterator = other.iterator()
 
@@ -130,7 +130,7 @@ class MyKArrayList<T> : Collection<T>, Iterable<T> {
   override fun toString(): String {
     if (dataPoints == 0) return "empty"
 
-    val builder = MyKStringBuilder().append("[").append(data[0].toString())
+    val builder = MyStringBuilder().append("[").append(data[0].toString())
 
     for (i in 1 until dataPoints)
       builder.append(", ").append(data[i].toString())

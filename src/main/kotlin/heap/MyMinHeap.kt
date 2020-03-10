@@ -1,7 +1,7 @@
 package heap
 
 @Suppress("UNCHECKED_CAST") // Type safe because insert(data) only accepts type T
-class MyKMaxHeap<T : Comparable<T>>() {
+class MyMinHeap<T : Comparable<T>>() {
 
   // -------- Member variables --------
 
@@ -30,32 +30,34 @@ class MyKMaxHeap<T : Comparable<T>>() {
     addToData(data)
   }
 
-  fun findMax(): T {
+  fun getMin(): T {
     val max = data[0] ?: throw NullPointerException()
     return max as T
   }
 
-  fun popMax(): T {
+  fun popMin(): T {
     val max = data[0] ?: throw NullPointerException()
-    deleteMax()
+    deleteMin()
     return max as T
   }
 
-  fun deleteMax() {
-    if (data[0] == null) throw NullPointerException()
+  fun deleteMin() {
+    if (data[0] == null)
+      throw NullPointerException()
 
-    when (size) {
-      0 -> return
-      1 -> {
-        data[0] = null
-        size--
-      }
-      else -> {
-        data[0] = data[size - 1]
-        data[size - 1] = null
-        size--
-        moveDownToCorrectPosition(0)
-      }
+    if (size == 0) {
+      return
+    }
+    else if (size == 1) {
+      data[0] = null
+      size--
+    }
+    else {
+      data[0] = data[size - 1]
+      data[size - 1] = null
+      size--
+
+      moveDownToCorrectPosition(0)
     }
 
     if (data.size > 3 * size)
@@ -103,7 +105,7 @@ class MyKMaxHeap<T : Comparable<T>>() {
     if (size == 2) {
       currentValue = data[currentIndex] as T
       leftValue = data[leftIndex] as T
-      if (currentValue < leftValue) swap(currentIndex, leftIndex)
+      if (currentValue > leftValue) swap(currentIndex, leftIndex)
     }
 
     while (leftIndex < maxIndex && rightIndex <= maxIndex) {
@@ -111,15 +113,15 @@ class MyKMaxHeap<T : Comparable<T>>() {
       leftValue = data[leftIndex] as T? ?: break
       rightValue = data[rightIndex] as T?
 
-      if (rightValue == null || leftValue >= rightValue) {
-        if (currentValue < leftValue) {
+      if (rightValue == null || leftValue <= rightValue) {
+        if (currentValue > leftValue) {
           swap(currentIndex, leftIndex)
           currentIndex = leftIndex
         }
         else return
       }
-      else if (rightValue > leftValue) {
-        if (currentValue < rightValue) {
+      else if (rightValue < leftValue) {
+        if (currentValue > rightValue) {
           swap(currentIndex, rightIndex)
           currentIndex = rightIndex
         }
@@ -142,7 +144,7 @@ class MyKMaxHeap<T : Comparable<T>>() {
       parentIndex = parentIndexOf(newIndex)
       parentValue = data[parentIndex] as T?
 
-      if (parentValue != null && parentValue < value) {
+      if (parentValue != null && parentValue > value) {
         swap(newIndex, parentIndex)
         newIndex = parentIndex
       }
@@ -174,7 +176,7 @@ class MyKMaxHeap<T : Comparable<T>>() {
   // -------- Any callbacks --------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKMaxHeap<*>) return false
+    if (other !is MyMaxHeap<*>) return false
     if (other.size() != size) return false
 
     var isEqual = false
@@ -183,7 +185,7 @@ class MyKMaxHeap<T : Comparable<T>>() {
     System.arraycopy(data, 0, this, 0, data.size)
 
     while (!other.isEmpty() && size > 0)
-      if (other.popMax() != popMax())
+      if (other.popMax() != popMin())
         break
 
     if (other.isEmpty() && size == 0)

@@ -2,7 +2,7 @@ package stack
 
 import java.lang.NullPointerException
 
-class MyKStack<T> : Collection<T> {
+class MyStack<T> : Collection<T> {
 
   private var top: Node<T>? = null
   private var base: Node<T>? = null
@@ -63,7 +63,7 @@ class MyKStack<T> : Collection<T> {
   }
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKStack<*>) return false
+    if (other !is MyStack<*>) return false
 
     var current = top
     var otherData: Any?

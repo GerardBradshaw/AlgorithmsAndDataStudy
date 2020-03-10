@@ -10,14 +10,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-public class MyKLinkedListTest {
+public class MyLinkedListTest {
 
-  private MyKLinkedList linkedList = new MyKLinkedList();
-  private MyKLinkedList nullList = new MyKLinkedList();
+  private MyLinkedList linkedList = new MyLinkedList();
+  private MyLinkedList nullList = new MyLinkedList();
 
   @Before
   public void setUp() throws Exception {
-    linkedList = new MyKLinkedList(6, 7, 0); // [6] -> [7] -> [0] -> null
+    linkedList = new MyLinkedList(6, 7, 0); // [6] -> [7] -> [0] -> null
   }
 
 
@@ -26,31 +26,31 @@ public class MyKLinkedListTest {
   @Test
   public void testAddLast_negativeValue() {
     linkedList.addLast(-4);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7, 0, -4))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 0, -4))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexMiddle() {
     linkedList.addAtIndex(33, 1);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 33, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 33, 7, 0))));
   }
 
   @Test
   public void testAddAtIndex_positiveValueIndexLast() {
     linkedList.addAtIndex(99, 3);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7, 0, 99))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 0, 99))));
   }
 
   @Test
   public void testAddFirst_positiveValue() {
     linkedList.addFirst(5);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(5, 6, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(5, 6, 7, 0))));
   }
 
   @Test
   public void testAddFirst_positiveValueNullList() {
     nullList.addFirst(5);
-    assertThat(nullList, is(equalTo(new MyKLinkedList(5))));
+    assertThat(nullList, is(equalTo(new MyLinkedList(5))));
   }
 
 
@@ -59,7 +59,7 @@ public class MyKLinkedListTest {
   @Test
   public void testSetFirst_validList() {
     linkedList.setFirst(9);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(9, 7, 0))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -70,7 +70,7 @@ public class MyKLinkedListTest {
   @Test
   public void testSetLast_validList() {
     linkedList.setLast(9);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 9))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -81,19 +81,19 @@ public class MyKLinkedListTest {
   @Test
   public void testSetAtIndex_indexFirst() {
     linkedList.setAtIndex(9, 0);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(9, 7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(9, 7, 0))));
   }
 
   @Test
   public void testSetAtIndex_indexLast() {
     linkedList.setAtIndex(9, 2);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7, 9))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7, 9))));
   }
 
   @Test
   public void testSetAtIndex_indexMiddle() {
     linkedList.setAtIndex(9, 1);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 9, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 9, 0))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -117,19 +117,19 @@ public class MyKLinkedListTest {
   @Test
   public void testRemove_firstItem() {
     linkedList.remove(6);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
   public void testRemove_middleItem() {
     linkedList.remove(7);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
   public void testRemove_lastItem() {
     linkedList.remove(0);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -150,19 +150,19 @@ public class MyKLinkedListTest {
   @Test
   public void testRemoveAtIndex_indexZero() {
     linkedList.removeAtIndex(0);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test
   public void testRemoveAtIndex_indexInMiddle() {
     linkedList.removeAtIndex(1);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 0))));
   }
 
   @Test
   public void testRemoveAtIndex_indexLast() {
     linkedList.removeAtIndex(2);
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = IndexOutOfBoundsException.class)
@@ -173,7 +173,7 @@ public class MyKLinkedListTest {
   @Test
   public void testRemoveLast_validList() {
     linkedList.removeLast();
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(6, 7))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(6, 7))));
   }
 
   @Test(expected = NullPointerException.class)
@@ -184,7 +184,7 @@ public class MyKLinkedListTest {
   @Test
   public void testRemoveFirst_validList() {
     linkedList.removeFirst();
-    assertThat(linkedList, is(equalTo(new MyKLinkedList(7, 0))));
+    assertThat(linkedList, is(equalTo(new MyLinkedList(7, 0))));
   }
 
   @Test(expected = NullPointerException.class)

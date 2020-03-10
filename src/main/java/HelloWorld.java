@@ -4,7 +4,7 @@ import hashtable.MyJHashTable2;
 import hashtable.Word;
 import linkedlist.MyJDoublyLinkedList;
 import tree.XMyBinarySearchTree;
-import trie.MyKTrie;
+import trie.MyTrie;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -14,7 +14,7 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyKTrie trie = new MyKTrie();
+    MyTrie trie = new MyTrie();
 
     trie.insert("CAR");
     trie.insert("CARD");

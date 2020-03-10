@@ -1,9 +1,9 @@
 package trie
 
-import array.MyKStringBuilder
+import array.MyStringBuilder
 import java.lang.Exception
 
-class MyKTrie {
+class MyTrie {
 
   // ---------------- Properties ----------------
 
@@ -63,7 +63,7 @@ class MyKTrie {
 
   fun printWordList() {
     if (head.children.isEmpty()) println("(empty)")
-    else printHelper(head, MyKStringBuilder())
+    else printHelper(head, MyStringBuilder())
   }
 
   // ---------------- Helpers ----------------
@@ -100,7 +100,7 @@ class MyKTrie {
     if (nodeNext != null) nodeNext.isCompleteWord = false
   }
 
-  private fun printHelper(node: Node, builder: MyKStringBuilder) {
+  private fun printHelper(node: Node, builder: MyStringBuilder) {
     val children = node.children
     val char = node.char
 
@@ -110,12 +110,12 @@ class MyKTrie {
 
     if (children.isNotEmpty()) {
       for (child in children.values) {
-        printHelper(child, MyKStringBuilder(builder.toString()))
+        printHelper(child, MyStringBuilder(builder.toString()))
       }
     }
   }
 
-  private fun toStringHelper(node: Node, builder: MyKStringBuilder, wordList: MyKStringBuilder): MyKStringBuilder {
+  private fun toStringHelper(node: Node, builder: MyStringBuilder, wordList: MyStringBuilder): MyStringBuilder {
     val children = node.children
     val char = node.char
 
@@ -125,7 +125,7 @@ class MyKTrie {
 
     if (children.isNotEmpty()) {
       for (child in children.values) {
-        printHelper(child, MyKStringBuilder(builder.toString()))
+        printHelper(child, MyStringBuilder(builder.toString()))
       }
     }
     return wordList
@@ -135,7 +135,7 @@ class MyKTrie {
   // ---------------- Any methods ----------------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKTrie) return false
+    if (other !is MyTrie) return false
     return other.toString() == toString()
   }
 
@@ -144,7 +144,7 @@ class MyKTrie {
   }
 
   override fun toString(): String {
-    return toStringHelper(head, MyKStringBuilder(), MyKStringBuilder()).toString()
+    return toStringHelper(head, MyStringBuilder(), MyStringBuilder()).toString()
   }
 
   // ---------------- Node class ----------------
@@ -160,7 +160,7 @@ class MyKTrie {
     }
 
     override fun toString(): String {
-      val builder = MyKStringBuilder().append(char ?: '*').append(" -> [").append(if (isCompleteWord) "*, " else "-, ")
+      val builder = MyStringBuilder().append(char ?: '*').append(" -> [").append(if (isCompleteWord) "*, " else "-, ")
 
       for (key in children.keys) {
         builder.append(key).append(", ")

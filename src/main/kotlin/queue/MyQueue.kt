@@ -2,7 +2,7 @@ package queue
 
 import java.lang.StringBuilder
 
-class MyKQueue<T> {
+class MyQueue<T> {
 
   private var front: Node<T>? = null
   private var back: Node<T>? = null;
@@ -57,8 +57,8 @@ class MyKQueue<T> {
   }
 
   override fun equals(other: Any?): Boolean {
-    // Case: other is not a MyKQueue
-    if (other !is MyKQueue<*>) return false
+    // Case: other is not a MyQueue
+    if (other !is MyQueue<*>) return false
 
     var current: Node<T>? = front
     var otherData: Any?

@@ -1,20 +1,20 @@
-import tree.MyKrbTree.Node;
+import tree.MyRedBlackTree.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class KArbTreePrinter {
+public class ArbTreePrinter {
 
   public static <Integer extends Comparable<?>> void printNode(Node root) {
-    int maxLevel = KArbTreePrinter.maxLevel(root);
+    int maxLevel = ArbTreePrinter.maxLevel(root);
 
     printNodeInternal(Collections.singletonList(root), 1, maxLevel);
   }
 
   private static <Integer extends Comparable<?>> void printNodeInternal(List<Node> nodes, int level, int maxLevel) {
-    if (nodes.isEmpty() || KArbTreePrinter.isAllElementsNull(nodes))
+    if (nodes.isEmpty() || ArbTreePrinter.isAllElementsNull(nodes))
       return;
 
     int floor = maxLevel - level;
@@ -22,7 +22,7 @@ public class KArbTreePrinter {
     int firstSpaces = (int) Math.pow(2, (floor)) - 1;
     int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-    KArbTreePrinter.printWhitespaces(firstSpaces);
+    ArbTreePrinter.printWhitespaces(firstSpaces);
 
     List<Node> newNodes = new ArrayList<Node>();
     for (Node node : nodes) {
@@ -36,31 +36,31 @@ public class KArbTreePrinter {
         System.out.print(" ");
       }
 
-      KArbTreePrinter.printWhitespaces(betweenSpaces);
+      ArbTreePrinter.printWhitespaces(betweenSpaces);
     }
     System.out.println("");
 
     for (int i = 1; i <= endgeLines; i++) {
       for (int j = 0; j < nodes.size(); j++) {
-        KArbTreePrinter.printWhitespaces(firstSpaces - i);
+        ArbTreePrinter.printWhitespaces(firstSpaces - i);
         if (nodes.get(j) == null) {
-          KArbTreePrinter.printWhitespaces(endgeLines + endgeLines + i + 1);
+          ArbTreePrinter.printWhitespaces(endgeLines + endgeLines + i + 1);
           continue;
         }
 
         if (nodes.get(j).getLeft() != null)
           System.out.print("/");
         else
-          KArbTreePrinter.printWhitespaces(1);
+          ArbTreePrinter.printWhitespaces(1);
 
-        KArbTreePrinter.printWhitespaces(i + i - 1);
+        ArbTreePrinter.printWhitespaces(i + i - 1);
 
         if (nodes.get(j).getRight() != null)
           System.out.print("\\");
         else
-          KArbTreePrinter.printWhitespaces(1);
+          ArbTreePrinter.printWhitespaces(1);
 
-        KArbTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
+        ArbTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
       }
 
       System.out.println("");
@@ -78,7 +78,7 @@ public class KArbTreePrinter {
     if (node == null)
       return 0;
 
-    return Math.max(KArbTreePrinter.maxLevel(node.getLeft()), KArbTreePrinter.maxLevel(node.getRight())) + 1;
+    return Math.max(ArbTreePrinter.maxLevel(node.getLeft()), ArbTreePrinter.maxLevel(node.getRight())) + 1;
   }
 
   private static boolean isAllElementsNull(List list) {

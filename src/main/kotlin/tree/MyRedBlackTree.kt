@@ -1,9 +1,9 @@
 package tree
 
-import array.MyKStringBuilder
-import stack.MyKStack
+import array.MyStringBuilder
+import stack.MyStack
 
-class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
+class MyRedBlackTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
   // ---------------- Member variables ----------------
 
@@ -422,7 +422,7 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
   // ---------------- Any class methods ----------------
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKrbTree<*>) return false
+    if (other !is MyRedBlackTree<*>) return false
 
     val iterator = iterator()
     val otherIterator = other.iterator()
@@ -442,7 +442,7 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
     return if (!iterator.hasNext()) "empty"
     else {
-      val builder = MyKStringBuilder().append("[").append(iterator.next().toString())
+      val builder = MyStringBuilder().append("[").append(iterator.next().toString())
 
       while (iterator.hasNext()) {
         builder.append(", ").append(iterator.next().toString())
@@ -457,7 +457,7 @@ class MyKrbTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
 
   override fun iterator(): Iterator<T> {
     return object : Iterator<T> {
-      val stack: MyKStack<Node<T>> = MyKStack()
+      val stack: MyStack<Node<T>> = MyStack()
 
       init {
         var current = root

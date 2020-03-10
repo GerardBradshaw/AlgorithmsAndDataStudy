@@ -1,12 +1,11 @@
 package queue
 
-import heap.MyKMaxHeap
-import heap.MyKMinHeap
+import heap.MyMinHeap
 import java.lang.StringBuilder
 
-class MyKPriorityQueue<T> {
+class MyPriorityQueue<T> {
 
-  private var heap: MyKMinHeap<Item<T>> = MyKMinHeap()
+  private var heap: MyMinHeap<Item<T>> = MyMinHeap()
 
   fun isEmpty(): Boolean {
     return heap.isEmpty()
@@ -29,7 +28,7 @@ class MyKPriorityQueue<T> {
 
     if (heap.isEmpty()) return "empty"
 
-    val heapCopy = MyKMinHeap<Item<T>>()
+    val heapCopy = MyMinHeap<Item<T>>()
     heapCopy.insert(heap.popMin())
     val builder = StringBuilder().append("[").append(heapCopy.getMin())
 

@@ -3,7 +3,7 @@ package array
 import java.lang.NullPointerException
 import kotlin.math.pow
 
-class MyKString : Comparable<MyKString> {
+class MyString : Comparable<MyString> {
 
   // ---------------- Member variables ----------------
 
@@ -38,7 +38,7 @@ class MyKString : Comparable<MyKString> {
     return chars[index]
   }
 
-  fun subSequence(startIndex: Int, endIndex: Int): MyKString {
+  fun subSequence(startIndex: Int, endIndex: Int): MyString {
     if (startIndex > endIndex || endIndex > length - 1)
       throw NullPointerException()
 
@@ -50,10 +50,10 @@ class MyKString : Comparable<MyKString> {
       charSeq[i] = chars[startIndex + i]
     }
 
-    return MyKString(charSeq)
+    return MyString(charSeq)
   }
 
-  override fun compareTo(other: MyKString): Int {
+  override fun compareTo(other: MyString): Int {
     // -'ve this less than, 0 equal, 1 this more than
     return hashCode() - other.hashCode()
   }
@@ -62,7 +62,7 @@ class MyKString : Comparable<MyKString> {
   // ---------------- Any callbacks ----------------
 
   override fun toString(): String {
-    val builder = MyKStringBuilder()
+    val builder = MyStringBuilder()
 
     for (char in chars) builder.append(char)
 
@@ -80,7 +80,7 @@ class MyKString : Comparable<MyKString> {
   }
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyKString) return false
+    if (other !is MyString) return false
 
     if (other.length != length) return false
 
