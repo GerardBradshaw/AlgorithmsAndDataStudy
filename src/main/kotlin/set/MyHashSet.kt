@@ -1,47 +1,83 @@
 package set
 
-class MyHashSet<T> : Set<T>, Iterable<T> {
+import hashtable.MyHashMap
 
-  // Member variables
+class MyHashSet<T> : Collection<T> {
 
-  
+  // ---------------- Member variables ----------------
 
-  // Public methods
-
-  fun insert(element: T) {
-    TODO()
-  }
-
-  fun delete(element: T) {
-    TODO()
-  }
+  private var map: MyHashMap<T, Any> = MyHashMap()
+  private val DUMMY_VAL = Any()
 
   override val size: Int
-    get() = TODO()
+    get() = map.size
+
+
+  // ---------------- Public methods ----------------
+
+  fun add(element: T): Boolean {
+    return map.put(element, DUMMY_VAL)
+  }
+
+  fun addAll(elements: Collection<T>): Boolean {
+    var isAllAdded = true
+
+    for (e in elements) {
+      if (!add(e)) isAllAdded = false
+    }
+
+    return isAllAdded
+  }
+
+  fun remove(element: T): Boolean {
+    return map.remove(element)
+  }
+
+  fun removeAll(elements: Collection<T>): Boolean {
+    var isAllRemoved = true
+
+    for (e in elements) {
+      if (!remove(e)) isAllRemoved = false
+    }
+
+    return isAllRemoved
+  }
+
+  fun clear() {
+    map.clear()
+  }
 
   override fun contains(element: T): Boolean {
-    TODO()
+    return map.containsKey(element)
   }
 
   override fun containsAll(elements: Collection<T>): Boolean {
-    TODO()
+    for (e in elements) {
+      if (!contains(e)) return false
+    }
+    return true
   }
 
   override fun isEmpty(): Boolean {
-    TODO()
+    return map.isEmpty()
+  }
+
+  fun isNotEmpty(): Boolean {
+    return map.isNotEmpty()
   }
 
   override fun iterator(): Iterator<T> {
-    TODO()
+    return object: Iterator<T> {
+
+      val iterator = map.keys.iterator()
+
+      override fun hasNext(): Boolean {
+        return iterator.hasNext()
+      }
+
+      override fun next(): T {
+        return iterator.next()
+      }
+    }
   }
-
-
-  // Private methods
-
-  private fun getHash(element: T): Int {
-    //return element.hashCode() %
-    TODO()
-  }
-
-
 }
