@@ -49,7 +49,7 @@ class MyHashMap<K,V> {
   // ---------------- Public methods ----------------
 
   /**
-   * Inserts the key-value pair into the hash map if they key is unique, otherwise no action is taken.
+   * Puts the key-value pair into the hash map if they key is unique, otherwise no action is taken.
    * @param key the element key
    * @param value the value corresponding to the key
    *
@@ -136,7 +136,7 @@ class MyHashMap<K,V> {
   }
 
   /**
-   * Gets the value corresponding to the given key or null if no such key exists in the Map.
+   * Gets the value corresponding to the given key or null if no such key exists.
    * @param key the key
    *
    * @return the value corresponding to the key, or null if no such key exists.
@@ -188,6 +188,16 @@ class MyHashMap<K,V> {
 
   // ---------------- Helper methods ----------------
 
+  /**
+   * Same as put(key, value) but adds parameter to increase entry count. Entry count should not be increased when
+   * resizing array.
+   * @param key the element key
+   * @param value the value corresponding to the key
+   * @param increaseNumberOfEntries numberOfEntries is increased if entry is successfully added when 'true' (default)
+   * and ignored when 'false'
+   *
+   * @return 'true' if the value was successfully inserted, 'false' otherwise.
+   */
   private fun putWithEntryCountModifier(key: K, value: V, increaseNumberOfEntries: Boolean = true): Boolean {
     resizeArray()
 
@@ -215,14 +225,14 @@ class MyHashMap<K,V> {
     var current = array[currentIndex]
 
     while (current != null) {
+      if (current.first == key) return -1
+
       if (currentIndex < maxIndex) currentIndex++
       else currentIndex = 0
 
       if (currentIndex == startIndex) return -1
 
       current = array[currentIndex]
-
-      if (current != null && current.first == key) return -1
     }
     return currentIndex
   }
