@@ -4,7 +4,7 @@ import java.lang.IndexOutOfBoundsException
 
 // Type safe as add(T) and set(Int, T) only allow type T & it cannot be otherwise modified
 @Suppress("UNCHECKED_CAST")
-class MyArrayList<T> : Collection<T>, Iterable<T> {
+class MyArrayList<T> : Collection<T> {
 
   // ---------------- Member variables ----------------
 
