@@ -1,5 +1,6 @@
 import array.JArraySorting;
 import com.sun.tools.jdeps.Graph;
+import graph.MyAdjListGraph;
 import hashtable.MyHashMap;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
@@ -19,33 +20,32 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    HashSet<String> jSet = new HashSet<>();
-    MyHashSet<String> gSet = new MyHashSet<>();
+    MyAdjListGraph<String> graph = new MyAdjListGraph<>();
 
-    String[] strings = {"0","1","2","3"};
+    // 0
+    graph.addVertex("0");
+    graph.addEdge("0", "1");
 
-    jSet.addAll(Arrays.asList(strings));
-    gSet.addAll(Arrays.asList(strings));
+    // 1
+    graph.addEdge("1", "2");
 
-    System.out.println("jSet: " + jSet.toString());
-    System.out.println("gSet: " + gSet.toString());
-    System.out.println("");
+    // 2
+    graph.addVertexAndEdges("2", Arrays.asList("0","3"));
 
-    System.out.println("Removing 2...");
-    jSet.remove("2");
-    gSet.remove("2");
+    // 3
+    graph.addVertexAndEdges("3", Collections.singletonList("2"));
 
-    System.out.println("jSet: " + jSet.toString());
-    System.out.println("gSet: " + gSet.toString());
-    System.out.println("");
+    // 4
+    graph.addEdge("4", "6");
 
-    System.out.println("Adding 4...");
-    jSet.add("4");
-    gSet.add("4");
+    // 5
+    graph.addVertex("5");
+    graph.addEdge("5", "4");
 
-    System.out.println("jSet: " + jSet.toString());
-    System.out.println("gSet: " + gSet.toString());
-    System.out.println("");
+    // 6
+    graph.addEdge("6", "5");
+
+    System.out.println(graph.toString());
 
   }
 
