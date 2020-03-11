@@ -15,6 +15,12 @@ class MyHashSet<T> : Collection<T> {
 
   // ---------------- Public methods ----------------
 
+  /**
+   * Inserts the element into the set map if it is unique, otherwise no action is taken.
+   * @param element the element to insert
+   *
+   * @return 'true' if the element was inserted (i.e. it was unique), 'false' otherwise.
+   */
   fun add(element: T): Boolean {
     return map.put(element, DUMMY_VAL)
   }
@@ -29,6 +35,10 @@ class MyHashSet<T> : Collection<T> {
     return isAllAdded
   }
 
+  /**
+   * Removes the value if it exists, otherwise no action is taken.
+   * @param element the element to remove
+   */
   fun remove(element: T): Boolean {
     return map.remove(element)
   }
