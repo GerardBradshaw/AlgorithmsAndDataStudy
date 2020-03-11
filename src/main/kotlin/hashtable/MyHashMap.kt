@@ -56,29 +56,14 @@ class MyHashMap<K,V> {
    * @return 'true' if the value was successfully inserted, 'false' otherwise.
    */
   fun put(key: K, value: V): Boolean {
-    return putWithEntryCountModifer(key, value)
-  }
-
-  private fun putWithEntryCountModifer(key: K, value: V, increaseNumberOfEntries: Boolean = true): Boolean {
-    resizeArray()
-
-    val index = getNextEmptyIndex(key)
-
-    if (index != -1) {
-      if (array[index] == null) {
-        array[index] = Pair(key, value)
-        if (increaseNumberOfEntries) numberOfEntries++
-        return true
-      }
-    }
-    return false
+    return putWithEntryCountModifier(key, value)
   }
 
   /**
    * Removes the value with corresponding key if it exists, otherwise returns without any action.
    * @param key the key corresponding to the value to remove
    */
-  fun remove(key: K) {
+  fun remove(key: K): Boolean {
     val startIndex = getIndexFromKey(key)
     var currentIndex = startIndex
     var current = array[startIndex]
@@ -88,15 +73,21 @@ class MyHashMap<K,V> {
         array[currentIndex] = null
         numberOfEntries--
         resizeArray()
-        return
+        return true
       }
 
       if (currentIndex < maxIndex) currentIndex++
       else currentIndex = 0
 
-      if (currentIndex == startIndex) return
+      if (currentIndex == startIndex) break
       current = array[currentIndex]
     }
+    return false
+  }
+
+  fun clear() {
+    array = arrayOfNulls(2)
+    numberOfEntries = 0
   }
 
   fun containsKey(key: K): Boolean {
@@ -197,6 +188,21 @@ class MyHashMap<K,V> {
 
   // ---------------- Helper methods ----------------
 
+  private fun putWithEntryCountModifier(key: K, value: V, increaseNumberOfEntries: Boolean = true): Boolean {
+    resizeArray()
+
+    val index = getNextEmptyIndex(key)
+
+    if (index != -1) {
+      if (array[index] == null) {
+        array[index] = Pair(key, value)
+        if (increaseNumberOfEntries) numberOfEntries++
+        return true
+      }
+    }
+    return false
+  }
+
   /**
    * Finds the first empty slot in array starting at the found by converting the key into an index.
    * @param key the key.
@@ -249,7 +255,7 @@ class MyHashMap<K,V> {
       array = arrayOfNulls(newArraySize)
 
       for (pair in arrayHolder) {
-        if (pair != null) putWithEntryCountModifer(pair.first, pair.second, false)
+        if (pair != null) putWithEntryCountModifier(pair.first, pair.second, false)
       }
     }
   }
