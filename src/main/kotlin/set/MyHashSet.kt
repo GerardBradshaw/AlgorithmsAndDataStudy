@@ -80,4 +80,21 @@ class MyHashSet<T> : Collection<T> {
       }
     }
   }
+
+  override fun equals(other: Any?): Boolean {
+    return when {
+      other !is MyHashSet<*> -> false
+      other.size != size -> false
+      other.containsAll(map.keys) -> true
+      else -> false
+    }
+  }
+
+  override fun hashCode(): Int {
+    return map.hashCode()
+  }
+
+  override fun toString(): String {
+    return map.keys.toString()
+  }
 }
