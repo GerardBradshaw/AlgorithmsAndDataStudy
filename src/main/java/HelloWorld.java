@@ -6,6 +6,7 @@ import hashtable.MyJHashTable2;
 import hashtable.Word;
 import linkedlist.MyJDoublyLinkedList;
 import org.jetbrains.annotations.NotNull;
+import set.MyHashSet;
 import tree.XMyBinarySearchTree;
 import trie.MyTrie;
 
@@ -18,43 +19,33 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyHashMap<Integer, String> map = new MyHashMap<>();
-    String[] strings = {"zero", "one", "two", "three"};
+    HashSet<String> jSet = new HashSet<>();
+    MyHashSet<String> gSet = new MyHashSet<>();
 
-    System.out.println("Map is: " + map.toString());
-    System.out.println("Size: " + map.getSize());
-    System.out.println();
+    String[] strings = {"0","1","2","3"};
 
-    for (int i = 0; i < 4; i++) {
-      map.put(i, strings[i]);
-    }
+    jSet.addAll(Arrays.asList(strings));
+    gSet.addAll(Arrays.asList(strings));
 
-    for (int i = 0; i < 4; i++) {
-      System.out.println("Contains key " + i + ": " + map.containsKey(i));
-      System.out.println("Contains value " + strings[i] + ": " + map.containsValue(strings[i]));
-      System.out.println("Contains entry " + i + "-" + strings[i] + ": " + map.containsEntry(i, strings[i]));
-    }
+    System.out.println("jSet: " + jSet.toString());
+    System.out.println("gSet: " + gSet.toString());
+    System.out.println("");
 
-    System.out.println();
-    System.out.println("Map is: " + map.toString());
+    System.out.println("Removing 2...");
+    jSet.remove("2");
+    gSet.remove("2");
 
-    for (int i = 0; i < 4; i++) {
-      System.out.println("Getting " + i + ": " + map.get(i));
-    }
+    System.out.println("jSet: " + jSet.toString());
+    System.out.println("gSet: " + gSet.toString());
+    System.out.println("");
 
-    System.out.println("Entries are: " + map.getEntries().toString());
-    System.out.println("Values are: " + map.getValues().toString());
-    System.out.println("Keys are: " + map.getKeys().toString());
-    System.out.println("Map size is " + map.getSize());
-    System.out.println("Map is empty: " + map.isEmpty());
+    System.out.println("Adding 4...");
+    jSet.add("4");
+    gSet.add("4");
 
-    map.remove(0);
-    map.remove(1);
-    map.remove(2);
-    map.remove(3);
-    System.out.println("All values removed. Map is: " + map.toString());
-    System.out.println("Size: " + map.getSize());
-    System.out.println("Map is not empty: " + map.isNotEmpty());
+    System.out.println("jSet: " + jSet.toString());
+    System.out.println("gSet: " + gSet.toString());
+    System.out.println("");
 
   }
 
