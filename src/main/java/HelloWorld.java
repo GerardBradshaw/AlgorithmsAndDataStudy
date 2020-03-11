@@ -1,8 +1,11 @@
 import array.JArraySorting;
+import com.sun.tools.jdeps.Graph;
+import hashtable.MyHashMap;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import hashtable.Word;
 import linkedlist.MyJDoublyLinkedList;
+import org.jetbrains.annotations.NotNull;
 import tree.XMyBinarySearchTree;
 import trie.MyTrie;
 
@@ -14,22 +17,45 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyTrie trie = new MyTrie();
 
-    trie.insert("CAR");
-    trie.insert("CARD");
-    trie.insert("CARRY");
-    trie.insert("CARRIER");
-    trie.insert("CARDS");
-    trie.insert("CARDED");
-    trie.insert("CARDIGAN");
-    System.out.println("  Count: " + trie.getWordCount());
-    trie.printWordList();
+    MyHashMap<Integer, String> map = new MyHashMap<>();
+    String[] strings = {"zero", "one", "two", "three"};
 
-    trie.delete("CAR");
-    trie.delete("CARRY");
-    System.out.println("  Count: " + trie.getWordCount());
-    trie.printWordList();
+    System.out.println("Map is: " + map.toString());
+    System.out.println("Size: " + map.getSize());
+    System.out.println();
+
+    for (int i = 0; i < 4; i++) {
+      map.put(i, strings[i]);
+    }
+
+    for (int i = 0; i < 4; i++) {
+      System.out.println("Contains key " + i + ": " + map.containsKey(i));
+      System.out.println("Contains value " + strings[i] + ": " + map.containsValue(strings[i]));
+      System.out.println("Contains entry " + i + "-" + strings[i] + ": " + map.containsEntry(i, strings[i]));
+    }
+
+    System.out.println();
+    System.out.println("Map is: " + map.toString());
+
+    for (int i = 0; i < 4; i++) {
+      System.out.println("Getting " + i + ": " + map.get(i));
+    }
+
+    System.out.println("Entries are: " + map.getEntries().toString());
+    System.out.println("Values are: " + map.getValues().toString());
+    System.out.println("Keys are: " + map.getKeys().toString());
+    System.out.println("Map size is " + map.getSize());
+    System.out.println("Map is empty: " + map.isEmpty());
+
+    map.remove(0);
+    map.remove(1);
+    map.remove(2);
+    map.remove(3);
+    System.out.println("All values removed. Map is: " + map.toString());
+    System.out.println("Size: " + map.getSize());
+    System.out.println("Map is not empty: " + map.isNotEmpty());
+
   }
 
   // -------- Arrays --------
