@@ -22,29 +22,25 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("4","5","6"));
-    System.out.println(graph.toString());
+    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("Aaa", "Bbb", "Ccc"));
 
     //graph.addEdge("0", "1",1);
     //graph.addEdge("1","2",1);
     //graph.addEdge("2", "0",1);
     //graph.addEdge("2", "3",1);
     //graph.addEdge("3", "2",1);
-    graph.addEdge("4", "6",1);
-    graph.addEdge("6", "5",1);
-    graph.addEdge("5", "4",1);
-
+    graph.addEdge("Aaa", "Ccc", 1);
+    graph.addEdge("Ccc", "Bbb", 1);
+    graph.addEdge("Bbb", "Aaa", 1);
     System.out.println(graph.toString());
 
-    MyAdjMatGraph<String> graph2 = new MyAdjMatGraph<>(Arrays.asList("5","6","4"));
-    System.out.println(graph2.toString());
-    graph2.addEdge("5", "4",1);
-    graph2.addEdge("6", "5",1);
-    graph2.addEdge("4", "6",1);
+    MyAdjMatGraph<String> graph2 = new MyAdjMatGraph<>(Arrays.asList("Ccc", "Bbb", "Aaa"));
+    graph2.addEdge("Bbb", "Aaa", 1);
+    graph2.addEdge("Ccc", "Bbb", 1);
+    graph2.addEdge("Aaa", "Ccc", 1);
     System.out.println(graph2.toString());
 
-    System.out.println();
-    System.out.println(graph.equals(graph2));
+    System.out.println(graph2.hashCode());
   }
 
   // -------- Arrays --------
