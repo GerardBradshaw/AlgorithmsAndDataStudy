@@ -4,9 +4,10 @@ import array.MyStringBuilder
 import hashtable.MyHashMap
 import set.MyHashSet
 
-class MyAdjListGraph<T : Comparable<T>> {
+class MyAdjListGraph<T> {
 
   // ---------------- Member variables ----------------
+
   private val vertices: MyHashMap<T, Node<T>> = MyHashMap()
 
   val numberOfNodes: Int
@@ -18,6 +19,7 @@ class MyAdjListGraph<T : Comparable<T>> {
       for (node in vertices.values) edgeCount += node.edges.size
       return edgeCount
     }
+
 
   // ---------------- Public methods ----------------
 
@@ -88,7 +90,7 @@ class MyAdjListGraph<T : Comparable<T>> {
 
   // ---------------- Data class ----------------
 
-  data class Node<T : Comparable<T>>(var vertex: T) {
+  data class Node<T>(var vertex: T) {
     val edges: MyHashSet<T> = MyHashSet()
   }
 }
