@@ -1,6 +1,7 @@
 import array.JArraySorting;
 import com.sun.tools.jdeps.Graph;
 import graph.MyAdjListGraph;
+import graph.MyAdjMatGraph;
 import hashtable.MyHashMap;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
@@ -8,6 +9,7 @@ import hashtable.Word;
 import linkedlist.MyJDoublyLinkedList;
 import org.jetbrains.annotations.NotNull;
 import set.MyHashSet;
+import sun.tools.jconsole.CreateMBeanDialog;
 import tree.XMyBinarySearchTree;
 import trie.MyTrie;
 
@@ -20,33 +22,29 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjListGraph<String> graph = new MyAdjListGraph<>();
+    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("4","5","6"));
+    System.out.println(graph.toString());
 
-    // 0
-    graph.addVertex("0");
-    graph.addEdge("0", "1");
-
-    // 1
-    graph.addEdge("1", "2");
-
-    // 2
-    graph.addVertexAndEdges("2", Arrays.asList("0","3"));
-
-    // 3
-    graph.addVertexAndEdges("3", Collections.singletonList("2"));
-
-    // 4
-    graph.addEdge("4", "6");
-
-    // 5
-    graph.addVertex("5");
-    graph.addEdge("5", "4");
-
-    // 6
-    graph.addEdge("6", "5");
+    //graph.addEdge("0", "1",1);
+    //graph.addEdge("1","2",1);
+    //graph.addEdge("2", "0",1);
+    //graph.addEdge("2", "3",1);
+    //graph.addEdge("3", "2",1);
+    graph.addEdge("4", "6",1);
+    graph.addEdge("6", "5",1);
+    graph.addEdge("5", "4",1);
 
     System.out.println(graph.toString());
 
+    MyAdjMatGraph<String> graph2 = new MyAdjMatGraph<>(Arrays.asList("5","6","4"));
+    System.out.println(graph2.toString());
+    graph2.addEdge("5", "4",1);
+    graph2.addEdge("6", "5",1);
+    graph2.addEdge("4", "6",1);
+    System.out.println(graph2.toString());
+
+    System.out.println();
+    System.out.println(graph.equals(graph2));
   }
 
   // -------- Arrays --------
