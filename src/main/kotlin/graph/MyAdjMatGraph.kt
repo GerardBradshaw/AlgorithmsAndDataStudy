@@ -1,6 +1,8 @@
 package graph
 
 import array.MyStringBuilder
+import hashtable.MyHashMap
+import kotlin.math.abs
 
 
 class MyAdjMatGraph<T>(vertices: List<T>) {
@@ -87,35 +89,43 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       || other.numberOfVertices != numberOfVertices) return false
 
     val otherVerticesList = other.vertices().asList()
-    val otherMatrixList = other.edges().asList()
+    val otherMatrix = other.edges()
+    val thisIndexToOtherIndex: MyHashMap<Int, Int> = MyHashMap()
 
-    val otherVertices: Array<Any?> = arrayOfNulls(vertices.size)
-    val otherMatrix: Array<IntArray> = Array(vertices.size) { _ -> IntArray(vertices.size) }
+    for (i in vertices.indices) {
+      val otherIndex = otherVerticesList.indexOf(vertices[i])
 
-    var otherIndex = -1
+      if (otherIndex != -1) thisIndexToOtherIndex.put(i, otherIndex)
+      else return false
+    }
 
-    for (i in 0 until vertices.size) {
-      otherIndex = otherVerticesList.indexOf(vertices[i])
+    for (i in matrix.indices) {
+      val otherI = thisIndexToOtherIndex.get(i) ?: return false
 
-      if (otherIndex == -1) return false
-      else {
-        otherVertices[i] = vertices[i]
-        otherMatrix[i] = otherMatrixList[i]
+      for (j in matrix.indices) {
+        val otherJ = thisIndexToOtherIndex.get(j) ?: return false
+        if (matrix[i][j] != otherMatrix[otherI][otherJ]) return false
       }
     }
-    TODO("This doesn't work becase the columns are shuffled but not the rows!")
-    //return otherMatrix.contentEquals(edges())
+    return true
   }
 
   override fun hashCode(): Int {
-    return toString().hashCode()
+    var hc = 0
+
+    for (i in matrix.indices) {
+      hc += vertices[i].hashCode()
+      for (j in matrix.indices) {
+        hc += matrix[i][j]
+      }
+    }
+    return hc
   }
 
   override fun toString(): String {
     val builder = MyStringBuilder()
 
-    builder.append("Headings: ")
-    //.append(vertices.toString()).append("\n")
+    builder.append("Columns: ")
 
     for (i in 0 until numberOfVertices) {
       builder.append(vertices[i].toString()).append(", ")
