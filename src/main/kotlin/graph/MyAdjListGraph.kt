@@ -61,11 +61,13 @@ class MyAdjListGraph<T> {
    * Returns an Array of type <T> containing all Vertices.
    *
    * @return an Array containing all vertices.
-   * @suppress "UNCHECKED_CAST" as type is guaranteed to be T due to internal operations
    */
-  fun getVertexData(): Array<T> {
-    @Suppress("UNCHECKED_CAST")
-    return Array(dataAndVertices.size) { index -> dataAndVertices.keys.elementAt(index) as Any } as Array<T>
+  fun getVertexData(): MyHashSet<T> {
+    val set = MyHashSet<T>()
+    for (key in dataAndVertices.keys) {
+      set.add(key)
+    }
+    return set
   }
 
   /**
@@ -78,16 +80,13 @@ class MyAdjListGraph<T> {
     return dataAndVertices.get(vertexData)?.edges
   }
 
-  fun getAllEdges(): MyHashSet<MyHashSet<T>> {
-    // TODO rewrite
+  fun getAllEdges(): MyHashSet<Pair<T, T>> {
+    val set = MyHashSet<Pair<T, T>>()
 
-    val vertexData = getVertexData()
-    val returnSet = MyHashSet<MyHashSet<T>>()
-
-    for (vertex in vertexData) {
-      returnSet.add(dataAndVertices.get(vertex)!!.edges)
+    for (vertex in dataAndVertices.values) {
+      set.addAll(vertex.getEdgesAsPairs())
     }
-    return returnSet
+    return set
   }
 
   override fun equals(other: Any?): Boolean {
@@ -130,6 +129,16 @@ class MyAdjListGraph<T> {
 
   data class Vertex<T>(var data: T) {
     val edges: MyHashSet<T> = MyHashSet()
+
+    fun getEdgesAsPairs(): MyHashSet<Pair<T, T>> {
+      val iterator = edges.iterator()
+      val returnSet = MyHashSet<Pair<T, T>>()
+
+      while (iterator.hasNext()) {
+        returnSet.add(Pair(data, iterator.next()))
+      }
+      return returnSet
+    }
 
     override fun equals(other: Any?): Boolean {
       return !(other !is Vertex<*> || other.data != data || other.edges != edges)
