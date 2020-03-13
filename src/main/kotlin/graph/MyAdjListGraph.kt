@@ -8,15 +8,15 @@ class MyAdjListGraph<T> {
 
   // ---------------- Member variables ----------------
 
-  private val vertices: MyHashMap<T, Node<T>> = MyHashMap()
+  private val verticesAndNodes: MyHashMap<T, Node<T>> = MyHashMap()
 
   val numberOfNodes: Int
-    get() = vertices.size
+    get() = verticesAndNodes.size
 
   val numberOfEdges: Int
     get() {
       var edgeCount = 0
-      for (node in vertices.values) edgeCount += node.edges.size
+      for (node in verticesAndNodes.values) edgeCount += node.edges.size
       return edgeCount
     }
 
@@ -24,13 +24,13 @@ class MyAdjListGraph<T> {
   // ---------------- Public methods ----------------
 
   fun addVertexAndEdges(vertex: T, edges: Collection<T>?) {
-    vertices.put(vertex, Node(vertex))
+    verticesAndNodes.put(vertex, Node(vertex))
 
     if (edges != null) {
-      vertices.get(vertex)?.edges?.addAll(edges)
+      verticesAndNodes.get(vertex)?.edges?.addAll(edges)
 
       for (edge in edges) {
-        vertices.put(edge, Node(edge))
+        verticesAndNodes.put(edge, Node(edge))
       }
     }
   }
@@ -40,21 +40,52 @@ class MyAdjListGraph<T> {
   }
 
   fun addEdge(source: T, destination: T) {
-    vertices.put(source, Node(source))
-    vertices.put(source, Node(destination))
-    vertices.get(source)?.edges?.add(destination)
+    verticesAndNodes.put(source, Node(source))
+    verticesAndNodes.put(source, Node(destination))
+    verticesAndNodes.get(source)?.edges?.add(destination)
   }
 
   fun removeVertex(vertex: T) {
-    vertices.remove(vertex)
+    verticesAndNodes.remove(vertex)
 
-    for (node in vertices.values) {
+    for (node in verticesAndNodes.values) {
       node.edges.remove(vertex)
     }
   }
 
   fun removeEdge(vertex: T, edge: T) {
-    vertices.get(vertex)?.edges?.remove(edge)
+    verticesAndNodes.get(vertex)?.edges?.remove(edge)
+  }
+
+  /**
+   * Returns an Array of type <T> containing all Vertices.
+   *
+   * @return an Array containing all vertices.
+   * @suppress "UNCHECKED_CAST" as type is guaranteed to be T due to internal operations
+   */
+  fun vertices(): Array<T> {
+    @Suppress("UNCHECKED_CAST")
+    return Array(verticesAndNodes.size) { index -> verticesAndNodes.keys.elementAt(index) as Any } as Array<T>
+  }
+
+  /**
+   * Returns the edges for a vertex if it exists, or null otherwise.
+   * @param vertex the vertex with edges of interest.
+   *
+   * @return set of edges for given vertex, or null if vertex is invalid.
+   */
+  fun getEdgesForVertex(vertex: T): MyHashSet<T>? {
+    return verticesAndNodes.get(vertex)?.edges
+  }
+
+  fun edges(): MyHashSet<MyHashSet<T>> {
+    val vertices = vertices()
+    val returnSet = MyHashSet<MyHashSet<T>>()
+
+    for (vertex in vertices) {
+      returnSet.add(verticesAndNodes.get(vertex)!!.edges)
+    }
+    return returnSet
   }
 
   override fun equals(other: Any?): Boolean {
@@ -62,7 +93,13 @@ class MyAdjListGraph<T> {
       || other.numberOfEdges != numberOfEdges
       || other.numberOfNodes != numberOfNodes) return false
 
-    TODO("Need to add a contains() method for nodes")
+    for (otherNode in other.verticesAndNodes.values) {
+      if (!verticesAndNodes.values.contains(otherNode)) {
+        return false
+      }
+    }
+
+    return true
   }
 
   override fun hashCode(): Int {
@@ -72,7 +109,7 @@ class MyAdjListGraph<T> {
   override fun toString(): String {
     val builder = MyStringBuilder()
 
-    for (node in vertices.values) {
+    for (node in verticesAndNodes.values) {
 
       builder.append("[").append(node.vertex.toString()).append(" -> ")
 
@@ -92,5 +129,19 @@ class MyAdjListGraph<T> {
 
   data class Node<T>(var vertex: T) {
     val edges: MyHashSet<T> = MyHashSet()
+
+    override fun equals(other: Any?): Boolean {
+      return !(other !is Node<*> || other.vertex != vertex || other.edges != edges)
+    }
+
+    override fun hashCode(): Int {
+      val prime = 31
+      var result = prime + vertex.hashCode()
+
+      for (edge in edges) {
+        result = prime * result + (edge?.hashCode() ?: 0)
+      }
+      return result
+    }
   }
 }
