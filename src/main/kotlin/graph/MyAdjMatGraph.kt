@@ -2,12 +2,13 @@ package graph
 
 import array.MyStringBuilder
 import hashtable.MyHashMap
+import set.MyHashSet
 
 class MyAdjMatGraph<T>(vertices: List<T>) {
 
   // ---------------- Member variables ----------------
 
-  private val matrix: Array<IntArray>
+  private val matrix: Array<IntArray> = Array(vertices.size) { _ -> IntArray(vertices.size)}
   private val vertices: Array<Any>
   private var edgeCount = 0
 
@@ -18,7 +19,6 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     get() = edgeCount
 
   init {
-    matrix = Array(vertices.size) { _ -> IntArray(vertices.size)}
     this.vertices = Array(vertices.size) { index -> vertices[index] as Any }
   }
 
@@ -26,26 +26,26 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   // ---------------- Public methods ----------------
 
   /**
-   * Adds an edge of specified distance between two vertices. If the vertices are invalid or the same, or if the
-   * distance is a negative number, no action is taken.
+   * Adds an edge of specified length between two vertices. If the vertices are invalid or the same, or if the length is
+   * a negative number, no action is taken.
    * @param from source vertex.
    * @param to destination vertex
-   * @param distance distance between the two vertices
+   * @param length distance between the two vertices
    *
    * @return 'true' if the vertices are valid & unique, and the distance is greater than 0, 'false' otherwise.
    */
-  fun addEdge(from: T, to: T, distance: Int): Boolean {
-    if (distance < 0 || from == to) return false
+  fun addEdge(from: T, to: T, length: Int): Boolean {
+    if (length < 0 || from == to) return false
 
     val fromIndex = vertices.indexOf(from as Any)
     val toIndex = vertices.indexOf(to as Any)
 
     if (fromIndex == -1 || toIndex == -1) return false
 
-    if (matrix[fromIndex][toIndex] == 0 && distance != 0) edgeCount++
-    else if (matrix[fromIndex][toIndex] != 0 && distance == 0) edgeCount--
+    if (matrix[fromIndex][toIndex] == 0 && length != 0) edgeCount++
+    else if (matrix[fromIndex][toIndex] != 0 && length == 0) edgeCount--
 
-    matrix[fromIndex][toIndex] = distance
+    matrix[fromIndex][toIndex] = length
     return true
   }
 
@@ -67,8 +67,38 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * @suppress "UNCHECKED_CAST" because type T is guaranteed internally
    */
   @Suppress("UNCHECKED_CAST")
-  fun vertices(): Array<T> {
+  fun getVertexData(): Array<T> {
     return vertices as Array<T>
+  }
+
+  /**
+   * Returns a MyHashSet of Pairs where pair.first is the edge vertex data, and pair.second is the distance from the
+   * provided vertex.
+   * @param vertexData the data contained in the desired index.
+   *
+   * @return a MyHashSet of Pairs where first is the edge vertex data, and second is the distance away from the provided
+   * vertex.
+   */
+  fun getEdgesForVertexData(vertexData: T): MyHashSet<Pair<T, Int>> {
+    val result = MyHashSet<Pair<T, Int>>()
+
+    val index = vertices.indexOf(vertexData as Any)
+    if (index == -1) return result
+
+    val toEdges = matrix[index]
+
+    for (i in vertices.indices) {
+      // Suppressing unchecked cast warning as vertices only contains type T
+      @Suppress("UNCHECKED_CAST")
+      val vertex = vertices[i] as T
+
+      val distance = toEdges[i]
+
+      if (distance != 0) {
+        result.add(Pair(vertex, distance))
+      }
+    }
+    return result
   }
 
   /**
@@ -77,7 +107,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    *
    * @return an Array of IntArrays containing the distance between vertices, where 0 represents no relationship.
    */
-  fun edges(): Array<IntArray> {
+  fun edgesAsMatrix(): Array<IntArray> {
     return matrix
   }
 
@@ -86,8 +116,8 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       || other.numberOfEdges != numberOfEdges
       || other.numberOfVertices != numberOfVertices) return false
 
-    val otherVerticesList = other.vertices().asList()
-    val otherMatrix = other.edges()
+    val otherVerticesList = other.getVertexData().asList()
+    val otherMatrix = other.edgesAsMatrix()
     val thisIndexToOtherIndex: MyHashMap<Int, Int> = MyHashMap()
 
     for (i in vertices.indices) {
@@ -155,11 +185,5 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     }
     builder.removeEnd(2)
     return builder.append("]").toString()
-  }
-
-  // ---------------- Data class ----------------
-
-  data class Node<T>(var vertex: T) {
-
   }
 }
