@@ -21,7 +21,7 @@ class MyAdjListGraph<T> {
     }
 
 
-  // ---------------- Public methods ----------------
+  // ---------------- Public fun ----------------
 
   fun addVertex(data: T, edges: Collection<T>?) {
     dataAndVertices.put(data, Vertex(data))
