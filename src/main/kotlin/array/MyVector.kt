@@ -6,71 +6,47 @@ import java.lang.IndexOutOfBoundsException
 @Suppress("UNCHECKED_CAST")
 class MyVector<T> : Collection<T>, Iterable<T> {
 
-  // ---------------- Member variables ----------------
+  // ---------------- Fields ----------------
 
-  private var data: Array<Any?> = arrayOfNulls(1)
-  private var dataPoints = 0
+  private var array: Array<Any?> = arrayOfNulls(1)
+  private var nextNullIndex = 0
 
   override val size: Int
-    get() = dataPoints
+    get() = nextNullIndex
 
 
   // ---------------- Public fun ----------------
 
   @Synchronized
-  fun add(data: T) {
-    add(size, data)
+  fun add(element: T) {
+    add(nextNullIndex, element)
   }
 
   @Synchronized
-  fun add(index: Int, data: T) {
-    if (index < 0 || index > dataPoints) throw IndexOutOfBoundsException()
-
-    if (dataPoints >= this.data.size) resizeArray()
-
-    for (i in dataPoints downTo index + 1) {
-      this.data[i] = this.data[i - 1]
-    }
-    this.data[index] = data
-    dataPoints++
+  fun add(index: Int, element: T) {
+    if (index < 0 || index > nextNullIndex) throw IndexOutOfBoundsException()
+    if (nextNullIndex >= array.size) resizeArray()
+    makeRoomAtIndexAndInsert(index, element)
   }
 
   @Synchronized
   fun get(index: Int): T {
-    if (index > dataPoints - 1 || index < 0) throw IndexOutOfBoundsException()
-    return data[index] as T
+    if (index > nextNullIndex - 1 || index < 0) throw IndexOutOfBoundsException()
+    return array[index] as T
   }
 
   @Synchronized
-  fun set(index: Int, data: T) {
-    if (index > dataPoints - 1 || index < 0) throw IndexOutOfBoundsException()
-    this.data[index] = data
+  fun set(index: Int, element: T) {
+    if (index > nextNullIndex - 1 || index < 0) throw IndexOutOfBoundsException()
+    array[index] = element
   }
 
   @Synchronized
   fun delete(index: Int) {
-    if (index < 0 || index > dataPoints - 1) throw IndexOutOfBoundsException()
-
-    for (i in index..(dataPoints-2)) {
-      this.data[i] = this.data[i + 1]
-    }
-    data[dataPoints - 1] = null
-    dataPoints--
-
-    if (dataPoints < 4 * this.data.size) resizeArray()
+    if (index < 0 || index > nextNullIndex - 1) throw IndexOutOfBoundsException()
+    moveNextElementsDown(index)
+    if (nextNullIndex < 4 * this.array.size) resizeArray()
   }
-
-
-  // ---------------- helpers ----------------
-
-  private fun resizeArray() {
-    val tempData: Array<Any?> = arrayOfNulls((dataPoints * 2 + 1))
-    System.arraycopy(data, 0, tempData, 0, dataPoints)
-    data = tempData
-  }
-
-
-  // ---------------- Iterator callbacks ----------------
 
   override fun iterator(): Iterator<T> {
     return object: Iterator<T> {
@@ -82,23 +58,25 @@ class MyVector<T> : Collection<T>, Iterable<T> {
       }
 
       override fun next(): T {
-        val listItem = data[currentIndex] as T
+        val listItem = array[currentIndex] as T
         currentIndex++
         return listItem
       }
     }
   }
 
-
-  // ---------------- Collection callbacks ----------------
-
   override fun isEmpty(): Boolean {
-    return dataPoints == 0
+    return nextNullIndex == 0
+  }
+
+  fun isNotEmpty(): Boolean {
+    return nextNullIndex != 0
   }
 
   @Synchronized
   override fun contains(element: T): Boolean {
-    for (dataPoint in data) {
+    for (dataPoint in array) {
+      if (dataPoint == null) break
       if (dataPoint as T == element) return true
     }
     return false
@@ -112,36 +90,59 @@ class MyVector<T> : Collection<T>, Iterable<T> {
     return true
   }
 
-
-  // ---------------- Any callbacks ----------------
-
   override fun equals(other: Any?): Boolean {
-    if (other !is MyArrayList<*> || other.size != size) return false
+    if (other !is MyVector<*> || other.size != size) return false
 
-    val otherIterator = other.iterator()
-
-    for (i in 0 until dataPoints) {
-      if (otherIterator.hasNext()) {
-        if (otherIterator.next() == data[i]) continue
-      }
-      return false
+    for (i in 0 until nextNullIndex) {
+      if (array[i] != other.array[i]) return false
     }
-    return !otherIterator.hasNext()
+    return true
   }
 
   override fun hashCode(): Int {
-    // I know this is really lazy and only works properly if T is String
-    return toString().hashCode()
+    val prime = 31
+    var result = 1
+
+    for (i in 0 until nextNullIndex) {
+      result = prime * result + array[i].hashCode()
+    }
+    return result
   }
 
   override fun toString(): String {
-    if (dataPoints == 0) return "empty"
+    if (nextNullIndex == 0) return "[]"
 
-    val builder = MyStringBuilder().append("[").append(data[0].toString())
+    val builder = MyStringBuilder().append("[").append(array[0].toString())
 
-    for (i in 1 until dataPoints)
-      builder.append(", ").append(data[i].toString())
+    for (i in 1 until nextNullIndex)
+      builder.append(", ").append(array[i].toString())
 
     return builder.append("]").toString()
   }
+
+
+  // ---------------- Helpers ----------------
+
+  private fun resizeArray() {
+    val tempData: Array<Any?> = arrayOfNulls((nextNullIndex * 2 + 1))
+    System.arraycopy(array, 0, tempData, 0, nextNullIndex)
+    array = tempData
+  }
+
+  private fun makeRoomAtIndexAndInsert(index: Int, element: T) {
+    for (i in nextNullIndex downTo index + 1) {
+      this.array[i] = this.array[i - 1]
+    }
+    this.array[index] = element
+    nextNullIndex++
+  }
+
+  private fun moveNextElementsDown(index: Int) {
+    for (i in index..(nextNullIndex-2)) {
+      array[i] = array[i + 1]
+    }
+    array[nextNullIndex - 1] = null
+    nextNullIndex--
+  }
+
 }

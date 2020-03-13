@@ -2,7 +2,10 @@ package array
 
 class MyStringBuilder() {
 
-  private var charArray = CharArray(1)
+  // ---------------- Fields & Constructor ----------------
+
+  private var array = CharArray(1)
+
   private var numberOfChars = 0
 
   constructor(string: String) : this() {
@@ -11,12 +14,15 @@ class MyStringBuilder() {
     }
   }
 
+
+  // ---------------- Public fun ----------------
+
   fun append(char: Char?): MyStringBuilder {
     if (char != null) {
-      if (numberOfChars == charArray.size) {
+      if (numberOfChars == array.size) {
         resizeArray()
       }
-      charArray[numberOfChars] = char
+      array[numberOfChars] = char
       numberOfChars++
     }
     return this
@@ -31,12 +37,12 @@ class MyStringBuilder() {
 
   fun removeEnd(numberOfChars: Int) {
     if (this.numberOfChars < numberOfChars) {
-      charArray = CharArray(1)
+      array = CharArray(1)
       this.numberOfChars = 0
     }
     else {
       val startIndex = this.numberOfChars - numberOfChars
-      for (i in startIndex until this.numberOfChars) charArray[i] = '\u0000'
+      for (i in startIndex until this.numberOfChars) array[i] = '\u0000'
       this.numberOfChars = startIndex
     }
     resizeArray()
@@ -47,7 +53,7 @@ class MyStringBuilder() {
   }
 
   fun report() {
-    println("There are $numberOfChars chars stored in an array of size ${charArray.size}")
+    println("There are $numberOfChars chars stored in an array of size ${array.size}")
   }
 
   fun reverse() {
@@ -58,20 +64,41 @@ class MyStringBuilder() {
 
     for (i in 0..((numberOfChars - 1) / 2)) {
       oppositeI = numberOfChars - i - 1
-      charAtI = charArray[i]
-      charArray[i] = charArray[oppositeI]
-      charArray[oppositeI] = charAtI
+      charAtI = array[i]
+      array[i] = array[oppositeI]
+      array[oppositeI] = charAtI
     }
-  }
-
-  private fun resizeArray() {
-    val temp =  CharArray(charArray.size * 2)
-    System.arraycopy(charArray, 0, temp, 0, charArray.size)
-    charArray = temp
   }
 
   override fun toString(): String {
     if (numberOfChars == 0) return ""
-    return String(charArray.copyOfRange(0, numberOfChars))
+    return String(array.copyOfRange(0, numberOfChars))
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyStringBuilder || other.numberOfChars != numberOfChars) return false
+
+    for (i in 0 until numberOfChars) {
+      if (other.array[i] != array[i]) return false
+    }
+    return true
+  }
+
+  override fun hashCode(): Int {
+    val prime = 31
+    var result = 1
+
+    for (i in 0 until numberOfChars) {
+      result = result * prime + array[i].hashCode()
+    }
+    return result
+  }
+
+  // ---------------- Helpers ----------------
+
+  private fun resizeArray() {
+    val temp =  CharArray(array.size * 2)
+    System.arraycopy(array, 0, temp, 0, array.size)
+    array = temp
   }
 }
