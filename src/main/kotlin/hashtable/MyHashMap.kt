@@ -171,14 +171,26 @@ class MyHashMap<K,V> {
   override fun equals(other: Any?): Boolean {
     if (other !is MyHashMap<*,*>) return false
 
-    for (pair in other.entries) {
-      if (!containsEntryAny(pair.first as Any, pair.second as Any)) return false
+    if (numberOfEntries != other.numberOfEntries) return false
+
+    for (pair in array) {
+      if (pair != null) {
+        if (!other.array.contains(pair)) {
+          return false
+        }
+      }
     }
     return true
   }
 
   override fun hashCode(): Int {
-    return toString().hashCode()
+    val prime = 31
+    var result = 1
+
+    for (pair in array) {
+      result = prime * result + (if (pair != null) 0 else pair.hashCode())
+    }
+    return result
   }
 
   override fun toString(): String {
