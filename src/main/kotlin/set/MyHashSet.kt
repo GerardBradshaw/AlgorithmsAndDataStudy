@@ -1,6 +1,9 @@
 package set
 
+import array.MyArrayList
 import hashtable.MyHashMap
+import java.util.*
+
 
 class MyHashSet<T> : Collection<T> {
 
@@ -57,6 +60,16 @@ class MyHashSet<T> : Collection<T> {
     map.clear()
   }
 
+  fun <L> asList(): List<T> {
+    val returnList = ArrayList<T>()
+
+    for (element in map.keys) {
+      returnList.add(element)
+    }
+
+    return returnList
+  }
+
   override fun contains(element: T): Boolean {
     return map.containsKey(element)
   }
@@ -101,7 +114,7 @@ class MyHashSet<T> : Collection<T> {
   }
 
   override fun hashCode(): Int {
-    return map.hashCode()
+    return map.keys.hashCode()
   }
 
   override fun toString(): String {
