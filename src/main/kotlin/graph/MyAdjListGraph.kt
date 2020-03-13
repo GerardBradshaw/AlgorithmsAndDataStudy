@@ -23,11 +23,11 @@ class MyAdjListGraph<T> {
 
   // ---------------- Public fun ----------------
 
-  fun addVertex(data: T, edges: Collection<T>?) {
-    dataAndVertices.put(data, Vertex(data))
+  fun addVertex(vertexData: T, edges: Collection<T>?) {
+    dataAndVertices.put(vertexData, Vertex(vertexData))
 
     if (edges != null) {
-      dataAndVertices.get(data)?.edges?.addAll(edges)
+      dataAndVertices.get(vertexData)?.edges?.addAll(edges)
 
       for (edge in edges) {
         dataAndVertices.put(edge, Vertex(edge))
