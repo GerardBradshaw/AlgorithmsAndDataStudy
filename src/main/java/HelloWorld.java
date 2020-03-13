@@ -22,25 +22,26 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("Aaa", "Bbb", "Ccc"));
-
-    //graph.addEdge("0", "1",1);
-    //graph.addEdge("1","2",1);
-    //graph.addEdge("2", "0",1);
-    //graph.addEdge("2", "3",1);
-    //graph.addEdge("3", "2",1);
-    graph.addEdge("Aaa", "Ccc", 1);
-    graph.addEdge("Ccc", "Bbb", 1);
-    graph.addEdge("Bbb", "Aaa", 1);
+    MyAdjListGraph<String> graph = new MyAdjListGraph<>(); //(Arrays.asList("1", "2", "3"));
+    graph.addEdge("1", "3");
+    graph.addEdge("3", "2");
+    graph.addEdge("2", "1");
     System.out.println(graph.toString());
 
-    MyAdjMatGraph<String> graph2 = new MyAdjMatGraph<>(Arrays.asList("Ccc", "Bbb", "Aaa"));
-    graph2.addEdge("Bbb", "Aaa", 1);
-    graph2.addEdge("Ccc", "Bbb", 1);
-    graph2.addEdge("Aaa", "Ccc", 1);
+    MyAdjListGraph<String> graph2 = new MyAdjListGraph<>(); //(Arrays.asList("1", "2", "3"));
+    graph2.addVertexWithNoEdges("1");
+    graph2.addVertexWithNoEdges("2");
+    graph2.addVertexWithNoEdges("3");
+    graph2.addEdge("1", "3");
+    graph2.addEdge("3", "2");
+    graph2.addEdge("2", "1");
     System.out.println(graph2.toString());
 
+    System.out.println(graph.hashCode());
     System.out.println(graph2.hashCode());
+    System.out.println(graph.equals(graph2));
+    System.out.println(graph2.equals(graph));
+
   }
 
   // -------- Arrays --------
