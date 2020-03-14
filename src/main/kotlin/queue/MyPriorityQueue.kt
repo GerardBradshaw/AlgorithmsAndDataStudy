@@ -5,14 +5,19 @@ import java.lang.StringBuilder
 
 class MyPriorityQueue<T> {
 
+  // ---------------- Fields ----------------
+
   private var heap: MyMinHeap<Item<T>> = MyMinHeap()
+
+
+  // ---------------- Public fun ----------------
 
   fun isEmpty(): Boolean {
     return heap.isEmpty()
   }
 
-  fun insert(value: T, priority: Int = Int.MAX_VALUE) {
-    heap.insert(Item(value, priority))
+  fun insert(element: T, priority: Int = Int.MAX_VALUE) {
+    heap.insert(Item(element, priority))
   }
 
   fun pull(): T? {
@@ -26,7 +31,7 @@ class MyPriorityQueue<T> {
   override fun toString(): String {
     // TODO Change to an array heap sort
 
-    if (heap.isEmpty()) return "empty"
+    if (heap.isEmpty()) return "[]"
 
     val heapCopy = MyMinHeap<Item<T>>()
     heapCopy.insert(heap.popMin())
@@ -41,6 +46,18 @@ class MyPriorityQueue<T> {
 
     return builder.append("]").toString()
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyPriorityQueue<*> || other.heap.size() != heap.size()) return false
+    return other.heap == heap
+    // NOTE: Equality evaluation in heap has to be fixed for this to work!
+  }
+
+  override fun hashCode(): Int {
+    return heap.hashCode()
+  }
+
+  // ---------------- Item data class ----------------
 
   data class Item<T>(val value: T, var priority: Int = Int.MAX_VALUE) : Comparable<Item<T>> {
     override fun toString(): String {
