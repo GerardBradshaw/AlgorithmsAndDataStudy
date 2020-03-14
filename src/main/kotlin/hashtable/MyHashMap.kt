@@ -4,7 +4,7 @@ import array.MyArrayList
 
 class MyHashMap<K,V> {
 
-  // ---------------- Member variables ----------------
+  // ---------------- Fields ----------------
 
   private var array: Array<Pair<K, V>?> = arrayOfNulls(2)
   private var numberOfEntries = 0
@@ -46,7 +46,7 @@ class MyHashMap<K,V> {
     }
 
 
-  // ---------------- Public methods ----------------
+  // ---------------- Public fun ----------------
 
   /**
    * Puts the key-value pair into the hash map if they key is unique, otherwise no action is taken.
@@ -169,9 +169,7 @@ class MyHashMap<K,V> {
   }
 
   override fun equals(other: Any?): Boolean {
-    if (other !is MyHashMap<*,*>) return false
-
-    if (numberOfEntries != other.numberOfEntries) return false
+    if (other !is MyHashMap<*,*> || other.numberOfEntries != numberOfEntries) return false
 
     for (pair in array) {
       if (pair != null) {
@@ -198,7 +196,7 @@ class MyHashMap<K,V> {
   }
 
 
-  // ---------------- Helper methods ----------------
+  // ---------------- Helpers ----------------
 
   /**
    * Same as put(key, value) but adds parameter to increase entry count. Entry count should not be increased when
