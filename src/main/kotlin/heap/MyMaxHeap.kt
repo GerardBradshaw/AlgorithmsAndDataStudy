@@ -3,13 +3,10 @@ package heap
 @Suppress("UNCHECKED_CAST") // Type safe because insert(data) only accepts type T
 class MyMaxHeap<T : Comparable<T>>() {
 
-  // -------- Member variables --------
+  // ---------------- Fields & Constructor ----------------
 
-  private var data: Array<Any?> = arrayOfNulls<Any?>(3)
+  private var array: Array<Any?> = arrayOfNulls<Any?>(3)
   private var size = 0
-
-
-  // -------- Constructor --------
 
   constructor(data: Array<T?>) : this() {
     for (obj in data) {
@@ -18,47 +15,43 @@ class MyMaxHeap<T : Comparable<T>>() {
   }
 
 
-  // -------- Public methods --------
+  // ---------------- Public fun ----------------
 
-  fun insert(data: T?) {
-    if (data == null)
-      return
-
-    if (!isEnoughSpace())
-      resizeArray()
-
-    addToData(data)
+  fun insert(element: T?) {
+    if (element == null) return
+    if (!isEnoughSpace()) resizeArray()
+    addToData(element)
   }
 
   fun findMax(): T {
-    val max = data[0] ?: throw NullPointerException()
+    val max = array[0] ?: throw NullPointerException()
     return max as T
   }
 
   fun popMax(): T {
-    val max = data[0] ?: throw NullPointerException()
+    val max = array[0] ?: throw NullPointerException()
     deleteMax()
     return max as T
   }
 
   fun deleteMax() {
-    if (data[0] == null) throw NullPointerException()
+    if (array[0] == null) throw NullPointerException()
 
     when (size) {
       0 -> return
       1 -> {
-        data[0] = null
+        array[0] = null
         size--
       }
       else -> {
-        data[0] = data[size - 1]
-        data[size - 1] = null
+        array[0] = array[size - 1]
+        array[size - 1] = null
         size--
         moveDownToCorrectPosition(0)
       }
     }
 
-    if (data.size > 3 * size)
+    if (array.size > 3 * size)
       resizeArray()
 
   }
@@ -72,23 +65,56 @@ class MyMaxHeap<T : Comparable<T>>() {
     return false
   }
 
+  fun isNotEmpty(): Boolean {
+    return size != 0
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyMaxHeap<*> || other.size != size) return false
+
+    for (i in 0 until size) {
+      if (other.array[i] != array[i]) return false
+    }
+    return true
+  }
+
+  override fun toString(): String {
+    if (size == 0) return "[]"
+
+    val builder = StringBuilder().append("[").append(array[0])
+
+    for (i in 1..(size - 1)) builder.append(", ").append(array[i].toString())
+
+    return builder.append("]").toString()
+  }
+
+  override fun hashCode(): Int {
+    val prime = 31
+    var result = 1
+
+    for (i in 0 until size) {
+      result = result * prime + array[i].hashCode()
+    }
+    return result
+  }
+
 
   // -------- Helpers --------
 
   private fun isEnoughSpace(): Boolean {
-    return data.size >= size + 1
+    return array.size >= size + 1
   }
 
-  private fun addToData(data: T) {
-    this.data[size] = data
+  private fun addToData(element: T) {
+    this.array[size] = element
     size++;
     moveUpToCorrectPosition(size - 1)
   }
 
   private fun resizeArray() {
     val tempData: Array<Any?> = arrayOfNulls(size * 2)
-    System.arraycopy(data, 0, tempData, 0, size)
-    data = tempData
+    System.arraycopy(array, 0, tempData, 0, size)
+    array = tempData
   }
 
   private fun moveDownToCorrectPosition(index: Int) {
@@ -101,15 +127,15 @@ class MyMaxHeap<T : Comparable<T>>() {
     val maxIndex = size - 1
 
     if (size == 2) {
-      currentValue = data[currentIndex] as T
-      leftValue = data[leftIndex] as T
+      currentValue = array[currentIndex] as T
+      leftValue = array[leftIndex] as T
       if (currentValue < leftValue) swap(currentIndex, leftIndex)
     }
 
     while (leftIndex < maxIndex && rightIndex <= maxIndex) {
-      currentValue = data[currentIndex] as T? ?: break
-      leftValue = data[leftIndex] as T? ?: break
-      rightValue = data[rightIndex] as T?
+      currentValue = array[currentIndex] as T? ?: break
+      leftValue = array[leftIndex] as T? ?: break
+      rightValue = array[rightIndex] as T?
 
       if (rightValue == null || leftValue >= rightValue) {
         if (currentValue < leftValue) {
@@ -133,14 +159,14 @@ class MyMaxHeap<T : Comparable<T>>() {
   }
 
   private fun moveUpToCorrectPosition(index: Int) {
-    val value = data[index] as T? ?: return
+    val value = array[index] as T? ?: return
     var newIndex = index
     var parentIndex: Int
     var parentValue: T?
 
     while (newIndex > 0) {
       parentIndex = parentIndexOf(newIndex)
-      parentValue = data[parentIndex] as T?
+      parentValue = array[parentIndex] as T?
 
       if (parentValue != null && parentValue < value) {
         swap(newIndex, parentIndex)
@@ -165,47 +191,8 @@ class MyMaxHeap<T : Comparable<T>>() {
   private fun swap(index1: Int, index2: Int) {
     if (index1 >= size || index2 >= size) throw IndexOutOfBoundsException();
 
-    val value1 = data[index1]
-    data[index1] = data[index2]
-    data[index2] = value1
-  }
-
-
-  // -------- Any callbacks --------
-
-  override fun equals(other: Any?): Boolean {
-    if (other !is MyMaxHeap<*>) return false
-    if (other.size() != size) return false
-
-    var isEqual = false
-    val saveSize = size
-    val saveData: Array<Any?> = arrayOfNulls(data.size)
-    System.arraycopy(data, 0, this, 0, data.size)
-
-    while (!other.isEmpty() && size > 0)
-      if (other.popMax() != popMax())
-        break
-
-    if (other.isEmpty() && size == 0)
-      isEqual = true
-
-    data = saveData
-    size = saveSize
-
-    return isEqual
-  }
-
-  override fun toString(): String {
-    if (size == 0) return "empty"
-
-    val builder = StringBuilder().append("[").append(data[0])
-
-    for (i in 1..(size - 1)) builder.append(", ").append(data[i].toString())
-
-    return builder.append("]").toString()
-  }
-
-  override fun hashCode(): Int {
-    return data.hashCode()
+    val value1 = array[index1]
+    array[index1] = array[index2]
+    array[index2] = value1
   }
 }
