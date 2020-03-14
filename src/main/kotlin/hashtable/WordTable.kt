@@ -234,28 +234,16 @@ class WordTable() {
   }
 
   override fun equals(other: Any?): Boolean {
-    // Not equal if other is not a WordTable
-    if (other !is WordTable)
-      return false
+    if (other !is WordTable || other.wordCount != wordCount) return false
 
-    // Not equal if other has a different size (wordCount)
-    if (other.size() != size())
-      return false
-
-    // Get an array of all the words in this
     val words = getWordArray()
 
-    // Not equal if there's a word in this that isn't in other
     for (word in words) {
       if (word != null) {
         val otherWord = other.get(word.word)
-        if (otherWord == null || !otherWord.equals(word))
-          return false
+        if (otherWord == null || otherWord != word) return false
       }
     }
-
-    // Return true because other is a WordTable, contains the same number of words, and all the words are the same
     return true
   }
-
 }
