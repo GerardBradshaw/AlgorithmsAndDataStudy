@@ -2,13 +2,10 @@ package heap
 
 class MyMinIntHeap() {
 
-  // -------- Member variables --------
+  // ---------------- Fields & Constructor ----------------
 
-  var data: Array<Int?> = arrayOfNulls(3)
-  var size = 0
-
-
-  // -------- Constructor --------
+  private var array: Array<Int?> = arrayOfNulls(3)
+  private var size = 0
 
   constructor(data: Array<Int?>) : this() {
     for (int in data) {
@@ -17,10 +14,10 @@ class MyMinIntHeap() {
   }
 
 
-  // -------- Public methods --------
+  // ---------------- Public fun ----------------
 
   fun findMin(): Int {
-    val min = data[0] ?: throw NullPointerException()
+    val min = array[0] ?: throw NullPointerException()
     return min
   }
 
@@ -35,29 +32,29 @@ class MyMinIntHeap() {
   }
 
   fun popMin(): Int {
-    val min = data[0] ?: throw NullPointerException()
+    val min = array[0] ?: throw NullPointerException()
     deleteMin()
     return min
   }
 
   fun deleteMin() {
-    if (data[0] == null) throw NullPointerException()
+    if (array[0] == null) throw NullPointerException()
 
     when (size) {
       0 -> return
       1 -> {
-        data[0] = null
+        array[0] = null
         size--
       }
       else -> {
-        data[0] = data[size - 1]
-        data[size - 1] = null
+        array[0] = array[size - 1]
+        array[size - 1] = null
         size--
         moveDownToCorrectPosition(0)
       }
     }
 
-    if (data.size > 3 * size) resizeArray()
+    if (array.size > 3 * size) resizeArray()
   }
 
   fun size(): Int {
@@ -69,23 +66,58 @@ class MyMinIntHeap() {
     return false
   }
 
+  fun isNotEmpty(): Boolean {
+    return size != 0
+  }
 
-  // -------- Helpers --------
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyMinIntHeap || other.size() != size) return false
+
+    for (i in 0 until size) {
+      if (other.array[i] != array[i]) return false
+    }
+    return true
+  }
+
+  override fun toString(): String {
+    if (size == 0) return "[]"
+
+    val builder = StringBuilder().append("[")
+
+    for (i in 0..(size - 2)) {
+      builder.append(array[i]).append(", ")
+    }
+
+    return builder.append(array[size - 1]).append("]").toString()
+  }
+
+  override fun hashCode(): Int {
+    val prime = 31
+    var result = 1
+
+    for (i in 0 until size) {
+      result = result * prime + array[i].hashCode()
+    }
+    return result
+  }
+
+
+  // ---------------- Helpers ----------------
 
   private fun isEnoughSpace(): Boolean {
-    return data.size >= size + 1
+    return array.size >= size + 1
   }
 
   private fun addToData(int: Int) {
-    data[size] = int
+    array[size] = int
     size++;
     moveUpToCorrectPosition(size - 1)
   }
 
   private fun resizeArray() {
     val tempData: Array<Int?> = arrayOfNulls(size * 2)
-    System.arraycopy(data, 0, tempData, 0, size)
-    data = tempData
+    System.arraycopy(array, 0, tempData, 0, size)
+    array = tempData
   }
 
   private fun moveDownToCorrectPosition(index: Int) {
@@ -98,15 +130,15 @@ class MyMinIntHeap() {
     val maxIndex = size - 1
 
     if (size == 2) {
-      currentValue = data[currentIndex] ?: return
-      leftValue = data[leftIndex] ?: return
+      currentValue = array[currentIndex] ?: return
+      leftValue = array[leftIndex] ?: return
       if (currentValue > leftValue) swap(currentIndex, leftIndex)
     }
 
     while (leftIndex < maxIndex && rightIndex <= maxIndex) {
-      currentValue = data[currentIndex] ?: break
-      leftValue = data[leftIndex] ?: break
-      rightValue = data[rightIndex] ?: Int.MAX_VALUE
+      currentValue = array[currentIndex] ?: break
+      leftValue = array[leftIndex] ?: break
+      rightValue = array[rightIndex] ?: Int.MAX_VALUE
 
       if (leftValue <= rightValue) {
         if (currentValue > leftValue) {
@@ -130,14 +162,14 @@ class MyMinIntHeap() {
   }
 
   private fun moveUpToCorrectPosition(index: Int) {
-    val value = data[index] ?: return
+    val value = array[index] ?: return
     var newIndex = index
     var parentIndex: Int
     var parentValue: Int
 
     while (newIndex > 0) {
       parentIndex = parentOf(newIndex)
-      parentValue = data[parentIndex] ?: Int.MIN_VALUE
+      parentValue = array[parentIndex] ?: Int.MIN_VALUE
 
       if (parentValue > value) {
         swap(newIndex, parentIndex)
@@ -163,55 +195,8 @@ class MyMinIntHeap() {
   private fun swap(index1: Int, index2: Int) {
     if (index1 >= size || index2 >= size) throw IndexOutOfBoundsException();
 
-    val value1 = data[index1]
-    data[index1] = data[index2]
-    data[index2] = value1
-  }
-
-
-  // -------- Any callbacks --------
-
-  override fun equals(other: Any?): Boolean {
-    if (other !is MyMinIntHeap) return false
-    if (other.size() != size) return false
-
-    var isEqual = false
-    val saveSize = size
-    val saveData: Array<Int?> = arrayOfNulls(data.size)
-    System.arraycopy(data, 0, this, 0, data.size)
-
-    while (!other.isEmpty() && size > 0)
-      if (other.popMin() != popMin())
-        break
-
-    if (other.isEmpty() && size == 0)
-      isEqual = true
-
-    data = saveData
-    size = saveSize
-
-    return isEqual
-  }
-
-  override fun toString(): String {
-    if (size == 0)
-      return "empty"
-
-    val builder = StringBuilder().append("[")
-
-    for (i in 0..(size - 2))
-      builder
-        .append(data[i])
-        .append(", ")
-
-    builder
-      .append(data[size - 1])
-      .append("]")
-
-    return builder.toString()
-  }
-
-  override fun hashCode(): Int {
-    return data.hashCode()
+    val value1 = array[index1]
+    array[index1] = array[index2]
+    array[index2] = value1
   }
 }
