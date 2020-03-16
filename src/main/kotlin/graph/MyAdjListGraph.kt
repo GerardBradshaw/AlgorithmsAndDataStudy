@@ -15,53 +15,78 @@ class MyAdjListGraph<T> {
 
   val numberOfEdges: Int
     get() {
-      var edgeCount = 0
-      for (vertex in dataAndVertices.values) edgeCount += vertex.edges.size
-      return edgeCount
+      var result = 0
+
+      for (vertex in dataAndVertices.values) {
+        result += vertex.edgeCount
+      }
+      return result
     }
 
 
   // ---------------- Public fun ----------------
 
+  /**
+   * Adds a vertex at [vertexData] and links from this to vertices in [edges]. A vertex is created for each edge vertex
+   * if it does not currently exist.
+   */
   fun addVertex(vertexData: T, edges: Collection<T>?) {
-    dataAndVertices.put(vertexData, Vertex(vertexData))
+    val vertex = Vertex(vertexData)
+    addVertexToMap(vertex)
 
     if (edges != null) {
-      dataAndVertices.get(vertexData)?.edges?.addAll(edges)
-
       for (edge in edges) {
-        dataAndVertices.put(edge, Vertex(edge))
+        val edgeVertex = Vertex(edge)
+        vertex.addEdge(edgeVertex)
+        addVertexToMap(edgeVertex)
       }
     }
   }
 
-  fun addVertexWithNoEdges(vertexData: T) {
-    addVertex(vertexData, null)
+  /**
+   * Adds a vertex at [vertexData] with no edges if a vertex does not currently exist there. No action is taken if an
+   * edge already exists.
+   * @return 'true' if the vertex at [vertexData] has no edges, 'false' if it still exists with edges.
+   */
+  fun addVertexWithNoEdges(vertexData: T): Boolean {
+    addVertexToMap(Vertex(vertexData))
+    return dataAndVertices.get(vertexData)!!.edgeCount == 0 // Null-safe as a vertex was just inserted
   }
 
+  /** Adds an edge from vertex [from] to vertex [to]. If a vertex doesn't exist, it's created. */
   fun addEdge(from: T, to: T) {
-    dataAndVertices.put(from, Vertex(from))
-    dataAndVertices.put(from, Vertex(to))
-    dataAndVertices.get(from)?.edges?.add(to)
+    val fromVertex = dataAndVertices.get(from) ?: run { createAndStoreVertex(from) }
+    val toVertex = dataAndVertices.get(to) ?: run { createAndStoreVertex(to) }
+    fromVertex.addEdge(toVertex)
   }
 
+  /** Removes vertex and edges to and from [vertexData] if they exist. */
   fun removeVertex(vertexData: T) {
-    dataAndVertices.remove(vertexData)
+    val success = dataAndVertices.remove(vertexData)
 
-    for (vertex in dataAndVertices.values) {
-      vertex.edges.remove(vertexData)
+    if (success) {
+      for (vertex in dataAndVertices.values) {
+        vertex.removeEdge(vertexData)
+      }
     }
   }
 
+  /**
+   * Removes an edge from vertex [from] to vertex [to] if the vertices are valid and an edge exists between them.
+   */
   fun removeEdge(from: T, to: T) {
-    dataAndVertices.get(from)?.edges?.remove(to)
+    dataAndVertices.get(from)?.removeEdge(to)
   }
 
-  /**
-   * Returns an Array of type <T> containing all Vertices.
-   *
-   * @return an Array containing all vertices.
-   */
+  fun bfs(vertexData: T): Boolean {
+    TODO()
+  }
+
+  fun dfs(vertexData: T): Boolean {
+    TODO()
+  }
+
+  /** Returns all vertices. */
   fun getVertexData(): MyHashSet<T> {
     val set = MyHashSet<T>()
     for (key in dataAndVertices.keys) {
@@ -70,16 +95,27 @@ class MyAdjListGraph<T> {
     return set
   }
 
-  /**
-   * Returns the edges for a vertex if it exists, or null otherwise.
-   * @param vertexData the vertex with edges of interest.
-   *
-   * @return set of edges for given vertex, or null if vertex is invalid.
-   */
+  /** Returns all edges from [vertexData] if they exist, or null if the vertex does not exist. */
   fun getEdgesFromData(vertexData: T): MyHashSet<T>? {
-    return dataAndVertices.get(vertexData)?.edges
+    val vertex = dataAndVertices.get(vertexData)
+
+    if (vertex != null) {
+      val edges = vertex.edgeSet
+
+      return if (edges.isEmpty()) null
+      else {
+        val result = MyHashSet<T>()
+
+        for (edge in edges) {
+          result.add(edge.data)
+        }
+        result
+      }
+    }
+    return null
   }
 
+  /** Returns all edges as [Pair]s where 'first' and 'second' in the Pair are the to and from vertex respectively. */
   fun getAllEdges(): MyHashSet<Pair<T, T>> {
     val set = MyHashSet<Pair<T, T>>()
 
@@ -113,43 +149,75 @@ class MyAdjListGraph<T> {
 
       builder.append("[").append(vertex.data.toString()).append(" -> ")
 
-      if (vertex.edges.isNotEmpty()) {
-        for (edge in vertex.edges) {
-          builder.append(edge.toString()).append(", ")
+      if (vertex.edgeSet.isNotEmpty()) {
+        for (edge in vertex.edgeSet) {
+          builder.append(edge.data.toString()).append(", ")
         }
         builder.removeEnd(2)
       }
-
       builder.append("]\n")
     }
     return builder.toString()
   }
 
+
+  // ---------------- Helpers ----------------
+
+  private fun addVertexToMap(vertex: Vertex<T>): Boolean {
+    return dataAndVertices.put(vertex.data, vertex)
+  }
+
+  /**
+   * Returns a new [Vertex] created from [vertexData] which is stored in [dataAndVertices]. If vertexData already maps
+   * to a Vertex, this is returned instead.
+   */
+  private fun createAndStoreVertex(vertexData: T): Vertex<T> {
+    val vertex = Vertex(vertexData)
+    dataAndVertices.put(vertexData, vertex)
+    return dataAndVertices.get(vertexData)!! // Null-safe as vertexData was just inserted
+  }
+
+
   // ---------------- Data class ----------------
 
   data class Vertex<T>(var data: T) {
-    val edges: MyHashSet<T> = MyHashSet()
+    // edgeSet could be changed to a MyHashMap with the edge data as the key. This would improve lookup time.
+    val edgeSet: MyHashSet<Vertex<T>> = MyHashSet()
+
+    val edgeCount
+      get() = edgeSet.size
+
+    fun addEdge(vertex: Vertex<T>) {
+      edgeSet.add(vertex)
+    }
+
+    fun removeEdge(vertexData: T) {
+      for (edge in edgeSet) {
+        if (edge.data == vertexData) {
+          edgeSet.remove(edge)
+        }
+      }
+    }
 
     fun getEdgesAsPairs(): MyHashSet<Pair<T, T>> {
-      val iterator = edges.iterator()
-      val returnSet = MyHashSet<Pair<T, T>>()
+      val returnSetUpdate = MyHashSet<Pair<T, T>>()
 
-      while (iterator.hasNext()) {
-        returnSet.add(Pair(data, iterator.next()))
+      for (edge in edgeSet) {
+        returnSetUpdate.add(Pair(data, edge.data))
       }
-      return returnSet
+      return returnSetUpdate
     }
 
     override fun equals(other: Any?): Boolean {
-      return !(other !is Vertex<*> || other.data != data || other.edges != edges)
+      return !(other !is Vertex<*> || other.data != data || other.getEdgesAsPairs() != getEdgesAsPairs())
     }
 
     override fun hashCode(): Int {
       val prime = 31
       var result = prime + data.hashCode()
 
-      for (edge in edges) {
-        result = prime * result + (edge?.hashCode() ?: 0)
+      for (edges in edgeSet) {
+        result = prime * result + edges.data.hashCode()
       }
       return result
     }
