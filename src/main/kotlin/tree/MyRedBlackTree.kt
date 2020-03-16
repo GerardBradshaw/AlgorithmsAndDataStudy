@@ -472,7 +472,7 @@ class MyRedBlackTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
       }
 
       override fun next(): T {
-        val node = stack.pop()
+        val node = stack.pop()!!
         val result = node.element
 
         val right = node.right
