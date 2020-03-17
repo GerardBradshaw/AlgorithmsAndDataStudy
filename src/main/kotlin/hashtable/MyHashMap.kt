@@ -60,8 +60,11 @@ class MyHashMap<K,V> {
   }
 
   /**
-   * Removes the value with corresponding key if it exists, otherwise returns without any action.
+   * Removes the value with corresponding key if it exists and returns 'true', otherwise returns without any action and
+   * returns 'false'.
    * @param key the key corresponding to the value to remove
+   *
+   * @return 'true' if the value existed in the map and was successfully removed, 'false' otherwise.
    */
   fun remove(key: K): Boolean {
     val startIndex = getIndexFromKey(key)
