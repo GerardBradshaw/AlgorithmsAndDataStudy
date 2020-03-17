@@ -69,9 +69,9 @@ class MyArrayList<T> : Collection<T> {
   }
 
   override fun contains(element: T): Boolean {
-    for (dataPoint in array) {
-      if (dataPoint == null) break
-      if (dataPoint as T == element) return true
+    for (e in array) {
+      if (e == null) break
+      if (e as T == element) return true
     }
     return false
   }
