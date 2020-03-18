@@ -1,6 +1,7 @@
 package graph
 
 import array.MyStringBuilder
+import queue.MyQueue
 import set.MyHashSet
 
 class MyAdjListGraph<T> {
@@ -53,14 +54,14 @@ class MyAdjListGraph<T> {
 
   /** Adds an edge from vertex [from] to vertex [to]. If a vertex doesn't exist, it's created. */
   fun addEdge(from: T, to: T) {
-    val fromVertex = bfsHelper(from) ?: run { createAndStoreVertex(from) }
-    val toVertex = bfsHelper(to) ?: run { createAndStoreVertex(to) }
+    val fromVertex = bfs(from) ?: run { createAndStoreVertex(from) }
+    val toVertex = bfs(to) ?: run { createAndStoreVertex(to) }
     fromVertex.addEdge(toVertex)
   }
 
   /** Removes vertex and edges to and from [vertexData] if they exist. */
   fun removeVertex(vertexData: T) {
-    val vertex = bfsHelper(vertexData)
+    val vertex = bfs(vertexData)
 
     if (vertex != null) {
       for (v in vertices) {
@@ -73,29 +74,61 @@ class MyAdjListGraph<T> {
    * Removes an edge from vertex [from] to vertex [to] if the vertices are valid and an edge exists between them.
    */
   fun removeEdge(from: T, to: T) {
-    val fromVertex = bfsHelper(from)
+    val fromVertex = bfs(from)
 
     if (fromVertex != null) {
-      val toVertex = bfsHelper(to)
+      val toVertex = bfs(to)
       if (toVertex != null) {
         fromVertex.removeEdge(toVertex.data)
       }
     }
   }
 
-  fun bfs(vertexData: T): Boolean {
-    return bfsHelper(vertexData) != null
+  fun bfsContains(vertexData: T): Boolean {
+    return bfs(vertexData) != null
   }
 
-  fun dfs(vertexData: T): Boolean {
-    return dfsHelper(vertexData) != null
+  fun bfsPrint() {
+    bfs(null, true)
   }
 
-  private fun bfsHelper(vertexData: T): Vertex<T>? {
-    TODO()
+  fun dfsContains(vertexData: T): Boolean {
+    return dfs(vertexData) != null
   }
 
-  private fun dfsHelper(vertexData: T): Vertex<T>? {
+  private fun bfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
+    val visited = MyHashSet<Vertex<T>>()
+    val queue = MyQueue<Vertex<T>>()
+    var currentVertex: Vertex<T>
+    val str = MyStringBuilder().append("BFS: ")
+
+    for (v in vertices) {
+      if (!visited.contains(v)) {
+        if (v.data == vertexData) return v
+        visited.add(v)
+        queue.enqueue(v)
+        if (print) str.append(v.data.toString()).append(", ")
+      }
+
+      while (queue.isNotEmpty()) {
+        currentVertex = queue.dequeue()!! // Null-safe ensured by isNotEmpty condition
+        for (e in currentVertex.edges) {
+          if (!visited.contains(e)) {
+            if (e.data == vertexData) return e
+            visited.add(e)
+            queue.enqueue(e)
+            if (print) str.append(e.data.toString()).append(", ")
+          }
+        }
+      }
+    }
+    if (print) {
+      println(str.removeEnd(2).toString())
+    }
+    return null
+  }
+
+  private fun dfs(vertexData: T): Vertex<T>? {
     TODO()
   }
 
@@ -112,7 +145,7 @@ class MyAdjListGraph<T> {
 
   /** Returns all edges from [vertexData] if they exist, or null if the vertex does not exist. */
   fun getEdgesFromData(vertexData: T): MyHashSet<T>? {
-    val vertex = bfsHelper(vertexData)
+    val vertex = bfs(vertexData)
 
     if (vertex != null) {
       val edges = vertex.edges
@@ -146,9 +179,7 @@ class MyAdjListGraph<T> {
       || other.numberOfNodes != numberOfNodes) return false
 
     for (oV in other.vertices) {
-      if (!vertices.contains(oV)) {
-        return false
-      }
+      if (!vertices.contains(oV)) return false
     }
     return true
   }
@@ -177,7 +208,7 @@ class MyAdjListGraph<T> {
       }
       builder.append("]\n")
     }
-    return builder.toString()
+    return builder.removeEnd(1).toString()
   }
 
 
@@ -195,7 +226,7 @@ class MyAdjListGraph<T> {
     val vertex = Vertex(vertexData)
     val success = vertices.add(vertex)
 
-    return if (success) vertex else bfsHelper(vertexData)!! // Null-safe as value was just inserted
+    return if (success) vertex else bfs(vertexData)!! // Null-safe as value was just inserted
   }
 
 
@@ -233,13 +264,7 @@ class MyAdjListGraph<T> {
     }
 
     override fun hashCode(): Int {
-      val prime = 31
-      var result = prime + data.hashCode()
-
-      for (edges in edges) {
-        result += edges.data.hashCode()
-      }
-      return prime * result
+      return 31 * data.hashCode()
     }
   }
 }
