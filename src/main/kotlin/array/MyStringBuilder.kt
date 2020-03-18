@@ -35,7 +35,7 @@ class MyStringBuilder() {
     return this
   }
 
-  fun removeEnd(numberOfChars: Int) {
+  fun removeEnd(numberOfChars: Int): MyStringBuilder {
     if (this.numberOfChars < numberOfChars) {
       array = CharArray(1)
       this.numberOfChars = 0
@@ -46,6 +46,7 @@ class MyStringBuilder() {
       this.numberOfChars = startIndex
     }
     resizeArray()
+    return this
   }
 
   fun length(): Int {
