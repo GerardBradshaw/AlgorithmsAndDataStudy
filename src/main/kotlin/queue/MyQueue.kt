@@ -32,6 +32,14 @@ class MyQueue<T> {
     return frontHolder.data
   }
 
+  fun isEmpty(): Boolean {
+    return front == null
+  }
+
+  fun isNotEmpty(): Boolean {
+    return front != null
+  }
+
   override fun toString(): String {
     val frontHolder = front ?: return "[]"
     val builder = StringBuilder()
