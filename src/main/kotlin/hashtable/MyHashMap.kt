@@ -1,6 +1,7 @@
 package hashtable
 
 import array.MyArrayList
+import kotlin.math.abs
 
 class MyHashMap<K,V> {
 
@@ -56,7 +57,7 @@ class MyHashMap<K,V> {
    * @return 'true' if the value was successfully inserted, 'false' otherwise.
    */
   fun put(key: K, value: V): Boolean {
-    return putWithEntryCountModifier(key, value)
+    return putHelper(key, value)
   }
 
   /**
@@ -206,20 +207,20 @@ class MyHashMap<K,V> {
    * resizing array.
    * @param key the element key
    * @param value the value corresponding to the key
-   * @param increaseNumberOfEntries numberOfEntries is increased if entry is successfully added when 'true' (default)
+   * @param resizing numberOfEntries is increased if entry is successfully added when 'true' (default)
    * and ignored when 'false'
    *
    * @return 'true' if the value was successfully inserted, 'false' otherwise.
    */
-  private fun putWithEntryCountModifier(key: K, value: V, increaseNumberOfEntries: Boolean = true): Boolean {
-    resizeArray()
+  private fun putHelper(key: K, value: V, resizing: Boolean = false): Boolean {
+    if (!resizing) resizeArray()
 
     val index = getNextEmptyIndex(key)
 
     if (index != -1) {
       if (array[index] == null) {
         array[index] = Pair(key, value)
-        if (increaseNumberOfEntries) numberOfEntries++
+        if (!resizing) numberOfEntries++
         return true
       }
     }
@@ -261,7 +262,7 @@ class MyHashMap<K,V> {
    * @return a valid index in the array
    */
   private fun getIndexFromAny(any: Any): Int {
-    return any.hashCode() % array.size
+    return abs(any.hashCode() % array.size)
   }
 
   /**
@@ -278,7 +279,7 @@ class MyHashMap<K,V> {
       array = arrayOfNulls(newArraySize)
 
       for (pair in arrayHolder) {
-        if (pair != null) putWithEntryCountModifier(pair.first, pair.second, false)
+        if (pair != null) putHelper(pair.first, pair.second, true)
       }
     }
   }
