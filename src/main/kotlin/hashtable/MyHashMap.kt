@@ -1,6 +1,7 @@
 package hashtable
 
 import array.MyArrayList
+import array.MyStringBuilder
 import kotlin.math.abs
 
 class MyHashMap<K,V> {
@@ -16,6 +17,11 @@ class MyHashMap<K,V> {
   val size: Int
     get() = numberOfEntries
 
+  /**
+   * Returns a [Collection] of [Pair] where Pair.first is the key ([K]) and Pair.second is the value ([V]).
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of keys
+   */
   val entries: Collection<Pair<K, V>>
     get() {
       val collection = MyArrayList<Pair<K,V>>()
@@ -26,6 +32,11 @@ class MyHashMap<K,V> {
       return collection
     }
 
+  /**
+   * Returns a [Collection] of keys ([K]).
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of keys
+   */
   val keys: Collection<K>
     get() {
       val collection = MyArrayList<K>()
@@ -36,6 +47,11 @@ class MyHashMap<K,V> {
       return collection
     }
 
+  /**
+   * Returns a [Collection] of values ([V]).
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of values
+   */
   val values: Collection<V>
     get() {
       val collection = MyArrayList<V>()
@@ -50,22 +66,19 @@ class MyHashMap<K,V> {
   // ---------------- Public fun ----------------
 
   /**
-   * Puts the key-value pair into the hash map if they key is unique, otherwise no action is taken.
-   * @param key the element key
-   * @param value the value corresponding to the key
+   * Returns 'true' if [value] is successfully inserted into the map with identifier [key] (key must be unique), 'false'
+   * otherwise.
    *
-   * @return 'true' if the value was successfully inserted, 'false' otherwise.
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n), n = number of entries
    */
   fun put(key: K, value: V): Boolean {
     return putHelper(key, value)
   }
 
   /**
-   * Removes the value with corresponding key if it exists and returns 'true', otherwise returns without any action and
-   * returns 'false'.
-   * @param key the key corresponding to the value to remove
+   * Returns 'true' if a value with identifier [key] exists and was successfully removed from the map, 'false' otherwise.
    *
-   * @return 'true' if the value existed in the map and was successfully removed, 'false' otherwise.
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n), n = number of entries
    */
   fun remove(key: K): Boolean {
     val startIndex = getIndexFromKey(key)
@@ -89,15 +102,30 @@ class MyHashMap<K,V> {
     return false
   }
 
+  /**
+   * Empties the map.
+   *
+   * Efficiency: O(1) time, O(1) space
+   */
   fun clear() {
     array = arrayOfNulls(2)
     numberOfEntries = 0
   }
 
+  /**
+   * Returns 'true' if the map contains [key], 'false' otherwise.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of keys
+   */
   fun containsKey(key: K): Boolean {
     return containsKeyHelper(key, { pair -> pair.first == key })
   }
 
+  /**
+   * Returns 'true' if the map contains [value], false otherwise.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of values
+   */
   fun containsValue(value: V): Boolean {
     if (numberOfEntries == 0) return false
 
@@ -107,18 +135,110 @@ class MyHashMap<K,V> {
     return false
   }
 
+  /**
+   * Returns 'true' if the map contains [value] with reference [key], 'false' otherwise.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of entries
+   */
   fun containsEntry(key: K, value: V): Boolean {
     return containsEntryAny(key as Any, value as Any)
   }
 
   /**
-   * Checks the Hash Map for an exact key-value match.
-   * Param types are 'Any' to allow usage when type 'K' and 'V' cannot be guaranteed due to type erasure (such as in
-   * equals()).
-   * @param key the key of any type
-   * @param value the value of any type
+   * Returns the value corresponding to [key], or null if no such key exists in the map.
    *
-   * @return 'true' if an exact key and value match is found, otherwise 'false'
+   * Efficiency: O(n) time, O(1) space, n = number of keys
+   */
+  fun get(key: K): V? {
+    if (numberOfEntries == 0) return null
+
+    val startIndex = getIndexFromKey(key)
+    var currentIndex = startIndex
+    var current = array[startIndex]
+
+    while (current != null) {
+      if (current.first == key) return current.second
+
+      if (currentIndex < maxIndex) currentIndex++
+      else currentIndex = 0
+
+      if (currentIndex == startIndex) return null
+      current = array[currentIndex]
+    }
+    return null
+  }
+
+  /**
+   * Efficiency: O(1) time, O(1) space
+   */
+  fun isEmpty(): Boolean {
+    return numberOfEntries == 0
+  }
+
+  /**
+   * Efficiency: O(1) time, O(1) space
+   */
+  fun isNotEmpty(): Boolean {
+    return numberOfEntries != 0
+  }
+
+  /**
+   * Indicates whether [other] is "equal to" this one. Other must contain all the same key-value pairs (order not
+   * important).
+   *
+   * Efficiency: O(n^2) time, O(1) space, n = number of entries
+   */
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyHashMap<*,*> || other.numberOfEntries != numberOfEntries) return false
+
+    for (pair in array) {
+      if (pair != null) {
+        if (!other.array.contains(pair)) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of entries
+   */
+  override fun hashCode(): Int {
+    val prime = 31
+    var result = 1
+
+    for (pair in array) {
+      result = prime * result + (if (pair != null) 0 else pair.hashCode())
+    }
+    return result
+  }
+
+  /**
+   * Returns a String representation of the object.
+   *
+   * Efficiency: O(n) time, O(?) space, n = number of entries
+   */
+  override fun toString(): String {
+    if (isEmpty()) return "empty"
+
+    val strB = MyStringBuilder()
+
+    for (pair in array) {
+      if (pair != null) strB.append("(${pair.first}, ${pair.second})\n")
+    }
+    return strB.toString()
+  }
+
+  // ---------------- Helpers ----------------
+
+  /**
+   * Returns 'true' if the map contains [value] with reference [key], 'false' otherwise. Accepts key and value of type
+   * [Any] due to type-erasure problems encountered when using types [K] and [V].
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of entries
    */
   private fun containsEntryAny(key: Any, value: Any): Boolean {
     if (numberOfEntries == 0) return false
@@ -140,77 +260,10 @@ class MyHashMap<K,V> {
   }
 
   /**
-   * Gets the value corresponding to the given key or null if no such key exists.
-   * @param key the key
+   * Puts [key] and [value] in the array as a [Pair] (Pair.first = key, Pair.second = value) after ensuring [array] has
+   * an null slot if [resizing] is 'false' (default). Returns 'true' only if successfully inserted (key is unique).
    *
-   * @return the value corresponding to the key, or null if no such key exists.
-   */
-  fun get(key: K): V? {
-    if (numberOfEntries == 0) return null
-
-    val startIndex = getIndexFromKey(key)
-    var currentIndex = startIndex
-    var current = array[startIndex]
-
-    while (current != null) {
-      if (current.first == key) return current.second
-
-      if (currentIndex < maxIndex) currentIndex++
-      else currentIndex = 0
-
-      if (currentIndex == startIndex) return null
-      current = array[currentIndex]
-    }
-    return null
-  }
-
-  fun isEmpty(): Boolean {
-    return numberOfEntries == 0
-  }
-
-  fun isNotEmpty(): Boolean {
-    return numberOfEntries != 0
-  }
-
-  override fun equals(other: Any?): Boolean {
-    if (other !is MyHashMap<*,*> || other.numberOfEntries != numberOfEntries) return false
-
-    for (pair in array) {
-      if (pair != null) {
-        if (!other.array.contains(pair)) {
-          return false
-        }
-      }
-    }
-    return true
-  }
-
-  override fun hashCode(): Int {
-    val prime = 31
-    var result = 1
-
-    for (pair in array) {
-      result = prime * result + (if (pair != null) 0 else pair.hashCode())
-    }
-    return result
-  }
-
-  override fun toString(): String {
-    return entries.toString()
-  }
-
-
-  // ---------------- Helpers ----------------
-
-  /**
-   * Same as put(key, value) but adds parameter to increase entry count. Entry count should not be increased when
-   * resizing array.
-   * @param key the element key
-   * @param value the value corresponding to the key
-   * @param resizing numberOfEntries is increased if entry is successfully added when 'true' (default)
-   * and ignored when 'false'
-   *
-   * @return 'true' if the value was successfully inserted, 'false' otherwise.
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n), n = number of entries
    */
   private fun putHelper(key: K, value: V, resizing: Boolean = false): Boolean {
     if (!resizing) resizeArray()
@@ -228,10 +281,10 @@ class MyHashMap<K,V> {
   }
 
   /**
-   * Finds the first empty slot in array starting at the found by converting the key into an index.
-   * @param key the key.
+   * Returns the first index with a null value in [array] appropriate for [key], or -1 if the key already exists in
+   * [array].
    *
-   * @return -1 if the key is not unique, otherwise an Int index.
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(1) space, n = number of entries
    */
   private fun getNextEmptyIndex(key: K): Int {
     val startIndex = getIndexFromKey(key)
@@ -251,23 +304,29 @@ class MyHashMap<K,V> {
     return currentIndex
   }
 
+  /**
+   * Returns the first index in [array] for inserting [key] (index may not contain null value).
+   *
+   * Efficiency: O(1) time, O(1) space
+   */
   private fun getIndexFromKey(key: K): Int {
     return getIndexFromAny(key as Any)
   }
 
   /**
-   * Finds the index in the array corresponding to the modulus of 'any' with the size of the array.
-   * @param any the key
+   * Returns the first index in [array] for inserting [key] (index may not contain null value). Accepts type [Any] due
+   * to type-erasure problems encountered when using [K].
    *
-   * @return a valid index in the array
+   * Efficiency: O(1) time, O(1) space
    */
   private fun getIndexFromAny(any: Any): Int {
     return abs(any.hashCode() % array.size)
   }
 
   /**
-   * Changes the size of the array to be 150% of the number of entries if it's full or less than half full.
-   * The array size is changed by reinserting each value into a new array and reassigning 'array' to this Array.
+   * Changes the size of [array] to 150% of the number of entries if it's full or less than half full.
+   *
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
    */
   private fun resizeArray() {
     val requiredSize = numberOfEntries + 1
@@ -284,6 +343,11 @@ class MyHashMap<K,V> {
     }
   }
 
+  /**
+   * Returns the next prime number after [n].
+   *
+   * Efficiency: O(1) time, O(1) space
+   */
   private fun nextPrime(n: Int): Int {
     var next = n
     if (n % 2 == 0) next++
@@ -294,6 +358,11 @@ class MyHashMap<K,V> {
     }
   }
 
+  /**
+   * Returns 'true' if [n] is prime.
+   *
+   * Efficiency: O(1) time, O(1) space
+   */
   private fun isPrime(n: Int): Boolean {
     if (n % 2 == 0) return false
 
@@ -303,6 +372,12 @@ class MyHashMap<K,V> {
     return true
   }
 
+  /**
+   * Returns 'true' if the map contains [key], 'false' otherwise. [keyMatches] function returns 'true' if key matches
+   * a given key-value [Pair].
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of keys
+   */
   private fun containsKeyHelper(key: K, keyMatches: (pair: Pair<K,V>) -> Boolean): Boolean {
     if (numberOfEntries == 0) return false
 
@@ -311,8 +386,7 @@ class MyHashMap<K,V> {
     var current = array[startIndex]
 
     while (current != null) {
-      if (keyMatches(current)) return true
-      // if (current.first == key) return true
+      if (keyMatches(current)) return true // if (current.first == key) return true
 
       if (currentIndex < maxIndex) currentIndex++
       else currentIndex = 0
