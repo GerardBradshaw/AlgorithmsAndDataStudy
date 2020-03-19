@@ -69,7 +69,7 @@ class MyHashMap<K,V> {
    * Returns 'true' if [value] is successfully inserted into the map with identifier [key] (key must be unique), 'false'
    * otherwise.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n), n = number of entries
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
    */
   fun put(key: K, value: V): Boolean {
     return putHelper(key, value)
