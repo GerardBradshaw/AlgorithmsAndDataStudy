@@ -9,7 +9,7 @@ class MyHashSet<T> : Collection<T> {
   // ---------------- Member variables ----------------
 
   private var map: MyHashMap<T, Any> = MyHashMap()
-  private val DUMMY_VAL = Any()
+  private val dummyVal = Any()
 
   override val size: Int
     get() = map.size
@@ -18,15 +18,20 @@ class MyHashSet<T> : Collection<T> {
   // ---------------- Public methods ----------------
 
   /**
-   * Inserts the element into the set map if it is unique, otherwise no action is taken.
-   * @param element the element to insert
+   * Returns true if [element] is unique and was successfully inserted into the map.
    *
-   * @return 'true' if the element was inserted (i.e. it was unique), 'false' otherwise.
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
    */
   fun add(element: T): Boolean {
-    return map.put(element, DUMMY_VAL)
+    return map.put(element, dummyVal)
   }
 
+  /**
+   * Returns true if all of [elements] was successfully inserted into the map.
+   *
+   * Efficiency: Typically O(e) time, O(1) space, e = number of elements to insert. Worst case O(e * n) time, O(n + e)
+   * space, n = number of existing entries.
+   */
   fun addAll(elements: Collection<T>): Boolean {
     var isAllAdded = true
 
@@ -38,13 +43,20 @@ class MyHashSet<T> : Collection<T> {
   }
 
   /**
-   * Removes the value if it exists, otherwise no action is taken.
-   * @param element the element to remove
+   * Returns true if [element] exists and was successfully removed from the map.
+   *
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
    */
   fun remove(element: T): Boolean {
     return map.remove(element)
   }
 
+  /**
+   * Returns true if all of [elements] was successfully removed from the map.
+   *
+   * Efficiency: Typically O(e) time, O(1) space, e = number of elements to remove. Worst case O(e * n) time, O(n + e)
+   * space, n = number of existing entries.
+   */
   fun removeAll(elements: Collection<T>): Boolean {
     var isAllRemoved = true
 
@@ -55,10 +67,20 @@ class MyHashSet<T> : Collection<T> {
     return isAllRemoved
   }
 
+  /**
+   * Empties the set.
+   *
+   * Efficiency: O(1) time, O(1) space
+   */
   fun clear() {
     map.clear()
   }
 
+  /**
+   * Returns elements in the set as a [List].
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of entries
+   */
   fun <L> asList(): List<T> {
     val returnList = ArrayList<T>()
 
@@ -69,10 +91,20 @@ class MyHashSet<T> : Collection<T> {
     return returnList
   }
 
+  /**
+   * Returns true if the set contains [element].
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of entries
+   */
   override fun contains(element: T): Boolean {
     return map.containsKey(element)
   }
 
+  /**
+   * Returns true of the set contains all in [elements].
+   *
+   * Efficiency: O(n * e) time, O(1) space, n = number of elements in the set, e = number of elements in parameter
+   */
   override fun containsAll(elements: Collection<T>): Boolean {
     for (e in elements) {
       if (!contains(e)) return false
@@ -80,10 +112,16 @@ class MyHashSet<T> : Collection<T> {
     return true
   }
 
+  /**
+   * Efficiency: O(1) time, O(1) space
+   */
   override fun isEmpty(): Boolean {
     return map.isEmpty()
   }
 
+  /**
+   * Efficiency: O(1) time, O(1) space
+   */
   fun isNotEmpty(): Boolean {
     return map.isNotEmpty()
   }
@@ -103,6 +141,11 @@ class MyHashSet<T> : Collection<T> {
     }
   }
 
+  /**
+   * Indicates whether [other] is "equal to" this one. Other must contain all the same elements.
+   *
+   * Efficiency: O(n^2) time, O(n) space, n = number of keys
+   */
   override fun equals(other: Any?): Boolean {
     return when {
       other !is MyHashSet<*> -> false
@@ -112,10 +155,20 @@ class MyHashSet<T> : Collection<T> {
     }
   }
 
+  /**
+   * Returns a hash code value for the object.
+   *
+   * Efficiency: At least O(n) time, O(n) space
+   */
   override fun hashCode(): Int {
     return map.keys.hashCode()
   }
 
+  /**
+   * Returns a String representation of the set.
+   *
+   * Efficiency: At least O(n) time, O(n) space
+   */
   override fun toString(): String {
     return map.keys.toString()
   }
