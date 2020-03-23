@@ -21,20 +21,21 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyAdjListGraph<Integer> graph = new MyAdjListGraph<>();
-    //graph.addUndirectedEdge(6, 5);
-    graph.addUndirectedEdge(5, 7);
-    graph.addUndirectedEdge(7, 8);
-    graph.addUndirectedEdge(8, 2);
-    graph.addUndirectedEdge(2, 5);
-    //graph.addUndirectedEdge(5, 8);
-    //graph.addUndirectedEdge(2, 7);
-    graph.addUndirectedEdge(2, 1);
-    graph.addUndirectedEdge(2, 3);
-    graph.addUndirectedEdge(1, 4);
-    graph.addUndirectedEdge(4, 3);
-    graph.addUndirectedEdge(3, 10);
-    graph.addUndirectedEdge(9, 3);
+    MyAdjListGraph<String> graph = new MyAdjListGraph<>();
+
+    graph.addUndirectedEdge("A","B");
+    graph.addUndirectedEdge("A","C");
+    graph.addUndirectedEdge("A","D");
+    graph.addUndirectedEdge("A","E");
+    graph.addUndirectedEdge("A","F");
+    graph.addUndirectedEdge("B","L");
+    graph.addUndirectedEdge("D","K");
+    graph.addUndirectedEdge("D","L");
+    graph.addUndirectedEdge("F","G");
+    graph.addUndirectedEdge("G","H");
+    graph.addUndirectedEdge("G","I");
+    graph.addUndirectedEdge("G","J");
+
     System.out.println(graph.toString());
     System.out.println("HashCode: " + graph.hashCode());
     //graph.bfsPrint();
