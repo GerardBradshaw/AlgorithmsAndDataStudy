@@ -21,28 +21,25 @@ import java.util.*;
 public class HelloWorld {
 
   public static void main(String[] args) {
-    MyAdjListGraph<String> graph = new MyAdjListGraph<>();
-    graph.addEdge("1", "3");
-    graph.addEdge("3", "2");
-    graph.addEdge("2", "1");
+    MyAdjListGraph<Integer> graph = new MyAdjListGraph<>();
+    //graph.addUndirectedEdge(6, 5);
+    graph.addUndirectedEdge(5, 7);
+    graph.addUndirectedEdge(7, 8);
+    graph.addUndirectedEdge(8, 2);
+    graph.addUndirectedEdge(2, 5);
+    //graph.addUndirectedEdge(5, 8);
+    //graph.addUndirectedEdge(2, 7);
+    graph.addUndirectedEdge(2, 1);
+    graph.addUndirectedEdge(2, 3);
+    graph.addUndirectedEdge(1, 4);
+    graph.addUndirectedEdge(4, 3);
+    graph.addUndirectedEdge(3, 10);
+    graph.addUndirectedEdge(9, 3);
     System.out.println(graph.toString());
     System.out.println("HashCode: " + graph.hashCode());
-    graph.bfsPrint();
+    //graph.bfsPrint();
+    graph.dfsPrint();
     System.out.println();
-
-    MyAdjListGraph<String> graph2 = new MyAdjListGraph<>();
-    graph2.addVertexWithNoEdges("1");
-    graph2.addVertexWithNoEdges("2");
-    graph2.addVertexWithNoEdges("3");
-    graph2.addEdge("1", "3");
-    graph2.addEdge("3", "2");
-    graph2.addEdge("2", "1");
-    System.out.println(graph2.toString());
-    System.out.println("HashCode: " + graph2.hashCode());
-    graph2.bfsPrint();
-
-    System.out.println("graph == graph2 : " + graph.equals(graph2));
-    System.out.println("graph == graph2 : " + graph2.equals(graph));
   }
 
   // -------- Arrays --------
