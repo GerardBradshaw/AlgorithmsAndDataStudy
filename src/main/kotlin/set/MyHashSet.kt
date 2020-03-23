@@ -94,7 +94,7 @@ class MyHashSet<T> : Collection<T> {
   /**
    * Returns true if the set contains [element].
    *
-   * Efficiency: O(n) time, O(1) space, n = number of entries
+   * Efficiency: Typically O(1) time, O(1) space, n = number of keys. Worst case O(n) time, O(1) space
    */
   override fun contains(element: T): Boolean {
     return map.containsKey(element)
@@ -103,7 +103,8 @@ class MyHashSet<T> : Collection<T> {
   /**
    * Returns true of the set contains all in [elements].
    *
-   * Efficiency: O(n * e) time, O(1) space, n = number of elements in the set, e = number of elements in parameter
+   * Efficiency: Typically O(c) time, O(1) space, c = number of elements in elements. Worst case O(c * n) time, O(1)
+   * space, n = number of entries
    */
   override fun containsAll(elements: Collection<T>): Boolean {
     for (e in elements) {
