@@ -3,6 +3,7 @@ package graph
 import array.MyStringBuilder
 import queue.MyQueue
 import set.MyHashSet
+import stack.MyStack
 
 class MyAdjListGraph<T> {
 
@@ -60,6 +61,16 @@ class MyAdjListGraph<T> {
   }
 
   /**
+   * Adds an edge from [vertexData1] to [vertexData2] and vice-versa. If a vertex doesn't exist, it's created.
+   *
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
+   */
+  fun addUndirectedEdge(vertexData1: T, vertexData2: T) {
+    addEdge(vertexData1, vertexData2)
+    addEdge(vertexData2, vertexData1)
+  }
+
+  /**
    * Adds an edge from [from] to [to]. If a vertex doesn't exist, it's created.
    *
    * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
@@ -110,14 +121,34 @@ class MyAdjListGraph<T> {
     return bfs(vertexData) != null
   }
 
+  /**
+   * Returns the graph in Breadth-First Search (BFS) order (in-order).
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
   fun bfsPrint() {
     bfs(null, true)
   }
 
-  // TODO
+  /**
+   * Returns true if the graph contains a vertex with [vertexData].
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
   fun dfsContains(vertexData: T): Boolean {
     return dfs(vertexData) != null
   }
+
+  /**
+   * Returns the graph in Depth-First Search (DFS) order (pre-order).
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
+  fun dfsPrint() {
+    dfs(null, true)
+  }
+
+  // ---------------- Helpers ----------------
 
   /**
    * Performs a Breadth-First Search (BFS) of [vertices] for [vertexData] and prints to the console if [print] is true.
@@ -127,22 +158,30 @@ class MyAdjListGraph<T> {
   private fun bfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
     val visited = MyHashSet<Vertex<T>>()
     val queue = MyQueue<Vertex<T>>()
-    var currentVertex: Vertex<T>
+    var result: Vertex<T>? = null
     val str = MyStringBuilder().append("BFS: ")
 
+    mainLoop@
     for (v in vertices) {
       if (!visited.contains(v)) {
-        if (v.data == vertexData) return v
+        if (v.data == vertexData) {
+          result = v
+          break@mainLoop
+        }
+
         visited.add(v)
         queue.enqueue(v)
         if (print) str.append(v.data.toString()).append(", ")
       }
 
       while (queue.isNotEmpty()) {
-        currentVertex = queue.dequeue()!! // Null-safe ensured by isNotEmpty condition
-        for (e in currentVertex.edges) {
+        for (e in queue.dequeue()!!.edges) { // Null-safe ensured by isNotEmpty condition
           if (!visited.contains(e)) {
-            if (e.data == vertexData) return e
+            if (e.data == vertexData) {
+              result = e
+              break@mainLoop
+            }
+
             visited.add(e)
             queue.enqueue(e)
             if (print) str.append(e.data.toString()).append(", ")
@@ -150,15 +189,55 @@ class MyAdjListGraph<T> {
         }
       }
     }
-    if (print) {
-      println(str.removeEnd(2).toString())
+    if (print) println(str.removeEnd(2).toString())
+    return result
+  }
+
+  // Returns null if vertex has no edges or no unvisited children
+  private fun dfsExplore(vertex: Vertex<T>, stack: MyStack<Vertex<T>>, visited: MyHashSet<Vertex<T>>, strBuilder: MyStringBuilder, print: Boolean): Vertex<T>? {
+    if (!visited.contains(vertex)) {
+      stack.push(vertex)
+      visited.add(vertex)
+      if (print) strBuilder.append(vertex.data.toString()).append(", ")
+    }
+    for (edge in vertex.edges) {
+      if (!visited.contains(edge)) return edge
     }
     return null
   }
 
-  // TODO
-  private fun dfs(vertexData: T): Vertex<T>? {
-    TODO()
+  /**
+   * Performs a Depth-First Search (DFS) of [vertices] for [vertexData] and prints to the console if it's null.
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
+  private fun dfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
+    val visited = MyHashSet<Vertex<T>>()
+    val stack = MyStack<Vertex<T>>()
+    val strBuilder = MyStringBuilder().append("DFS: ")
+
+    var current: Vertex<T>? = null
+
+    mainLoop@
+    for (v in vertices) {
+      current = v
+
+      while (current != null) {
+        if (current.data == vertexData) break@mainLoop
+        current = dfsExplore(current, stack, visited, strBuilder, print)
+      }
+
+      while (stack.isNotEmpty()) {
+        current = stack.pop()
+
+        while (current != null) {
+          if (current.data == vertexData) break@mainLoop
+          current = dfsExplore(current, stack, visited, strBuilder, print)
+        }
+      }
+    }
+    if (print) println(strBuilder.removeEnd(2).toString())
+    return current
   }
 
   /**
