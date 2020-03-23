@@ -193,16 +193,26 @@ class MyAdjListGraph<T> {
     return result
   }
 
-  // Returns null if vertex has no edges or no unvisited children
+  /**
+   * Returns an unexplored [Vertex] connected to [vertex] if one exists. Also: adds vertex to [stack] if its never been
+   * explored (so its edges can be explored later); adds vertex data to [strBuilder] using toString(); adds vertex to
+   * [visited] so it won't be added to strBuilder or stack again.
+   */
   private fun dfsExplore(vertex: Vertex<T>, stack: MyStack<Vertex<T>>, visited: MyHashSet<Vertex<T>>, strBuilder: MyStringBuilder, print: Boolean): Vertex<T>? {
+
     if (!visited.contains(vertex)) {
       stack.push(vertex)
       visited.add(vertex)
       if (print) strBuilder.append(vertex.data.toString()).append(", ")
     }
+
     for (edge in vertex.edges) {
-      if (!visited.contains(edge)) return edge
+      if (!visited.contains(edge)) {
+        stack.push(vertex)
+        return edge
+      }
     }
+
     return null
   }
 
