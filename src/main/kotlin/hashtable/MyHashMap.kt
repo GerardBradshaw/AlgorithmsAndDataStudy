@@ -115,7 +115,7 @@ class MyHashMap<K,V> {
   /**
    * Returns 'true' if the map contains [key], 'false' otherwise.
    *
-   * Efficiency: O(n) time, O(1) space, n = number of keys
+   * Efficiency: Typically O(1) time, O(1) space, n = number of keys. Worst case O(n) time, O(1) space
    */
   fun containsKey(key: K): Boolean {
     return containsKeyHelper(key, { pair -> pair.first == key })
@@ -376,7 +376,7 @@ class MyHashMap<K,V> {
    * Returns 'true' if the map contains [key], 'false' otherwise. [keyMatches] function returns 'true' if key matches
    * a given key-value [Pair].
    *
-   * Efficiency: O(n) time, O(1) space, n = number of keys
+   * Efficiency: Typically O(1) time, O(1) space, n = number of keys. Worst case O(n) time, O(1) space
    */
   private fun containsKeyHelper(key: K, keyMatches: (pair: Pair<K,V>) -> Boolean): Boolean {
     if (numberOfEntries == 0) return false
