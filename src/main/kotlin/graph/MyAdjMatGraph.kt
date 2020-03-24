@@ -2,7 +2,9 @@ package graph
 
 import array.MyStringBuilder
 import hashtable.MyHashMap
+import queue.MyQueue
 import set.MyHashSet
+import stack.MyStack
 
 class MyAdjMatGraph<T>(vertices: List<T>) {
 
@@ -26,13 +28,10 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   // ---------------- Public methods ----------------
 
   /**
-   * Adds an edge of specified length between two vertices. If the vertices are invalid or the same, or if the length is
-   * a negative number, no action is taken.
-   * @param from source vertex.
-   * @param to destination vertex
-   * @param length distance between the two vertices
+   * Returns true if an edge from [from] to [to] of length [length] is successfully created (length >= 0, vertices exist
+   * and are unique). If length is 0, any existing edge is removed.
    *
-   * @return 'true' if the vertices are valid & unique, and the distance is greater than 0, 'false' otherwise.
+   * Efficiency: O(1) time, O(1) space
    */
   fun addEdge(from: T, to: T, length: Int): Boolean {
     if (length < 0 || from == to) return false
@@ -50,34 +49,40 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   }
 
   /**
-   * Removes the edge between two edges if one exists. If the vertices are invalid or the same, no action is taken.
-   * @param from source vertex
-   * @param to destination vertex
+   * Returns true if an edge between [vertexData1] and [vertexData2] of length [length] is successfully created in both
+   * directions (length >=0, vertices exist and are unique). If length is 0, any existing edge is removed.
    *
-   * @return 'true' if the vertices are valid & unique and the edge has been removed or never existed, 'false' otherwise.
+   * Efficiency: O(1) time, O(1) space
+   */
+  fun addUndirectedEdge(vertexData1: T, vertexData2: T, length: Int): Boolean {
+    return addEdge(vertexData1, vertexData2, length) && addEdge(vertexData2, vertexData1, length)
+  }
+
+  /**
+   * Returns true if [from] and [to] are valid and unique and the edge between them (from [from] to [to]) is zero at the
+   * end of this operation.
+   *
+   * Efficiency: O(1) time, O(1) space
    */
   fun removeEdge(from: T, to: T): Boolean {
     return addEdge(from, to, 0)
   }
 
   /**
-   * Returns an array containing a all vertices.
-   * @return Array of all vertices of type T
+   * Returns an array containing the data from all vertices.
    *
-   * @suppress "UNCHECKED_CAST" because type T is guaranteed internally
+   * Efficiency: O(1) time, O(1) space
    */
-  @Suppress("UNCHECKED_CAST")
   fun getVertexData(): Array<T> {
+    @Suppress("UNCHECKED_CAST") // type T is guaranteed internally
     return vertices as Array<T>
   }
 
   /**
-   * Returns a MyHashSet of Pairs where pair.first is the edge vertex data, and pair.second is the distance from the
-   * provided vertex.
-   * @param vertexData the data contained in the desired index.
+   * Returns a [MyHashSet] of [Pair] where Pair.first is the edge vertex data, and Pair.second is the distance from the
+   * vertex with data [vertexData].
    *
-   * @return a MyHashSet of Pairs where first is the edge vertex data, and second is the distance away from the provided
-   * vertex.
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
    */
   fun getEdgesForVertexData(vertexData: T): MyHashSet<Pair<T, Int>> {
     val result = MyHashSet<Pair<T, Int>>()
@@ -102,13 +107,49 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   }
 
   /**
-   * Returns an N by N matrix containing the distance between vertices, where N is the number of vertices and 0
-   * indicates no relationship. Each column corresponds and row corresponds to the vertices returned by vertices().
+   * Returns an [Array] of [IntArray] (matrix) containing the distance between vertices. Each column and row corresponds
+   * to the vertices return by vertices() in the same order.
    *
-   * @return an Array of IntArrays containing the distance between vertices, where 0 represents no relationship.
+   * Efficiency: O(1) time, O(1) space
    */
   fun edgesAsMatrix(): Array<IntArray> {
     return matrix
+  }
+
+  /**
+   * Returns true if a vertex exists at [vertexData]. Existence checked used a Breadth-First Search (BFS) approach.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of vertices
+   */
+  fun bfsContains(vertexData: T): Boolean {
+    return bfs(vertexData)
+  }
+
+  /**
+   * Uses a Breadth-First Search (BFS) to print the graph in BFS order.
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
+  fun bfsPrint() {
+    bfs(null, true)
+  }
+
+  /**
+   * Returns true if a vertex exists at [vertexData]. Existence checked used a Depth-First Search (DFS) approach.
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of vertices
+   */
+  fun dfsContains(vertexData: T): Boolean {
+    return dfs(vertexData)
+  }
+
+  /**
+   * Uses a Depth-First Search (DFS) to print the graph in DFS order.
+   *
+   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   */
+  fun dfsPrint() {
+    dfs(null, true)
   }
 
   override fun equals(other: Any?): Boolean {
@@ -185,5 +226,139 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     }
     builder.removeEnd(2)
     return builder.append("]").toString()
+  }
+
+  /**
+   * Returns true if vertex at [vertexData] is contained in [vertices] and prints the route if [print] is true.
+   * Operation is performed using a Breadth-First Search.
+   *
+   * Efficiency: O(n) time, O(p) space, n = number of vertices, p = n if print is true, 1 otherwise
+   */
+  private fun bfs(vertexData: T?, print: Boolean = false): Boolean {
+    var success = false
+    val queue = MyQueue<T>()
+    val visited = MyHashSet<T>()
+    val message = MyStringBuilder().append("BFS: ")
+    var currentData: T
+
+    mainLoop@
+    for (i in 0 until numberOfVertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
+      @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
+      currentData = vertices[i] as T
+
+      if (!visited.contains(currentData)) {
+        if (currentData == vertexData) {
+          success = true
+          break@mainLoop
+        }
+        bfsExplore(currentData, queue, visited, message, print, i)
+      }
+
+      while (queue.isNotEmpty()) {
+        currentData = queue.dequeue()!! // not null due to loop condition
+        bfsExplore(currentData, queue, visited, message, print)
+      }
+    }
+    if (print) println(message.removeEnd(2).toString())
+    return success
+  }
+
+  /**
+   * Returns true if vertex at [vertexData] is contained in [vertices] and prints the route if [print] is true.
+   * Operation is performed using a Depth-First Search (DFS).
+   *
+   * Efficiency: O(n) time, O(p) space, n = number of vertices, p = n if print is true, 1 otherwise
+   */
+  private fun dfs(vertexData: T?, print: Boolean = false): Boolean {
+    var success = false
+    val stack = MyStack<T>()
+    val visited = MyHashSet<T>()
+    val message = MyStringBuilder().append("BFS: ")
+    var currentData: T
+
+    mainLoop@
+    for (i in 0 until numberOfVertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
+      @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
+      currentData = vertices[i] as T
+
+      if (!visited.contains(currentData)) {
+        if (currentData == vertexData) {
+          success = true
+          break@mainLoop
+        }
+        dfsExplore(currentData, stack, visited, message, print, i)
+      }
+
+      while (stack.isNotEmpty()) {
+        currentData = stack.pop()!! // not null due to loop condition
+        dfsExplore(currentData, stack, visited, message, print)
+      }
+    }
+    if (print) println(message.removeEnd(2).toString())
+    return success
+  }
+
+  /**
+   * If vertex with [vertexData] (its index in [vertices] can be provided with [index]) is not in [visited], it is:
+   * - Added to [visited]
+   * - Added to [message] using toString() if [print] is true
+   * - The vertices at its edges are added to [queue] if they are not in [visited].
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of vertices
+   */
+  private fun bfsExplore(vertexData: T,
+                         queue: MyQueue<T>,
+                         visited: MyHashSet<T>,
+                         message: MyStringBuilder,
+                         print: Boolean,
+                         index: Int = -1) {
+
+    if (!visited.contains(vertexData)) {
+      visited.add(vertexData)
+      if (print) message.append("${vertexData.toString()}, ")
+
+      val row = if (index == -1) vertices.indexOf(vertexData as Any) else index
+
+      for (col in 0 until numberOfVertices) {
+        @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
+        if (!visited.contains(vertices[col] as T)) {
+          if (matrix[row][col] != 0) queue.enqueue(vertices[col] as T)
+        }
+      }
+    }
+  }
+
+  /**
+   * If vertex with [vertexData] (its index in [vertices] can be provided with [index]) is not in [visited], it is:
+   * - Added to [visited]
+   * - Added to [message] using toString() if [print] is true
+   * - The vertices at its edges are added to [stack] if they are not in [visited].
+   *
+   * Efficiency: O(n) time, O(1) space, n = number of vertices
+   */
+  private fun dfsExplore(vertexData: T,
+                         stack: MyStack<T>,
+                         visited: MyHashSet<T>,
+                         message: MyStringBuilder,
+                         print: Boolean,
+                         index: Int = -1) {
+
+    if (!visited.contains(vertexData)) {
+      visited.add(vertexData)
+      if (print) message.append("${vertexData.toString()}, ")
+
+      val row = if (index == -1) vertices.indexOf(vertexData as Any) else index
+
+      for (col in 0 until numberOfVertices) {
+        @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
+        if (!visited.contains(vertices[col] as T)) {
+          if (matrix[row][col] != 0) stack.push(vertices[col] as T)
+        }
+      }
+    }
   }
 }
