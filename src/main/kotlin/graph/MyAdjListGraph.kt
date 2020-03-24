@@ -150,6 +150,12 @@ class MyAdjListGraph<T> {
 
   // ---------------- Helpers ----------------
 
+  private fun bfsAddToVisitedAndQueueAndPrint(vertex: Vertex<T>, visited: MyHashSet<Vertex<T>>, queue: MyQueue<Vertex<T>>, message: MyStringBuilder, print: Boolean) {
+    visited.add(vertex)
+    queue.enqueue(vertex)
+    if (print) message.append(vertex.data.toString()).append(", ")
+  }
+
   /**
    * Performs a Breadth-First Search (BFS) of [vertices] for [vertexData] and prints to the console if [print] is true.
    *
@@ -159,7 +165,7 @@ class MyAdjListGraph<T> {
     val visited = MyHashSet<Vertex<T>>()
     val queue = MyQueue<Vertex<T>>()
     var result: Vertex<T>? = null
-    val str = MyStringBuilder().append("BFS: ")
+    val message = MyStringBuilder().append("BFS: ")
 
     mainLoop@
     for (v in vertices) {
@@ -170,10 +176,7 @@ class MyAdjListGraph<T> {
           result = v
           break@mainLoop
         }
-
-        visited.add(v)
-        queue.enqueue(v)
-        if (print) str.append(v.data.toString()).append(", ")
+        bfsAddToVisitedAndQueueAndPrint(v, visited, queue, message, print)
       }
 
       while (queue.isNotEmpty()) {
@@ -183,15 +186,12 @@ class MyAdjListGraph<T> {
               result = e
               break@mainLoop
             }
-
-            visited.add(e)
-            queue.enqueue(e)
-            if (print) str.append(e.data.toString()).append(", ")
+            bfsAddToVisitedAndQueueAndPrint(e, visited, queue, message, print)
           }
         }
       }
     }
-    if (print) println(str.removeEnd(2).toString())
+    if (print) println(message.removeEnd(2).toString())
     return result
   }
 
