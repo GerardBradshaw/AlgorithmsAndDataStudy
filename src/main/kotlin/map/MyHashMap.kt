@@ -2,9 +2,10 @@ package map
 
 import array.MyArrayList
 import array.MyStringBuilder
+import java.lang.NullPointerException
 import kotlin.math.abs
 
-class MyHashMap<K,V> {
+class MyHashMap<K,V> : Iterable<Pair<K,V>> {
 
   // ---------------- Fields ----------------
 
@@ -230,6 +231,28 @@ class MyHashMap<K,V> {
       if (pair != null) strB.append("(${pair.first}, ${pair.second})\n")
     }
     return strB.toString()
+  }
+
+  override fun iterator(): Iterator<Pair<K, V>> {
+    return object : Iterator<Pair<K, V>> {
+      var currentIndex = 0
+      var returnCount = 0
+
+      override fun hasNext(): Boolean {
+        return returnCount < numberOfEntries
+      }
+
+      override fun next(): Pair<K, V> {
+        var currentPair: Pair<K, V>? = null
+
+        while (currentPair == null && currentIndex < array.size) {
+          currentPair = array[currentIndex]
+          currentIndex++
+        }
+        returnCount++
+        return currentPair ?: throw NullPointerException()
+      }
+    }
   }
 
   // ---------------- Helpers ----------------
