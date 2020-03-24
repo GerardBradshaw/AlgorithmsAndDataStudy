@@ -1,6 +1,6 @@
 package set
 
-import hashtable.MyHashMap
+import map.MyHashMap
 import java.util.*
 
 

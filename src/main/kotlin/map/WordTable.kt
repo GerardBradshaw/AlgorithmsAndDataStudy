@@ -1,4 +1,4 @@
-package hashtable
+package map
 
 import java.lang.StringBuilder
 import java.util.*

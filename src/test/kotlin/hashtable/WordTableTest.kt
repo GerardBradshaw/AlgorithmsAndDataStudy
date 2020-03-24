@@ -1,5 +1,7 @@
 package hashtable
 
+import map.Word
+import map.WordTable
 import org.hamcrest.CoreMatchers
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -16,31 +18,41 @@ class WordTableTest {
 
   @Before
   fun setup() {
-    table = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep")))
+    table = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep")
+      )
+    )
 
-    originalTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep")))  }
+    originalTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep")
+      )
+    )
+  }
 
   @Test
   fun insertWord_wordWithUniqueKey() {
     table.insertWord(newWord)
 
-    val resultTable = WordTable(arrayOf(
-      newWord,
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep")))
+    val resultTable = WordTable(
+      arrayOf(
+        newWord,
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }
@@ -57,19 +69,23 @@ class WordTableTest {
       Word("car", "a personal motor vehicle"),
       Word("war", "what is it good for?"),
       null,
-      Word("oak", "a type of tree"))
+      Word("oak", "a type of tree")
+    )
 
     table.insertWords(arrayToInsert)
 
-    val resultTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("car", "a personal motor vehicle"),
-      Word("war", "what is it good for?"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep"),
-      Word("oak", "a type of tree")))
+    val resultTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("car", "a personal motor vehicle"),
+        Word("war", "what is it good for?"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep"),
+        Word("oak", "a type of tree")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }
@@ -81,19 +97,23 @@ class WordTableTest {
       existingWord,
       newWord,
       null,
-      Word("oak", "a type of tree"))
+      Word("oak", "a type of tree")
+    )
 
     table.insertWords(arrayToInsert)
 
-    val resultTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("car", "a personal motor vehicle"),
-      newWord,
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep"),
-      Word("oak", "a type of tree")))
+    val resultTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("car", "a personal motor vehicle"),
+        newWord,
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep"),
+        Word("oak", "a type of tree")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }
@@ -119,19 +139,23 @@ class WordTableTest {
       Word("car", "a personal motor vehicle"),
       Word("war", "what is it good for?"),
       null,
-      Word("oak", "a type of tree"))
+      Word("oak", "a type of tree")
+    )
 
     table.insertWordsWithoutChangingTableSize(arrayToInsert)
 
-    val resultTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("car", "a personal motor vehicle"),
-      Word("war", "what is it good for?"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep"),
-      Word("oak", "a type of tree")))
+    val resultTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("car", "a personal motor vehicle"),
+        Word("war", "what is it good for?"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep"),
+        Word("oak", "a type of tree")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }
@@ -143,19 +167,23 @@ class WordTableTest {
       existingWord,
       newWord,
       null,
-      Word("oak", "a type of tree"))
+      Word("oak", "a type of tree")
+    )
 
     table.insertWordsWithoutChangingTableSize(arrayToInsert)
 
-    val resultTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("bad", "not good"),
-      Word("car", "a personal motor vehicle"),
-      newWord,
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep"),
-      Word("oak", "a type of tree")))
+    val resultTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("bad", "not good"),
+        Word("car", "a personal motor vehicle"),
+        newWord,
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep"),
+        Word("oak", "a type of tree")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }
@@ -195,11 +223,14 @@ class WordTableTest {
   fun remove_validString() {
     table.remove(existingWord.word)
 
-    val resultTable = WordTable(arrayOf(
-      Word("pin", "a sharp thing"),
-      Word("use", "to use"),
-      Word("eat", "to consume"),
-      Word("nap", "a mini-sleep")))
+    val resultTable = WordTable(
+      arrayOf(
+        Word("pin", "a sharp thing"),
+        Word("use", "to use"),
+        Word("eat", "to consume"),
+        Word("nap", "a mini-sleep")
+      )
+    )
 
     assertThat(table, CoreMatchers.`is`(CoreMatchers.equalTo(resultTable)))
   }

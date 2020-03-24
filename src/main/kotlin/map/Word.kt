@@ -1,4 +1,4 @@
-package hashtable
+package map
 
 data class Word(val word: String, val definition: String) {
   override fun toString(): String {

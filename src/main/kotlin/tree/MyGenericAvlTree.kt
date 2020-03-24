@@ -546,7 +546,7 @@ class MyGenericAvlTree<T : Comparable<T>> : Iterable<T> {
     xNode.left = null
     xNode.right = null
   }
-  
+
   private fun deleteLeaf(xNode: Node<T>) {
     val parent = xNode.parent
     val parentLeft = parent?.left

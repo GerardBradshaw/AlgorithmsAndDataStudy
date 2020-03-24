@@ -1,4 +1,4 @@
-package hashtable
+package map
 
 import array.MyArrayList
 import array.MyStringBuilder
@@ -189,7 +189,7 @@ class MyHashMap<K,V> {
    * Efficiency: O(n^2) time, O(1) space, n = number of entries
    */
   override fun equals(other: Any?): Boolean {
-    if (other !is MyHashMap<*,*> || other.numberOfEntries != numberOfEntries) return false
+    if (other !is MyHashMap<*, *> || other.numberOfEntries != numberOfEntries) return false
 
     for (pair in array) {
       if (pair != null) {

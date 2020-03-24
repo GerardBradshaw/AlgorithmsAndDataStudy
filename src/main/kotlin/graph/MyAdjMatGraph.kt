@@ -1,7 +1,7 @@
 package graph
 
 import array.MyStringBuilder
-import hashtable.MyHashMap
+import map.MyHashMap
 import queue.MyQueue
 import set.MyHashSet
 import stack.MyStack
