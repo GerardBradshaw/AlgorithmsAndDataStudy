@@ -11,7 +11,7 @@ class MyAdjListGraph<T> {
 
   private val vertices = MyHashSet<Vertex<T>>()
 
-  val numberOfNodes: Int
+  val numberOfVertices: Int
     get() = vertices.size
 
   /**
@@ -163,6 +163,8 @@ class MyAdjListGraph<T> {
 
     mainLoop@
     for (v in vertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
       if (!visited.contains(v)) {
         if (v.data == vertexData) {
           result = v
@@ -230,6 +232,8 @@ class MyAdjListGraph<T> {
 
     mainLoop@
     for (v in vertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
       current = v
 
       while (current != null) {
@@ -308,7 +312,7 @@ class MyAdjListGraph<T> {
   override fun equals(other: Any?): Boolean {
     if (other !is MyAdjListGraph<*>
       || other.numberOfEdges != numberOfEdges
-      || other.numberOfNodes != numberOfNodes) return false
+      || other.numberOfVertices != numberOfVertices) return false
 
     for (oV in other.vertices) {
       if (!vertices.contains(oV)) return false
