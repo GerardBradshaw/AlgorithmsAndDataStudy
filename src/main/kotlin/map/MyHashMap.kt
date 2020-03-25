@@ -77,6 +77,16 @@ class MyHashMap<K,V> : Iterable<Pair<K,V>> {
   }
 
   /**
+   * Returns true if [key] exists in the map and was successfully updated with a new value of [value]. If [key] does not
+   * exist, it is not inserted and false is returned.
+   *
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
+   */
+  fun set(key: K, value: V): Boolean {
+    return setHelper(key, value)
+  }
+
+  /**
    * Returns 'true' if a value with identifier [key] exists and was successfully removed from the map, 'false' otherwise.
    *
    * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n), n = number of entries
@@ -301,6 +311,31 @@ class MyHashMap<K,V> : Iterable<Pair<K,V>> {
       }
     }
     return false
+  }
+
+  private fun setHelper(key: K, value: V): Boolean {
+    val startIndex = getIndexFromKey(key)
+    var currentIndex = startIndex
+    var current = array[currentIndex]
+
+    while (current != null) {
+      if (current.first == key) return setAtIndex(currentIndex, value)
+
+      if (currentIndex < maxIndex) currentIndex++
+      else currentIndex = 0
+
+      if (currentIndex == startIndex) break
+      current = array[currentIndex]
+    }
+    return false
+  }
+
+  private fun setAtIndex(index: Int, value: V): Boolean {
+    val pair = array[index] ?: return false
+    val key = pair.first
+
+    array[index] = Pair(key, value)
+    return true
   }
 
   /**
