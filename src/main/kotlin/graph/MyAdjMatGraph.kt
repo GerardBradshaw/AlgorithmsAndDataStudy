@@ -31,7 +31,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Returns true if an edge from [from] to [to] of length [length] is successfully created (length >= 0, vertices exist
    * and are unique). If length is 0, any existing edge is removed.
    *
-   * Efficiency: O(1) time, O(1) space
+   * Efficiency: O(v) time, O(1) space, v = number of vertices
    */
   fun addEdge(from: T, to: T, length: Int): Boolean {
     if (length < 0 || from == to) return false

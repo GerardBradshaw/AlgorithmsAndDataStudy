@@ -17,7 +17,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns the total number of edges.
    *
-   * Efficiency: O(n) time, O(1) space, n = number of edges
+   * Efficiency: O(v) time, O(1) space, v = number of edges
    */
   val numberOfEdges: Int
     get() {
@@ -36,7 +36,7 @@ class MyAdjListGraph<T> {
    * Adds a vertex at [vertexData] and links from this to vertices in [edges]. A vertex is created for each edge vertex
    * if it does not currently exist.
    *
-   * Efficiency: Typically O(e) time, O(1) space, e = number of edges. Worst case O(n * e) time, O(n) space, n = number of vertices
+   * Efficiency: Typically O(e) time, O(1) space, e = number of edges in collection. Worst case O(v * e) time, O(v) space, v = number of vertices
    */
   fun addVertex(vertexData: T, edges: Collection<T>?) {
     val vertex = Vertex(vertexData)
@@ -54,7 +54,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns true if a vertex with [vertexData] was inserted with no edges, or if one already exists with no edges.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of vertices
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(v) time, O(v) space, v = number of vertices
    */
   fun addVertexWithNoEdges(vertexData: T): Boolean {
     return addVertexToSet(Vertex(vertexData))
@@ -63,7 +63,7 @@ class MyAdjListGraph<T> {
   /**
    * Adds an edge from [vertexData1] to [vertexData2] and vice-versa. If a vertex doesn't exist, it's created.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(v) time, O(v) space, v = number of entries
    */
   fun addUndirectedEdge(vertexData1: T, vertexData2: T) {
     addEdge(vertexData1, vertexData2)
@@ -73,7 +73,7 @@ class MyAdjListGraph<T> {
   /**
    * Adds an edge from [from] to [to]. If a vertex doesn't exist, it's created.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(v + e) time, O(v) space, v = number of entries, e = number of edges
    */
   fun addEdge(from: T, to: T) {
     val fromVertex = bfs(from) ?: run { createAndStoreVertex(from) }
@@ -84,7 +84,7 @@ class MyAdjListGraph<T> {
   /**
    * Removes vertex and edges to and from [vertexData] if they exist.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun removeVertex(vertexData: T) {
     val vertex = bfs(vertexData)
@@ -99,7 +99,7 @@ class MyAdjListGraph<T> {
   /**
    * Removes an edge from vertex [from] to vertex [to] if the vertices are valid and an edge exists between them.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun removeEdge(from: T, to: T) {
     val fromVertex = bfs(from)
@@ -115,7 +115,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns true if the graph contains a vertex with [vertexData].
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun bfsContains(vertexData: T): Boolean {
     return bfs(vertexData) != null
@@ -124,7 +124,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns the graph in Breadth-First Search (BFS) order (in-order).
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun bfsPrint() {
     bfs(null, true)
@@ -133,7 +133,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns true if the graph contains a vertex with [vertexData].
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun dfsContains(vertexData: T): Boolean {
     return dfs(vertexData) != null
@@ -142,7 +142,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns the graph in Depth-First Search (DFS) order (pre-order).
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun dfsPrint() {
     dfs(null, true)
@@ -159,7 +159,7 @@ class MyAdjListGraph<T> {
   /**
    * Performs a Breadth-First Search (BFS) of [vertices] for [vertexData] and prints to the console if [print] is true.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   private fun bfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
     val visited = MyHashSet<Vertex<T>>()
@@ -221,7 +221,7 @@ class MyAdjListGraph<T> {
   /**
    * Performs a Depth-First Search (DFS) of [vertices] for [vertexData] and prints to the console if it's null.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   private fun dfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
     val visited = MyHashSet<Vertex<T>>()
@@ -257,7 +257,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns all vertices.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of entries
+   * Efficiency: O(v) time, O(v) space, v = number of entries
    */
   fun getVertexData(): MyHashSet<T> {
     val set = MyHashSet<T>()
@@ -271,7 +271,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns all edges from [vertexData] if they exist, or null if the vertex does not exist.
    *
-   * Efficiency: O(n) time, O(n) space, n = number of vertices
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   fun getEdgesFromData(vertexData: T): MyHashSet<T>? {
     val vertex = bfs(vertexData)
@@ -295,7 +295,7 @@ class MyAdjListGraph<T> {
   /**
    * Returns all edges as [Pair] where Pair.first and Pair.second are the 'to' and 'from' vertex data respectively.
    *
-   * Efficiency: O(n * e) time, O(n * e) space, n = number of vertices, e = number of edges
+   * Efficiency: O(v * e) time, O(v * e) space, v = number of vertices, e = number of edges
    */
   fun getAllEdges(): MyHashSet<Pair<T, T>> {
     val set = MyHashSet<Pair<T, T>>()
@@ -307,7 +307,7 @@ class MyAdjListGraph<T> {
   }
 
   /**
-   * Efficiency: At least O(n^2) time, O(n) space, n = number of entries
+   * Efficiency: At least O(v^2) time, O(v) space, v = number of entries
    */
   override fun equals(other: Any?): Boolean {
     if (other !is MyAdjListGraph<*>
@@ -321,7 +321,7 @@ class MyAdjListGraph<T> {
   }
 
   /**
-   * Efficiency: O(n) time, O(1) space, n = number of vertices
+   * Efficiency: O(v) time, O(1) space, v = number of vertices
    */
   override fun hashCode(): Int {
     var result = 0
@@ -356,7 +356,7 @@ class MyAdjListGraph<T> {
   /**
    * Adds [vertex] to [vertices] if it's unique.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of vertices
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(v) time, O(v) space, v = number of vertices
    */
   private fun addVertexToSet(vertex: Vertex<T>): Boolean {
     return vertices.add(vertex)
@@ -366,7 +366,7 @@ class MyAdjListGraph<T> {
    * Returns the [Vertex] at [vertexData] in [vertices] if one exists, otherwise a new one is created and that is
    * returned.
    *
-   * Efficiency: Typically O(1) time, O(1) space. Worst case O(n) time, O(n) space, n = number of entries
+   * Efficiency: Typically O(1) time, O(1) space. Worst case O(v + e) time, O(v) space, v = number of vertices, e = number of edges
    */
   private fun createAndStoreVertex(vertexData: T): Vertex<T> {
     val vertex = Vertex(vertexData)
