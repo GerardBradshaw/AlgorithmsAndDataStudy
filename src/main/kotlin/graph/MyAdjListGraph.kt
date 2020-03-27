@@ -1,9 +1,12 @@
 package graph
 
 import array.MyStringBuilder
+import map.MyHashMap
+import queue.MyPriorityQueue
 import queue.MyQueue
 import set.MyHashSet
 import stack.MyStack
+import java.lang.IndexOutOfBoundsException
 
 class MyAdjListGraph<T> {
 
@@ -24,7 +27,7 @@ class MyAdjListGraph<T> {
       var result = 0
 
       for (vertex in vertices) {
-        result += vertex.edgeCount
+        result += vertex.neighbourCount
       }
       return result
     }
@@ -148,110 +151,31 @@ class MyAdjListGraph<T> {
     dfs(null, true)
   }
 
-  // ---------------- Helpers ----------------
+  fun dijkstraWithQueue(fromValue: T, toValue: T): Int {
+    if (fromValue == toValue) return 0
 
-  private fun bfsAddToVisitedAndQueueAndPrint(vertex: Vertex<T>, visited: MyHashSet<Vertex<T>>, queue: MyQueue<Vertex<T>>, message: MyStringBuilder, print: Boolean) {
-    visited.add(vertex)
-    queue.enqueue(vertex)
-    if (print) message.append(vertex.data.toString()).append(", ")
+    val fromVertex = bfs(fromValue)
+    if (fromVertex != null) {
+      val toVertex = bfs(toValue)
+      if (toVertex != null) return dijkstraWithVerticesAndQueue(fromVertex, toVertex)
+    }
+    throw IndexOutOfBoundsException()
   }
 
   /**
-   * Performs a Breadth-First Search (BFS) of [vertices] for [vertexData] and prints to the console if [print] is true.
+   * Returns the shortest distance from vertex at [from] to [to], or -1 if no path exists.
    *
-   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
+   * TODO Efficiency: O() time, O() space
    */
-  private fun bfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
-    val visited = MyHashSet<Vertex<T>>()
-    val queue = MyQueue<Vertex<T>>()
-    var result: Vertex<T>? = null
-    val message = MyStringBuilder().append("BFS: ")
+  fun dijkstra(from: T, to: T): Int {
+    if (from == to) return 0
 
-    mainLoop@
-    for (v in vertices) {
-      if (visited.size == numberOfVertices) break@mainLoop
-
-      if (!visited.contains(v)) {
-        if (v.data == vertexData) {
-          result = v
-          break@mainLoop
-        }
-        bfsAddToVisitedAndQueueAndPrint(v, visited, queue, message, print)
-      }
-
-      while (queue.isNotEmpty()) {
-        for (e in queue.dequeue()!!.edges) { // Null-safe ensured by isNotEmpty condition
-          if (!visited.contains(e)) {
-            if (e.data == vertexData) {
-              result = e
-              break@mainLoop
-            }
-            bfsAddToVisitedAndQueueAndPrint(e, visited, queue, message, print)
-          }
-        }
-      }
+    val fromVertex = bfs(from)
+    if (fromVertex != null) {
+      val toVertex = bfs(to)
+      if (toVertex != null) return dijkstraWithVertices(fromVertex, toVertex)
     }
-    if (print) println(message.removeEnd(2).toString())
-    return result
-  }
-
-  /**
-   * Returns an unexplored [Vertex] connected to [vertex] if one exists. Also: adds vertex to [stack] if its never been
-   * explored (so its edges can be explored later); adds vertex data to [strBuilder] using toString(); adds vertex to
-   * [visited] so it won't be added to strBuilder or stack again.
-   */
-  private fun dfsExplore(vertex: Vertex<T>, stack: MyStack<Vertex<T>>, visited: MyHashSet<Vertex<T>>, strBuilder: MyStringBuilder, print: Boolean): Vertex<T>? {
-
-    if (!visited.contains(vertex)) {
-      stack.push(vertex)
-      visited.add(vertex)
-      if (print) strBuilder.append(vertex.data.toString()).append(", ")
-    }
-
-    for (edge in vertex.edges) {
-      if (!visited.contains(edge)) {
-        stack.push(vertex)
-        return edge
-      }
-    }
-
-    return null
-  }
-
-  /**
-   * Performs a Depth-First Search (DFS) of [vertices] for [vertexData] and prints to the console if it's null.
-   *
-   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
-   */
-  private fun dfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
-    val visited = MyHashSet<Vertex<T>>()
-    val stack = MyStack<Vertex<T>>()
-    val strBuilder = MyStringBuilder().append("DFS: ")
-
-    var current: Vertex<T>? = null
-
-    mainLoop@
-    for (v in vertices) {
-      if (visited.size == numberOfVertices) break@mainLoop
-
-      current = v
-
-      while (current != null) {
-        if (current.data == vertexData) break@mainLoop
-        current = dfsExplore(current, stack, visited, strBuilder, print)
-      }
-
-      while (stack.isNotEmpty()) {
-        current = stack.pop()
-
-        while (current != null) {
-          if (current.data == vertexData) break@mainLoop
-          current = dfsExplore(current, stack, visited, strBuilder, print)
-        }
-      }
-    }
-    if (print) println(strBuilder.removeEnd(2).toString())
-    return current
+    throw IndexOutOfBoundsException()
   }
 
   /**
@@ -277,7 +201,7 @@ class MyAdjListGraph<T> {
     val vertex = bfs(vertexData)
 
     if (vertex != null) {
-      val edges = vertex.edges
+      val edges = vertex.neighbours
 
       return if (edges.isEmpty()) null
       else {
@@ -339,8 +263,8 @@ class MyAdjListGraph<T> {
 
       builder.append("[").append(v.data.toString()).append(" -> ")
 
-      if (v.edges.isNotEmpty()) {
-        for (edge in v.edges) {
+      if (v.neighbours.isNotEmpty()) {
+        for (edge in v.neighbours) {
           builder.append(edge.data.toString()).append(", ")
         }
         builder.removeEnd(2)
@@ -352,6 +276,211 @@ class MyAdjListGraph<T> {
 
 
   // ---------------- Helpers ----------------
+
+  private fun dijkstraWithVerticesAndQueue(from: Vertex<T>, to: Vertex<T>): Int {
+    val visited = MyHashSet<Vertex<T>>()
+    val queue = MyPriorityQueue<VertexAndWeightPair<T>>()
+    queue.add(VertexAndWeightPair(from, 0),0)
+
+    while (!queue.isEmpty()) {
+      val currentVertexAndWeightPair = queue.poll()!! // loop ensures queue has data
+      val currentVertex = currentVertexAndWeightPair.vertex
+      val currentWeight = currentVertexAndWeightPair.weight
+
+      if (!visited.contains(currentVertex)) {
+        if (currentVertex == to) return currentWeight
+
+        for (neighbourVertex in currentVertex.neighbours) {
+          if (!visited.contains(neighbourVertex)) addVertexToQueue(neighbourVertex, queue, currentWeight)
+        }
+        visited.add(currentVertexAndWeightPair.vertex)
+      }
+    }
+    return -1
+  }
+
+  private fun addVertexToQueue(vertex: Vertex<T>, queue: MyPriorityQueue<VertexAndWeightPair<T>>, currentWeight: Int) {
+    val neighbourWeight = currentWeight + 1
+    val neighbourVertexAndWeightPair = VertexAndWeightPair(vertex, neighbourWeight)
+    queue.add(neighbourVertexAndWeightPair, neighbourWeight)
+  }
+
+  private fun bfsAddToVisitedAndQueueAndPrint(vertex: Vertex<T>, visited: MyHashSet<Vertex<T>>, queue: MyQueue<Vertex<T>>, message: MyStringBuilder, print: Boolean) {
+    visited.add(vertex)
+    queue.enqueue(vertex)
+    if (print) message.append(vertex.data.toString()).append(", ")
+  }
+
+  /**
+   * Returns a [MyHashMap] containing the distances from [from] to all other vertices in the map. If a vertex is not a
+   * neighbour of [from], the distance is set to Int.MAX_VALUE.
+   *
+   * Efficiency: O(v) time, O(1) space. v = number of vertices
+   */
+  private fun populateVerticesToCostsMap(from: Vertex<T>): MyHashMap<Vertex<T>, Int> {
+    val result = MyHashMap<Vertex<T>, Int>()
+
+    for (v in vertices) {
+      when {
+        from.neighbours.contains(v) -> result.put(v, 1)
+        v != from -> result.put(v, Int.MAX_VALUE)
+      }
+    }
+    return result
+  }
+
+  // TODO doc and replace Pairs with custom class
+  /**
+   * Returns the [Vertex] with least expensive cost to move to.
+   */
+  private fun getCheapestUnexplored(unexploredDistances: MyHashMap<Vertex<T>, Int>): Pair<Vertex<T>, Int> {
+    var result: Pair<Vertex<T>, Int>? = null
+
+    for (pair in unexploredDistances.entries) {
+      if (result == null) result = pair
+      else if (pair.second < result.second) result = pair
+    }
+
+    return result!!
+  }
+
+  // TODO doc and replace Pairs with custom class
+  private fun updateDistances(current: Pair<Vertex<T>, Int>, unexploredVerticesToCosts: MyHashMap<Vertex<T>, Int>) {
+    val currentVertex = current.first
+    val currentCost = current.second
+
+    for (vertexAndCost in unexploredVerticesToCosts) {
+      if (currentVertex.neighbours.contains(vertexAndCost.first)) {
+        val newCost = currentCost + 1
+
+        // TODO don't use pairs because distances are final
+        if (newCost < vertexAndCost.second) {
+          val vertex = vertexAndCost.first
+          unexploredVerticesToCosts.remove(vertex)
+          unexploredVerticesToCosts.put(vertex, newCost)
+        }
+      }
+    }
+  }
+
+  private fun dijkstraWithVertices(from: Vertex<T>, to: Vertex<T>): Int {
+
+    val unexploredVerticesToCosts = populateVerticesToCostsMap(from)
+
+    var currentVertexAndCost = Pair(from, 0)
+    var currentCost = 0
+
+    while (true) {
+      currentVertexAndCost = getCheapestUnexplored(unexploredVerticesToCosts)
+
+      currentCost = currentVertexAndCost.second
+      if (currentCost == Int.MAX_VALUE) return -1
+
+      updateDistances(currentVertexAndCost, unexploredVerticesToCosts)
+
+      unexploredVerticesToCosts.remove(currentVertexAndCost.first)
+
+      if (currentVertexAndCost.first == to) return currentCost
+    }
+  }
+
+  /**
+   * Performs a Breadth-First Search (BFS) of [vertices] for [vertexData] and prints to the console if [print] is true.
+   *
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
+   */
+  private fun bfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
+    val visited = MyHashSet<Vertex<T>>()
+    val queue = MyQueue<Vertex<T>>()
+    var result: Vertex<T>? = null
+    val message = MyStringBuilder().append("BFS: ")
+
+    mainLoop@
+    for (v in vertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
+      if (!visited.contains(v)) {
+        if (v.data == vertexData) {
+          result = v
+          break@mainLoop
+        }
+        bfsAddToVisitedAndQueueAndPrint(v, visited, queue, message, print)
+      }
+
+      while (queue.isNotEmpty()) {
+        for (e in queue.dequeue()!!.neighbours) { // Null-safe ensured by isNotEmpty condition
+          if (!visited.contains(e)) {
+            if (e.data == vertexData) {
+              result = e
+              break@mainLoop
+            }
+            bfsAddToVisitedAndQueueAndPrint(e, visited, queue, message, print)
+          }
+        }
+      }
+    }
+    if (print) println(message.removeEnd(2).toString())
+    return result
+  }
+
+  /**
+   * Returns an unexplored [Vertex] connected to [vertex] if one exists. Also: adds vertex to [stack] if its never been
+   * explored (so its edges can be explored later); adds vertex data to [strBuilder] using toString(); adds vertex to
+   * [visited] so it won't be added to strBuilder or stack again.
+   */
+  private fun dfsExplore(vertex: Vertex<T>, stack: MyStack<Vertex<T>>, visited: MyHashSet<Vertex<T>>, strBuilder: MyStringBuilder, print: Boolean): Vertex<T>? {
+
+    if (!visited.contains(vertex)) {
+      stack.push(vertex)
+      visited.add(vertex)
+      if (print) strBuilder.append(vertex.data.toString()).append(", ")
+    }
+
+    for (edge in vertex.neighbours) {
+      if (!visited.contains(edge)) {
+        stack.push(vertex)
+        return edge
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Performs a Depth-First Search (DFS) of [vertices] for [vertexData] and prints to the console if it's null.
+   *
+   * Efficiency: O(v + e) time, O(v) space, v = number of vertices, e = number of edges
+   */
+  private fun dfs(vertexData: T?, print: Boolean = false): Vertex<T>? {
+    val visited = MyHashSet<Vertex<T>>()
+    val stack = MyStack<Vertex<T>>()
+    val strBuilder = MyStringBuilder().append("DFS: ")
+
+    var current: Vertex<T>? = null
+
+    mainLoop@
+    for (v in vertices) {
+      if (visited.size == numberOfVertices) break@mainLoop
+
+      current = v
+
+      while (current != null) {
+        if (current.data == vertexData) break@mainLoop
+        current = dfsExplore(current, stack, visited, strBuilder, print)
+      }
+
+      while (stack.isNotEmpty()) {
+        current = stack.pop()
+
+        while (current != null) {
+          if (current.data == vertexData) break@mainLoop
+          current = dfsExplore(current, stack, visited, strBuilder, print)
+        }
+      }
+    }
+    if (print) println(strBuilder.removeEnd(2).toString())
+    return current
+  }
 
   /**
    * Adds [vertex] to [vertices] if it's unique.
@@ -376,22 +505,22 @@ class MyAdjListGraph<T> {
   }
 
 
-  // ---------------- Data class ----------------
+  // ---------------- Data classes ----------------
 
   data class Vertex<T>(var data: T) {
-    val edges: MyHashSet<Vertex<T>> = MyHashSet()
+    val neighbours: MyHashSet<Vertex<T>> = MyHashSet()
 
-    val edgeCount
-      get() = edges.size
+    val neighbourCount
+      get() = neighbours.size
 
     fun addEdge(vertex: Vertex<T>) {
-      edges.add(vertex)
+      neighbours.add(vertex)
     }
 
     fun removeEdge(vertexData: T) {
-      for (e in edges) {
+      for (e in neighbours) {
         if (e.data == vertexData) {
-          edges.remove(e)
+          neighbours.remove(e)
         }
       }
     }
@@ -399,7 +528,7 @@ class MyAdjListGraph<T> {
     fun getEdgesAsPairs(): MyHashSet<Pair<T, T>> {
       val returnSetUpdate = MyHashSet<Pair<T, T>>()
 
-      for (e in edges) {
+      for (e in neighbours) {
         returnSetUpdate.add(Pair(data, e.data))
       }
       return returnSetUpdate
@@ -411,6 +540,24 @@ class MyAdjListGraph<T> {
 
     override fun hashCode(): Int {
       return 31 * data.hashCode()
+    }
+
+    override fun toString(): String {
+      val stringBuilder = MyStringBuilder().append("[").append(data.toString()).append(" -> ")
+
+      if (neighbours.isNotEmpty()) {
+        for (neighbour in neighbours) {
+          stringBuilder.append(neighbour.data.toString()).append(", ")
+        }
+        stringBuilder.removeEnd(2)
+      }
+      return stringBuilder.append("]").toString()
+    }
+  }
+
+  private data class VertexAndWeightPair<T>(val vertex: Vertex<T>, var weight: Int)  {
+    override fun toString(): String {
+      return "(${vertex.data.toString()}, $weight)"
     }
   }
 }
