@@ -2,6 +2,7 @@ package graph
 
 import array.MyStringBuilder
 import map.MyHashMap
+import queue.MyPriorityQueue
 import queue.MyQueue
 import set.MyHashSet
 import stack.MyStack
@@ -10,12 +11,12 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   // ---------------- Member variables ----------------
 
-  private val matrix: Array<IntArray> = Array(vertices.size) { _ -> IntArray(vertices.size)}
+  private val adjacencyMatrix: Array<IntArray> = Array(vertices.size) { _ -> IntArray(vertices.size)}
   private val vertexValues: Array<Any>
   private var edgeCount = 0
 
   val numberOfVertices: Int
-    get() = matrix.size
+    get() = adjacencyMatrix.size
 
   val numberOfEdges: Int
     get() = edgeCount
@@ -41,10 +42,10 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
     if (fromIndex == -1 || toIndex == -1) return false
 
-    if (matrix[fromIndex][toIndex] == 0 && edgeLength != 0) edgeCount++
-    else if (matrix[fromIndex][toIndex] != 0 && edgeLength == 0) edgeCount--
+    if (adjacencyMatrix[fromIndex][toIndex] == 0 && edgeLength != 0) edgeCount++
+    else if (adjacencyMatrix[fromIndex][toIndex] != 0 && edgeLength == 0) edgeCount--
 
-    matrix[fromIndex][toIndex] = edgeLength
+    adjacencyMatrix[fromIndex][toIndex] = edgeLength
     return true
   }
 
@@ -90,7 +91,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     val index = vertexValues.indexOf(value as Any)
     if (index == -1) return result
 
-    val toEdges = matrix[index]
+    val toEdges = adjacencyMatrix[index]
 
     for (i in vertexValues.indices) {
       // Suppressing unchecked cast warning as vertices only contains type T
@@ -113,7 +114,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Efficiency: O(1) time, O(1) space
    */
   fun edgesAsMatrix(): Array<IntArray> {
-    return matrix
+    return adjacencyMatrix
   }
 
   /**
@@ -152,6 +153,61 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     dfs(null, true)
   }
 
+  fun dijkstra(fromValue: T, toValue: T): Int {
+    val fromIndex = getIndexOfValue(fromValue)
+
+    if (fromValue != -1) {
+      val toIndex = getIndexOfValue(toValue)
+      if (toIndex != -1) return dijkstraWithIndices(fromIndex, toIndex)
+    }
+    return -1
+  }
+
+  private fun dijkstraWithIndices(fromIndex: Int, toIndex: Int): Int {
+    val visitedIndices = MyHashSet<Int>()
+    val queue = MyPriorityQueue<IndexAndWeightPair>()
+    queue.add(IndexAndWeightPair(fromIndex, 0))
+
+    while (queue.isNotEmpty()) {
+      val currentIndexAndWeightPair = queue.poll()!! // loop guarantees result
+      val currentIndex = currentIndexAndWeightPair.index
+      val currentWeight = currentIndexAndWeightPair.weight
+
+      if (currentIndex == toIndex) return currentWeight
+
+      if (!visitedIndices.contains(currentIndex)) {
+        val currentNeighbourWeights = adjacencyMatrix[currentIndex]
+
+        for (i in currentNeighbourWeights.indices) {
+          if (!visitedIndices.contains(i)) {
+            if (currentNeighbourWeights[i] != 0) addNeighbourIndexAndWeightToQueue(currentIndex, currentWeight, i, queue)
+          }
+        }
+        visitedIndices.add(currentIndex)
+      }
+    }
+    return -1
+  }
+
+  private fun addNeighbourIndexAndWeightToQueue(parentIndex: Int, parentWeight: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndWeightPair>) {
+    val newWeight = parentWeight + adjacencyMatrix[parentIndex][neighbourIndex]
+    val neighbourIndexAndWeightPair = IndexAndWeightPair(neighbourIndex, newWeight)
+    queue.add(neighbourIndexAndWeightPair, newWeight)
+  }
+
+  private data class IndexAndWeightPair(val index: Int, val weight: Int = Int.MAX_VALUE) {
+    override fun toString(): String {
+      return "($index, $weight)"
+    }
+  }
+
+  private fun getIndexOfValue(value: T): Int {
+    for (i in vertexValues.indices) {
+      if (vertexValues[i] == value as Any) return i
+    }
+    return -1
+  }
+
   override fun equals(other: Any?): Boolean {
     if (other !is MyAdjMatGraph<*>
       || other.numberOfEdges != numberOfEdges
@@ -168,12 +224,12 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       else return false
     }
 
-    for (i in matrix.indices) {
+    for (i in adjacencyMatrix.indices) {
       val otherI = thisIndexToOtherIndex.get(i) ?: return false
 
-      for (j in matrix.indices) {
+      for (j in adjacencyMatrix.indices) {
         val otherJ = thisIndexToOtherIndex.get(j) ?: return false
-        if (matrix[i][j] != otherMatrix[otherI][otherJ]) return false
+        if (adjacencyMatrix[i][j] != otherMatrix[otherI][otherJ]) return false
       }
     }
     return true
@@ -182,10 +238,10 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   override fun hashCode(): Int {
     var hc = 0
 
-    for (i in matrix.indices) {
+    for (i in adjacencyMatrix.indices) {
       hc += vertexValues[i].hashCode()
-      for (j in matrix.indices) {
-        hc += matrix[i][j]
+      for (j in adjacencyMatrix.indices) {
+        hc += adjacencyMatrix[i][j]
       }
     }
     return hc
@@ -209,7 +265,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
         .append("Row ")
         .append(vertexValues[i].toString())
         .append(": ")
-        .append(intArrayToString(matrix[i]))
+        .append(intArrayToString(adjacencyMatrix[i]))
         .append("\n")
     }
 
@@ -227,7 +283,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     builder.removeEnd(2)
     return builder.append("]").toString()
   }
-  
+
   /**
    * Returns true if vertex at [value] is contained in [vertexValues] and prints the route if [print] is true.
    * Operation is performed using a Breadth-First Search.
@@ -326,7 +382,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       for (col in 0 until numberOfVertices) {
         @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
         if (!visited.contains(vertexValues[col] as T)) {
-          if (matrix[row][col] != 0) queue.enqueue(vertexValues[col] as T)
+          if (adjacencyMatrix[row][col] != 0) queue.enqueue(vertexValues[col] as T)
         }
       }
     }
@@ -356,7 +412,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       for (col in 0 until numberOfVertices) {
         @Suppress("UNCHECKED_CAST") // type T guaranteed in vertices
         if (!visited.contains(vertexValues[col] as T)) {
-          if (matrix[row][col] != 0) stack.push(vertexValues[col] as T)
+          if (adjacencyMatrix[row][col] != 0) stack.push(vertexValues[col] as T)
         }
       }
     }
