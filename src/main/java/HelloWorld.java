@@ -22,28 +22,25 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyHashSet<String> vertices = new MyHashSet<>();
-    vertices.addAll(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"));
-    MyAdjMatGraph<String> graph = new MyAdjMatGraph<String>(vertices.asList());
+    MyAdjListGraph<String> graph = new MyAdjListGraph<>();
 
-    graph.addUndirectedEdge("A","B",1);
-    graph.addUndirectedEdge("A","C",1);
-    graph.addUndirectedEdge("A","D",1);
-    graph.addUndirectedEdge("A","E",1);
-    graph.addUndirectedEdge("A","F",1);
-    graph.addUndirectedEdge("B","L",1);
-    graph.addUndirectedEdge("D","K",1);
-    graph.addUndirectedEdge("D","L",1);
-    graph.addUndirectedEdge("F","G",1);
-    graph.addUndirectedEdge("G","H",1);
-    graph.addUndirectedEdge("G","I",1);
-    graph.addUndirectedEdge("G","J",1);
+    graph.addUndirectedEdge("A","B");
+    graph.addUndirectedEdge("A","C");
+    graph.addUndirectedEdge("A","D");
+    graph.addUndirectedEdge("A","E");
+    graph.addUndirectedEdge("A","F");
+    graph.addUndirectedEdge("B","L");
+    graph.addUndirectedEdge("D","K");
+    graph.addUndirectedEdge("D","L");
+    graph.addUndirectedEdge("F","G");
+    graph.addUndirectedEdge("G","H");
+    graph.addUndirectedEdge("G","I");
+    graph.addUndirectedEdge("G","J");
+    graph.addUndirectedEdge("L","H");
+    graph.addVertexWithNoEdges("Z");
+    //System.out.println(graph.toString());
 
-    System.out.println(graph.toString());
-    System.out.println("HashCode: " + graph.hashCode());
-    //graph.bfsPrint();
-    graph.dfsPrint();
-    //System.out.println();
+    System.out.println(graph.dijkstraWithQueue("A", "D"));
   }
 
   // -------- Arrays --------
