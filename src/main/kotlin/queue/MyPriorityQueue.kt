@@ -16,11 +16,12 @@ class MyPriorityQueue<T> {
     return heap.isEmpty()
   }
 
-  fun insert(element: T, priority: Int = Int.MAX_VALUE) {
-    heap.insert(Item(element, priority))
+  fun add(element: T, priority: Int = Int.MAX_VALUE) {
+    val item = Item(element, priority)
+    heap.insert(item)
   }
 
-  fun pull(): T? {
+  fun poll(): T? {
     return heap.popMin().value
   }
 
@@ -30,6 +31,9 @@ class MyPriorityQueue<T> {
 
   override fun toString(): String {
     // TODO Change to an array heap sort
+
+    return heap.toString()
+    /*
 
     if (heap.isEmpty()) return "[]"
 
@@ -45,6 +49,8 @@ class MyPriorityQueue<T> {
     heap = heapCopy
 
     return builder.append("]").toString()
+
+     */
   }
 
   override fun equals(other: Any?): Boolean {
