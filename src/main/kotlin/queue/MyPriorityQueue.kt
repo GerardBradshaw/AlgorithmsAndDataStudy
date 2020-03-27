@@ -16,6 +16,10 @@ class MyPriorityQueue<T> {
     return heap.isEmpty()
   }
 
+  fun isNotEmpty(): Boolean {
+    return heap.isNotEmpty()
+  }
+
   fun add(element: T, priority: Int = Int.MAX_VALUE) {
     val item = Item(element, priority)
     heap.insert(item)
