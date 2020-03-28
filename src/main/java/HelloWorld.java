@@ -24,22 +24,21 @@ public class HelloWorld {
 
     MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"));
 
-    graph.addUndirectedEdge("A","B",1);
+    graph.addUndirectedEdge("A","B",4);
     graph.addUndirectedEdge("A","C",1);
-    graph.addUndirectedEdge("A","D",1);
-    graph.addUndirectedEdge("A","E",1);
-    graph.addUndirectedEdge("A","F",1);
-    graph.addUndirectedEdge("B","L",1);
-    graph.addUndirectedEdge("D","K",1);
-    graph.addUndirectedEdge("D","L",1);
-    graph.addUndirectedEdge("F","G",1);
+    graph.addUndirectedEdge("A","D",9);
+    graph.addUndirectedEdge("A","E",2);
+    graph.addUndirectedEdge("A","F",5);
+    graph.addUndirectedEdge("B","L",6);
+    graph.addUndirectedEdge("D","K",2);
+    graph.addUndirectedEdge("D","L",2);
+    graph.addUndirectedEdge("F","G",10);
     graph.addUndirectedEdge("G","H",1);
-    graph.addUndirectedEdge("G","I",1);
-    graph.addUndirectedEdge("G","J",1);
-    graph.addUndirectedEdge("L","H",1);
-    //System.out.println(graph.toString());
+    graph.addUndirectedEdge("G","I",4);
+    graph.addUndirectedEdge("L","H",7);
+    System.out.println(graph.toString());
 
-    System.out.println(graph.dijkstra("C", "H"));
+    System.out.println(graph.dijkstra("C", "J"));
   }
 
   // -------- Arrays --------
