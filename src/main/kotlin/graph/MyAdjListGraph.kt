@@ -175,7 +175,7 @@ class MyAdjListGraph<T> {
       val toVertex = bfs(to)
       if (toVertex != null) return dijkstraWithVertices(fromVertex, toVertex)
     }
-    throw IndexOutOfBoundsException()
+    throw Exception()
   }
 
   /**
@@ -274,8 +274,69 @@ class MyAdjListGraph<T> {
     return builder.removeEnd(1).toString()
   }
 
+  fun bellmanFord(sourceVertexData: T): MyHashMap<Vertex<T>, Int> {
+    val sourceVertex = bfs(sourceVertexData) ?: throw Exception()
+    return bellmanFordWithVertex(sourceVertex)
+  }
+
+  fun bellmanFordPrint(sourceVertexData: T) {
+    val vertexToDistanceMap = bellmanFord(sourceVertexData)
+
+    if (vertexToDistanceMap.isNotEmpty()) {
+      println("Distances from ${sourceVertexData.toString()} to other vertices: ")
+      for (vertexToDistance in vertexToDistanceMap) {
+        println("${vertexToDistance.first.data.toString()} = ${vertexToDistance.second}")
+      }
+    }
+    else println("Empty graph.")
+  }
+
 
   // ---------------- Helpers ----------------
+
+  private fun bellmanFordWithVertex(sourceVertex: Vertex<T>): MyHashMap<Vertex<T>, Int> {
+    val vertexToDistanceMap = initializeVertexToDistanceMap(sourceVertex)
+
+    val numberOfLoops = vertices.size - 1
+
+    for (i in 0 until numberOfLoops) {
+      bellmanFordRelaxVertices(vertexToDistanceMap)
+    }
+
+    return vertexToDistanceMap
+  }
+
+  private fun initializeVertexToDistanceMap(sourceVertex: Vertex<T>): MyHashMap<Vertex<T>, Int> {
+    val result = MyHashMap<Vertex<T>, Int>()
+
+    for (vertex in vertices) {
+      if (vertex == sourceVertex) result.put(vertex, 0)
+      else result.put(vertex, Int.MAX_VALUE)
+    }
+
+    return result
+  }
+
+  private fun bellmanFordRelaxVertices(vertexToDistanceMap: MyHashMap<Vertex<T>, Int>) {
+    for (vertex in vertexToDistanceMap.keys) {
+      bellmanFordRelaxation(vertex, vertexToDistanceMap)
+    }
+  }
+
+  private fun bellmanFordRelaxation(vertex: Vertex<T>, vertexToDistanceMap: MyHashMap<Vertex<T>, Int>) {
+    val distanceToVertex = vertexToDistanceMap.get(vertex)!! // Not null due to method usage
+
+    for (neighbour in vertex.neighbours) {
+      val currentDistanceToNeighbour = vertexToDistanceMap.get(neighbour)!! // Not null as all neighbours exist as vertices
+      val newDistanceToNeighbour = if (distanceToVertex != Int.MAX_VALUE) distanceToVertex + 1 else distanceToVertex
+
+      if (newDistanceToNeighbour < currentDistanceToNeighbour) {
+        vertexToDistanceMap.remove(neighbour)
+        vertexToDistanceMap.put(neighbour, newDistanceToNeighbour)
+      }
+    }
+  }
+
 
   private fun dijkstraWithVerticesAndQueue(from: Vertex<T>, to: Vertex<T>): Int {
     val visited = MyHashSet<Vertex<T>>()
