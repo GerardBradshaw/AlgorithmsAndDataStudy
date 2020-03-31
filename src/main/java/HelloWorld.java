@@ -1,13 +1,10 @@
 import array.JArraySorting;
-import graph.MyAdjListGraph;
 import graph.MyAdjMatGraph;
-import map.MyHashMap;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
 import tree.XMyBinarySearchTree;
-import trie.MyTrie;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -32,7 +29,7 @@ public class HelloWorld {
     graph.addEdge("6","7",3);
     System.out.println(graph.toString());
 
-    graph.bellmanFord("1");
+    graph.floydWarshall();
   }
 
   // -------- Arrays --------
