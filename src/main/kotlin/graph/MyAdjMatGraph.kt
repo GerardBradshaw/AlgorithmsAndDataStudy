@@ -35,7 +35,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Efficiency: O(v) time, O(1) space, v = number of vertices
    */
   fun addEdge(fromValue: T, toValue: T, edgeLength: Int): Boolean {
-    if (edgeLength < 0 || fromValue == toValue) return false
+    if (fromValue == toValue) return false
 
     val fromIndex = vertexValues.indexOf(fromValue as Any)
     val toIndex = vertexValues.indexOf(toValue as Any)
@@ -163,6 +163,142 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return -1
   }
 
+  fun bellmanFord(sourceValue: T) {
+    val index = getIndexOfValue(sourceValue)
+
+    if (index != -1) bellmanFordWithIndex(index)
+    else println("No such value (${sourceValue.toString()})")
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is MyAdjMatGraph<*>
+      || other.numberOfEdges != numberOfEdges
+      || other.numberOfVertices != numberOfVertices) return false
+
+    val otherVerticesList = other.getVertexData().asList()
+    val otherMatrix = other.edgesAsMatrix()
+    val thisIndexToOtherIndex: MyHashMap<Int, Int> = MyHashMap()
+
+    for (i in vertexValues.indices) {
+      val otherIndex = otherVerticesList.indexOf(vertexValues[i])
+
+      if (otherIndex != -1) thisIndexToOtherIndex.put(i, otherIndex)
+      else return false
+    }
+
+    for (i in adjacencyMatrix.indices) {
+      val otherI = thisIndexToOtherIndex.get(i) ?: return false
+
+      for (j in adjacencyMatrix.indices) {
+        val otherJ = thisIndexToOtherIndex.get(j) ?: return false
+        if (adjacencyMatrix[i][j] != otherMatrix[otherI][otherJ]) return false
+      }
+    }
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = 0
+
+    for (i in adjacencyMatrix.indices) {
+      result += vertexValues[i].hashCode()
+      for (j in adjacencyMatrix.indices) {
+        result += adjacencyMatrix[i][j]
+      }
+    }
+    return result
+  }
+
+  override fun toString(): String {
+    val builder = MyStringBuilder()
+
+    builder.append("Columns: ")
+
+    for (i in 0 until numberOfVertices) {
+      builder.append(vertexValues[i].toString()).append(", ")
+    }
+
+    builder.apply {
+      removeEnd(2)
+      append("\n") }
+
+    for (i in 0 until vertexValues.size) {
+      builder
+        .append("Row ")
+        .append(vertexValues[i].toString())
+        .append(": ")
+        .append(intArrayToString(adjacencyMatrix[i]))
+        .append("\n")
+    }
+
+    return builder.toString()
+  }
+
+
+  // ---------------- Helpers ----------------
+
+  private fun bellmanFordRelaxVertices(indexToDistanceMap: MyHashMap<Int, Int>) {
+    for (index in vertexValues.indices) {
+      bellmanFordRelaxVertexNeighbours(index, indexToDistanceMap)
+    }
+  }
+
+  private fun bellmanFordRelaxVertexNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+    val distanceToVertex = indexToDistanceMap.get(index)!! // Guaranteed to have value for all indices
+
+    val neighbourDistances = adjacencyMatrix[index]
+
+    for (neighbourIndex in neighbourDistances.indices) {
+      val currentDistanceToNeighbour = indexToDistanceMap.get(neighbourIndex)!! // Guaranteed to have value for all indices
+      val additionalDistanceToNeighbour = neighbourDistances[neighbourIndex]
+
+      val newDistanceToNeighbour =
+        if (distanceToVertex != Int.MAX_VALUE && additionalDistanceToNeighbour != 0) {
+          distanceToVertex + additionalDistanceToNeighbour
+        }
+        else Int.MAX_VALUE
+
+      if (newDistanceToNeighbour < currentDistanceToNeighbour) {
+        indexToDistanceMap.remove(neighbourIndex)
+        indexToDistanceMap.put(neighbourIndex, newDistanceToNeighbour)
+      }
+    }
+  }
+
+  private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+    println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
+
+    for (indexAndDistancePair in indexToDistanceMap) {
+      val vertexValue = vertexValues[indexAndDistancePair.first]
+      val distance = indexAndDistancePair.second
+
+      if (distance != Int.MAX_VALUE) println("${vertexValue.toString()} = $distance")
+      else println("${vertexValue.toString()} = inf")
+    }
+  }
+
+  private fun bellmanFordWithIndex(sourceIndex: Int) {
+    val indexToDistanceMap = initializeIndexToDistanceMap(sourceIndex)
+
+    val numberOfLoops = vertexValues.size - 1
+
+    for (i in 0 until numberOfLoops) {
+      bellmanFordRelaxVertices(indexToDistanceMap)
+    }
+
+    printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
+  }
+
+  private fun initializeIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
+    val result = MyHashMap<Int, Int>()
+
+    for (i in vertexValues.indices) {
+      if (i == sourceIndex) result.put(i, 0)
+      else result.put(i, Int.MAX_VALUE)
+    }
+    return result
+  }
+
   private fun dijkstraWithIndices(fromIndex: Int, toIndex: Int): Int {
     val visitedIndices = MyHashSet<Int>()
     val queue = MyPriorityQueue<IndexAndWeightPair>()
@@ -207,73 +343,6 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     }
     return -1
   }
-
-  override fun equals(other: Any?): Boolean {
-    if (other !is MyAdjMatGraph<*>
-      || other.numberOfEdges != numberOfEdges
-      || other.numberOfVertices != numberOfVertices) return false
-
-    val otherVerticesList = other.getVertexData().asList()
-    val otherMatrix = other.edgesAsMatrix()
-    val thisIndexToOtherIndex: MyHashMap<Int, Int> = MyHashMap()
-
-    for (i in vertexValues.indices) {
-      val otherIndex = otherVerticesList.indexOf(vertexValues[i])
-
-      if (otherIndex != -1) thisIndexToOtherIndex.put(i, otherIndex)
-      else return false
-    }
-
-    for (i in adjacencyMatrix.indices) {
-      val otherI = thisIndexToOtherIndex.get(i) ?: return false
-
-      for (j in adjacencyMatrix.indices) {
-        val otherJ = thisIndexToOtherIndex.get(j) ?: return false
-        if (adjacencyMatrix[i][j] != otherMatrix[otherI][otherJ]) return false
-      }
-    }
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var hc = 0
-
-    for (i in adjacencyMatrix.indices) {
-      hc += vertexValues[i].hashCode()
-      for (j in adjacencyMatrix.indices) {
-        hc += adjacencyMatrix[i][j]
-      }
-    }
-    return hc
-  }
-
-  override fun toString(): String {
-    val builder = MyStringBuilder()
-
-    builder.append("Columns: ")
-
-    for (i in 0 until numberOfVertices) {
-      builder.append(vertexValues[i].toString()).append(", ")
-    }
-
-    builder.apply {
-      removeEnd(2)
-      append("\n") }
-
-    for (i in 0 until vertexValues.size) {
-      builder
-        .append("Row ")
-        .append(vertexValues[i].toString())
-        .append(": ")
-        .append(intArrayToString(adjacencyMatrix[i]))
-        .append("\n")
-    }
-
-    return builder.toString()
-  }
-
-
-  // ---------------- Helpers ----------------
 
   private fun intArrayToString(array: IntArray): String {
     val builder = MyStringBuilder().append("[")
