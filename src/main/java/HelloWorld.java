@@ -1,5 +1,4 @@
 import array.JArraySorting;
-import com.sun.tools.jdeps.Graph;
 import graph.MyAdjListGraph;
 import graph.MyAdjMatGraph;
 import map.MyHashMap;
@@ -7,9 +6,6 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
-import org.jetbrains.annotations.NotNull;
-import set.MyHashSet;
-import sun.tools.jconsole.CreateMBeanDialog;
 import tree.XMyBinarySearchTree;
 import trie.MyTrie;
 
@@ -22,23 +18,21 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjListGraph<String> graph = new MyAdjListGraph<>(); //Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"));
+    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
 
-    graph.addUndirectedEdge("A","B");
-    graph.addUndirectedEdge("A","C");
-    graph.addUndirectedEdge("A","D");
-    graph.addUndirectedEdge("A","E");
-    graph.addUndirectedEdge("A","F");
-    graph.addUndirectedEdge("B","L");
-    graph.addUndirectedEdge("D","K");
-    graph.addUndirectedEdge("D","L");
-    graph.addUndirectedEdge("F","G");
-    graph.addUndirectedEdge("G","H");
-    graph.addUndirectedEdge("G","I");
-    graph.addUndirectedEdge("L","H");
+    graph.addEdge("1","2",6);
+    graph.addEdge("1","3",5);
+    graph.addEdge("1","4",5);
+    graph.addEdge("2","5",-1);
+    graph.addEdge("3","2",-2);
+    graph.addEdge("3","5",1);
+    graph.addEdge("4","3",-2);
+    graph.addEdge("4","6",-1);
+    graph.addEdge("5","7",3);
+    graph.addEdge("6","7",3);
     System.out.println(graph.toString());
 
-    graph.bellmanFordPrint("B");
+    graph.bellmanFord("1");
   }
 
   // -------- Arrays --------
