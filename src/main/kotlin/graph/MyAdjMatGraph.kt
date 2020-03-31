@@ -153,6 +153,13 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     dfs(null, true)
   }
 
+  /**
+   * Uses the Dijkstra shortest path algorithm to find the shortest distance from [fromValue] to [toValue] if they exist
+   * in the graph.
+   *
+   * Efficiency: Typically O(V * log(E)) time, O(E) space. Additional O(V) time if index lookup included. V = number of
+   * vertices, E = number of edges
+   */
   fun dijkstra(fromValue: T, toValue: T): Int {
     val fromIndex = getIndexOfValue(fromValue)
 
@@ -163,6 +170,12 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return -1
   }
 
+  /**
+   * Prints the shortest distance between the vertex at [sourceValue] (if it exists) and all other vertices using the
+   * Bellman-Ford shortest path algorithm.
+   *
+   * Efficiency: Typically O(V * E) time, O(V) space. V = number of vertices, E = number of edges
+   */
   fun bellmanFord(sourceValue: T) {
     val index = getIndexOfValue(sourceValue)
     val isValidIndex = index != -1
@@ -174,6 +187,12 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     else println("No such value (${sourceValue.toString()})")
   }
 
+  /**
+   * Returns true of a negative loop is present in the graph. Loop is detected using Bellman-Ford shortest path
+   * algorithm.
+   *
+   * Efficiency: O(V * E) time, O(V) space. V = number of vertices, E = number of edges
+   */
   fun detectNegativeLoopWithBellmanFord(): Boolean {
     val indexToDistanceMap = getCompletedBfIndexToDistanceMap(0)
     return relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)
@@ -250,12 +269,12 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     var changeCount = 0
 
     for (index in indexToDistanceMap.keys) {
-      if (bellmanFordRelaxVertexNeighbours(index, indexToDistanceMap)) changeCount++
+      if (bellmanFordRelaxNeighbours(index, indexToDistanceMap)) changeCount++
     }
     return changeCount != 0
   }
 
-  private fun bellmanFordRelaxVertexNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
+  private fun bellmanFordRelaxNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
     val distanceToVertex = indexToDistanceMap.get(index)!! // Guaranteed to have value for all indices
     val neighbourDistances = adjacencyMatrix[index]
     var mapDataChanged = false
