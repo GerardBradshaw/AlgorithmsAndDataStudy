@@ -279,20 +279,23 @@ class MyAdjListGraph<T> {
     return bellmanFordWithVertex(sourceVertex)
   }
 
-  fun bellmanFordPrint(sourceVertexData: T) {
-    val vertexToDistanceMap = bellmanFord(sourceVertexData)
-
-    if (vertexToDistanceMap.isNotEmpty()) {
-      println("Distances from ${sourceVertexData.toString()} to other vertices: ")
-      for (vertexToDistance in vertexToDistanceMap) {
-        println("${vertexToDistance.first.data.toString()} = ${vertexToDistance.second}")
-      }
-    }
-    else println("Empty graph.")
+  fun bellmanFordDetectLoop(sourceVertexData: T): Boolean {
+    val sourceVertex = bfs(sourceVertexData) ?: throw Exception()
+    return bellmanFordDetectLoopWithVertex(sourceVertex)
   }
 
 
   // ---------------- Helpers ----------------
+
+  private fun bellmanFordDetectLoopWithVertex(sourceVertex: Vertex<T>): Boolean {
+    val vertexToDistanceMap = bellmanFordWithVertex(sourceVertex)
+    var changeCount = 0
+
+    for (vertex in vertexToDistanceMap.keys) {
+      if (!bellmanFordRelaxVertexNeighbours(vertex, vertexToDistanceMap)) changeCount++
+    }
+    return changeCount != 0
+  }
 
   private fun bellmanFordWithVertex(sourceVertex: Vertex<T>): MyHashMap<Vertex<T>, Int> {
     val vertexToDistanceMap = initializeVertexToDistanceMap(sourceVertex)
@@ -319,12 +322,13 @@ class MyAdjListGraph<T> {
 
   private fun bellmanFordRelaxVertices(vertexToDistanceMap: MyHashMap<Vertex<T>, Int>) {
     for (vertex in vertexToDistanceMap.keys) {
-      bellmanFordRelaxation(vertex, vertexToDistanceMap)
+      bellmanFordRelaxVertexNeighbours(vertex, vertexToDistanceMap)
     }
   }
 
-  private fun bellmanFordRelaxation(vertex: Vertex<T>, vertexToDistanceMap: MyHashMap<Vertex<T>, Int>) {
+  private fun bellmanFordRelaxVertexNeighbours(vertex: Vertex<T>, vertexToDistanceMap: MyHashMap<Vertex<T>, Int>): Boolean {
     val distanceToVertex = vertexToDistanceMap.get(vertex)!! // Not null due to method usage
+    var mapDataChanged = false
 
     for (neighbour in vertex.neighbours) {
       val currentDistanceToNeighbour = vertexToDistanceMap.get(neighbour)!! // Not null as all neighbours exist as vertices
@@ -333,8 +337,10 @@ class MyAdjListGraph<T> {
       if (newDistanceToNeighbour < currentDistanceToNeighbour) {
         vertexToDistanceMap.remove(neighbour)
         vertexToDistanceMap.put(neighbour, newDistanceToNeighbour)
+        mapDataChanged = true
       }
     }
+    return mapDataChanged
   }
 
 
@@ -428,8 +434,8 @@ class MyAdjListGraph<T> {
 
     val unexploredVerticesToCosts = populateVerticesToCostsMap(from)
 
-    var currentVertexAndCost = Pair(from, 0)
-    var currentCost = 0
+    var currentVertexAndCost: Pair<Vertex<T>, Int>
+    var currentCost: Int
 
     while (true) {
       currentVertexAndCost = getCheapestUnexplored(unexploredVerticesToCosts)
