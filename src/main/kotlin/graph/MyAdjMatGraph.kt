@@ -198,6 +198,16 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)
   }
 
+  /**
+   * Prints a matrix representing the shortest path from each vertex to each other vertex using the
+   * Floyd-Warshall shortest path algorithm.
+   *
+   * Efficiency: O(V^3) time, O(V^2) space, V = number of vertices
+   */
+  fun floydWarshall() {
+    println(intMatrixToString(getFloydWarshallMatrix()))
+  }
+
   override fun equals(other: Any?): Boolean {
     if (other !is MyAdjMatGraph<*>
       || other.numberOfEdges != numberOfEdges
@@ -240,7 +250,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   override fun toString(): String {
     val builder = MyStringBuilder()
 
-    builder.append("Columns: ")
+    builder.append("Col: ")
 
     for (i in 0 until numberOfVertices) {
       builder.append(vertexValues[i].toString()).append(", ")
@@ -250,20 +260,58 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       removeEnd(2)
       append("\n") }
 
-    for (i in 0 until vertexValues.size) {
-      builder
-        .append("Row ")
-        .append(vertexValues[i].toString())
-        .append(": ")
-        .append(intArrayToString(adjacencyMatrix[i]))
-        .append("\n")
-    }
+    builder.append(intMatrixToString(adjacencyMatrix))
 
     return builder.toString()
   }
 
 
   // ---------------- Helpers ----------------
+
+  private fun getFloydWarshallMatrix(): Array<IntArray> {
+    val matrix = getInitialFWMatrix()
+
+    for (vertexIndex in vertexValues.indices) {
+
+      for (fromIndex in matrix.indices) {
+        if (fromIndex == vertexIndex) continue
+
+        val intArray = matrix[fromIndex]
+
+        for (toIndex in intArray.indices) {
+          if (toIndex == vertexIndex) continue
+
+          val fromToVertexDistance = matrix[fromIndex][vertexIndex]
+          val vertexToToDistance = matrix[vertexIndex][toIndex]
+
+          val newValue = if (fromToVertexDistance != Int.MAX_VALUE && vertexToToDistance != Int.MAX_VALUE)
+            fromToVertexDistance + vertexToToDistance else Int.MAX_VALUE
+
+          if (newValue < matrix[fromIndex][toIndex]) matrix[fromIndex][toIndex] = newValue
+        }
+      }
+    }
+    return matrix
+  }
+
+  private fun getInitialFWMatrix(): Array<IntArray> {
+    val result: Array<IntArray> = Array(vertexValues.size) { _ -> IntArray(vertexValues.size) }
+
+    for (i in adjacencyMatrix.indices) {
+      val intArray = adjacencyMatrix[i]
+
+      for (j in intArray.indices) {
+        val distance = intArray[j]
+
+        result[i][j] = when {
+          i == j -> 0
+          distance == 0 -> Int.MAX_VALUE
+          else -> distance
+        }
+      }
+    }
+    return result
+  }
 
   private fun relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
     var changeCount = 0
@@ -377,11 +425,33 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   private fun intArrayToString(array: IntArray): String {
     val builder = MyStringBuilder().append("[")
+
     for (int in array) {
-      builder.append(int.toString()).append(", ")
+      if (int == Int.MAX_VALUE) builder.append("---")
+      else {
+        when {
+          int < -10 -> builder.append(" ")
+          int < 0 -> builder.append(" ")
+          int > 10 -> builder.append("  ")
+          int >= 0 -> builder.append("  ")
+        }
+        builder.append(int.toString())
+      }
+
+      builder.append(", ")
     }
     builder.removeEnd(2)
     return builder.append("]").toString()
+  }
+
+  private fun intMatrixToString(matrix: Array<IntArray>): String {
+    if (matrix.size != vertexValues.size) return "error writing matrix"
+    val string = MyStringBuilder()
+
+    for (i in matrix.indices) {
+      string.append(vertexValues[i].toString()).append(": ").append(intArrayToString(matrix[i])).append("\n")
+    }
+    return string.toString()
   }
 
   /**
