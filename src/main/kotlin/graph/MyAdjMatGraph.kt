@@ -165,9 +165,18 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   fun bellmanFord(sourceValue: T) {
     val index = getIndexOfValue(sourceValue)
+    val isValidIndex = index != -1
 
-    if (index != -1) bellmanFordWithIndex(index)
+    if (isValidIndex) {
+      val indexToDistanceMap = getCompletedBfIndexToDistanceMap(index)
+      printBfIndexToDistanceMap(index, indexToDistanceMap)
+    }
     else println("No such value (${sourceValue.toString()})")
+  }
+
+  fun detectNegativeLoopWithBellmanFord(): Boolean {
+    val indexToDistanceMap = getCompletedBfIndexToDistanceMap(0)
+    return relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)
   }
 
   override fun equals(other: Any?): Boolean {
@@ -237,16 +246,19 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   // ---------------- Helpers ----------------
 
-  private fun bellmanFordRelaxVertices(indexToDistanceMap: MyHashMap<Int, Int>) {
-    for (index in vertexValues.indices) {
-      bellmanFordRelaxVertexNeighbours(index, indexToDistanceMap)
+  private fun relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
+    var changeCount = 0
+
+    for (index in indexToDistanceMap.keys) {
+      if (bellmanFordRelaxVertexNeighbours(index, indexToDistanceMap)) changeCount++
     }
+    return changeCount != 0
   }
 
-  private fun bellmanFordRelaxVertexNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+  private fun bellmanFordRelaxVertexNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
     val distanceToVertex = indexToDistanceMap.get(index)!! // Guaranteed to have value for all indices
-
     val neighbourDistances = adjacencyMatrix[index]
+    var mapDataChanged = false
 
     for (neighbourIndex in neighbourDistances.indices) {
       val currentDistanceToNeighbour = indexToDistanceMap.get(neighbourIndex)!! // Guaranteed to have value for all indices
@@ -261,11 +273,13 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       if (newDistanceToNeighbour < currentDistanceToNeighbour) {
         indexToDistanceMap.remove(neighbourIndex)
         indexToDistanceMap.put(neighbourIndex, newDistanceToNeighbour)
+        mapDataChanged = true
       }
     }
+    return mapDataChanged
   }
 
-  private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+  private fun printBfIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
     println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
 
     for (indexAndDistancePair in indexToDistanceMap) {
@@ -277,16 +291,14 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     }
   }
 
-  private fun bellmanFordWithIndex(sourceIndex: Int) {
+  private fun getCompletedBfIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
     val indexToDistanceMap = initializeIndexToDistanceMap(sourceIndex)
+    val numberOfPassesOverAllEdges = vertexValues.size - 1
 
-    val numberOfLoops = vertexValues.size - 1
-
-    for (i in 0 until numberOfLoops) {
-      bellmanFordRelaxVertices(indexToDistanceMap)
+    for (i in 0 until numberOfPassesOverAllEdges) {
+      if (!relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)) break
     }
-
-    printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
+    return indexToDistanceMap
   }
 
   private fun initializeIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
