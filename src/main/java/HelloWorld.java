@@ -20,16 +20,17 @@ public class HelloWorld {
     graph.addEdge("1","2",6);
     graph.addEdge("1","3",5);
     graph.addEdge("1","4",5);
-    graph.addEdge("2","5",-1);
-    graph.addEdge("3","2",-2);
+    graph.addEdge("2","5",1);
+    graph.addEdge("3","2",2);
     graph.addEdge("3","5",1);
-    graph.addEdge("4","3",-2);
-    graph.addEdge("4","6",-1);
+    graph.addEdge("4","3",2);
+    graph.addEdge("4","6",1);
     graph.addEdge("5","7",3);
     graph.addEdge("6","7",3);
-    System.out.println(graph.toString());
+    //System.out.println(graph.toString());
 
     graph.floydWarshall();
+    graph.dijkstra("1");
   }
 
   // -------- Arrays --------
