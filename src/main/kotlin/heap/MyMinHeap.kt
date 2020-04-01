@@ -163,13 +163,12 @@ class MyMinHeap<T : Comparable<T>>() {
         else return
       }
       else {
-        if (currentValue > rightValue) {
-          swapElementsInArray(currentIndex, rightIndex)
-          currentIndex = rightIndex
-        }
-        else if (currentValue > leftValue) {
-          swapElementsInArray(currentIndex, leftIndex)
-          currentIndex = leftIndex
+        val lesserChildIndex = if (leftValue <= rightValue) leftIndex else rightIndex
+        val lesserChildValue = array[lesserChildIndex]!! as T // Not null as array smallerIndex is either left or right index
+
+        if (currentValue < lesserChildValue) {
+          swapElementsInArray(currentIndex, lesserChildIndex)
+          currentIndex = lesserChildIndex
         }
         else return
       }
