@@ -154,20 +154,20 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   }
 
   /**
-   * Uses the Dijkstra shortest path algorithm to find the shortest distance from [fromValue] to [toValue] if they exist
-   * in the graph.
+   * Uses the Dijkstra shortest path algorithm to find the shortest distance from [sourceValue] to all others.
    *
    * Efficiency: Typically O(V * log(E)) time, O(E) space. Additional O(V) time if index lookup included. V = number of
    * vertices, E = number of edges
    */
-  fun dijkstra(fromValue: T, toValue: T): Int {
-    val fromIndex = getIndexOfValue(fromValue)
+  fun dijkstra(sourceValue: T) {
+    val sourceIndex = getIndexOfValue(sourceValue)
+    val validIndex = sourceIndex != -1
 
-    if (fromValue != -1) {
-      val toIndex = getIndexOfValue(toValue)
-      if (toIndex != -1) return dijkstraWithIndices(fromIndex, toIndex)
+    if (validIndex) {
+      val indexToDistanceMap = getIndexToDistanceMapWithDijkstra(sourceIndex)
+      return printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
     }
-    return -1
+    println("\"${sourceValue.toString()}\" invalid")
   }
 
   /**
@@ -182,7 +182,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
     if (isValidIndex) {
       val indexToDistanceMap = getCompletedBfIndexToDistanceMap(index)
-      printBfIndexToDistanceMap(index, indexToDistanceMap)
+      printIndexToDistanceMap(index, indexToDistanceMap)
     }
     else println("No such value (${sourceValue.toString()})")
   }
@@ -346,15 +346,15 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return mapDataChanged
   }
 
-  private fun printBfIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+  private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
     println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
 
     for (indexAndDistancePair in indexToDistanceMap) {
       val vertexValue = vertexValues[indexAndDistancePair.first]
       val distance = indexAndDistancePair.second
 
-      if (distance != Int.MAX_VALUE) println("${vertexValue.toString()} = $distance")
-      else println("${vertexValue.toString()} = inf")
+      if (distance != Int.MAX_VALUE) println("$vertexValue = $distance")
+      else println("$vertexValue = inf")
     }
   }
 
@@ -378,41 +378,41 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return result
   }
 
-  private fun dijkstraWithIndices(fromIndex: Int, toIndex: Int): Int {
-    val visitedIndices = MyHashSet<Int>()
-    val queue = MyPriorityQueue<IndexAndWeightPair>()
-    queue.add(IndexAndWeightPair(fromIndex, 0))
+  private fun getIndexToDistanceMapWithDijkstra(sourceIndex: Int): MyHashMap<Int, Int> {
+    val result = MyHashMap<Int, Int>()
+    val queue = MyPriorityQueue<IndexAndDistancePair>()
+    queue.add(IndexAndDistancePair(sourceIndex, 0))
 
     while (queue.isNotEmpty()) {
-      val currentIndexAndWeightPair = queue.poll()!! // loop guarantees result
-      val currentIndex = currentIndexAndWeightPair.index
-      val currentWeight = currentIndexAndWeightPair.weight
+      val indexAndDistancePair = queue.poll()!! // loop guarantees result
+      val index = indexAndDistancePair.index
+      val tailDistance = indexAndDistancePair.distance
 
-      if (currentIndex == toIndex) return currentWeight
+      if (!result.containsKey(index)) {
+        result.put(index, tailDistance)
 
-      if (!visitedIndices.contains(currentIndex)) {
-        val currentNeighbourWeights = adjacencyMatrix[currentIndex]
-
-        for (i in currentNeighbourWeights.indices) {
-          if (!visitedIndices.contains(i)) {
-            if (currentNeighbourWeights[i] != 0) addNeighbourIndexAndWeightToQueue(currentIndex, currentWeight, i, queue)
+        for (neighbourIndex in vertexValues.indices) {
+          if (!result.containsKey(neighbourIndex)) {
+            addNeighbourIndexAndDistanceToQueue(index, tailDistance, neighbourIndex, queue)
           }
         }
-        visitedIndices.add(currentIndex)
       }
     }
-    return -1
+    return result
   }
 
-  private fun addNeighbourIndexAndWeightToQueue(parentIndex: Int, parentWeight: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndWeightPair>) {
-    val newWeight = parentWeight + adjacencyMatrix[parentIndex][neighbourIndex]
-    val neighbourIndexAndWeightPair = IndexAndWeightPair(neighbourIndex, newWeight)
-    queue.add(neighbourIndexAndWeightPair, newWeight)
+  private fun addNeighbourIndexAndDistanceToQueue(index: Int, tailDistance: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndDistancePair>) {
+    val additionalDistanceToNeighbour = adjacencyMatrix[index][neighbourIndex]
+
+    if (additionalDistanceToNeighbour != 0) {
+      val newDistance = tailDistance + additionalDistanceToNeighbour
+      queue.add(IndexAndDistancePair(neighbourIndex, newDistance), newDistance)
+    }
   }
 
-  private data class IndexAndWeightPair(val index: Int, val weight: Int = Int.MAX_VALUE) {
+  private data class IndexAndDistancePair(val index: Int, val distance: Int = Int.MAX_VALUE) {
     override fun toString(): String {
-      return "($index, $weight)"
+      return "($index, $distance)"
     }
   }
 
