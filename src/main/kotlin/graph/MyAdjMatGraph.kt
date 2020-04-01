@@ -157,14 +157,14 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Uses the Dijkstra shortest path algorithm to find the shortest distance from [sourceValue] to all others.
    *
    * Efficiency: Typically O(V * log(E)) time, O(E) space. Additional O(V) time if index lookup included. V = number of
-   * vertices, E = number of edges
+   * vertices, E = number of edges. Worst case O(V^2) time.
    */
   fun dijkstra(sourceValue: T) {
     val sourceIndex = getIndexOfValue(sourceValue)
     val validIndex = sourceIndex != -1
 
     if (validIndex) {
-      val indexToDistanceMap = getIndexToDistanceMapWithDijkstra(sourceIndex)
+      val indexToDistanceMap = dijkstraGetIndexToDistanceMap(sourceIndex)
       return printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
     }
     println("\"${sourceValue.toString()}\" invalid")
@@ -181,7 +181,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     val isValidIndex = index != -1
 
     if (isValidIndex) {
-      val indexToDistanceMap = getCompletedBfIndexToDistanceMap(index)
+      val indexToDistanceMap = bfGetCompletedIndexToDistanceMap(index)
       printIndexToDistanceMap(index, indexToDistanceMap)
     }
     else println("No such value (${sourceValue.toString()})")
@@ -194,8 +194,8 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Efficiency: O(V * E) time, O(V) space. V = number of vertices, E = number of edges
    */
   fun detectNegativeLoopWithBellmanFord(): Boolean {
-    val indexToDistanceMap = getCompletedBfIndexToDistanceMap(0)
-    return relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)
+    val indexToDistanceMap = bfGetCompletedIndexToDistanceMap(0)
+    return bfRelaxDistancesWithSinglePassOverAllEdges(indexToDistanceMap)
   }
 
   /**
@@ -205,7 +205,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    * Efficiency: O(V^3) time, O(V^2) space, V = number of vertices
    */
   fun floydWarshall() {
-    println(intMatrixToString(getFloydWarshallMatrix()))
+    println(intMatrixToString(fwGetMatrix()))
   }
 
   override fun equals(other: Any?): Boolean {
@@ -268,33 +268,36 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   // ---------------- Helpers ----------------
 
-  private fun getFloydWarshallMatrix(): Array<IntArray> {
-    val matrix = getInitialFWMatrix()
+  private fun fwGetMatrix(): Array<IntArray> {
+    val fwMatrix = fwGetInitialMatrix()
+    val numberOfPasses = vertexValues.size - 1
 
-    for (vertexIndex in vertexValues.indices) {
-
-      for (fromIndex in matrix.indices) {
-        if (fromIndex == vertexIndex) continue
-
-        val intArray = matrix[fromIndex]
-
-        for (toIndex in intArray.indices) {
-          if (toIndex == vertexIndex) continue
-
-          val fromToVertexDistance = matrix[fromIndex][vertexIndex]
-          val vertexToToDistance = matrix[vertexIndex][toIndex]
-
-          val newValue = if (fromToVertexDistance != Int.MAX_VALUE && vertexToToDistance != Int.MAX_VALUE)
-            fromToVertexDistance + vertexToToDistance else Int.MAX_VALUE
-
-          if (newValue < matrix[fromIndex][toIndex]) matrix[fromIndex][toIndex] = newValue
-        }
-      }
+    for (vertexIndex in 0..numberOfPasses) {
+      fwUpdateMatrix(vertexIndex, fwMatrix)
     }
-    return matrix
+    return fwMatrix
   }
 
-  private fun getInitialFWMatrix(): Array<IntArray> {
+  private fun fwUpdateMatrix(vertexIndex: Int, fwMatrix: Array<IntArray>) {
+    for (fromIndex in fwMatrix.indices) {
+      if (fromIndex == vertexIndex) return
+      val intArray = fwMatrix[fromIndex]
+
+      for (toIndex in intArray.indices) {
+        if (toIndex == vertexIndex) continue
+
+        val fromToVertexDistance = fwMatrix[fromIndex][vertexIndex]
+        val vertexToToDistance = fwMatrix[vertexIndex][toIndex]
+
+        val newValue = if (fromToVertexDistance != Int.MAX_VALUE && vertexToToDistance != Int.MAX_VALUE)
+          fromToVertexDistance + vertexToToDistance else Int.MAX_VALUE
+
+        if (newValue < fwMatrix[fromIndex][toIndex]) fwMatrix[fromIndex][toIndex] = newValue
+      }
+    }
+  }
+
+  private fun fwGetInitialMatrix(): Array<IntArray> {
     val result: Array<IntArray> = Array(vertexValues.size) { _ -> IntArray(vertexValues.size) }
 
     for (i in adjacencyMatrix.indices) {
@@ -313,16 +316,16 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return result
   }
 
-  private fun relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
+  private fun bfRelaxDistancesWithSinglePassOverAllEdges(indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
     var changeCount = 0
 
     for (index in indexToDistanceMap.keys) {
-      if (bellmanFordRelaxNeighbours(index, indexToDistanceMap)) changeCount++
+      if (bfRelaxNeighbours(index, indexToDistanceMap)) changeCount++
     }
     return changeCount != 0
   }
 
-  private fun bellmanFordRelaxNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
+  private fun bfRelaxNeighbours(index: Int, indexToDistanceMap: MyHashMap<Int, Int>): Boolean {
     val distanceToVertex = indexToDistanceMap.get(index)!! // Guaranteed to have value for all indices
     val neighbourDistances = adjacencyMatrix[index]
     var mapDataChanged = false
@@ -346,29 +349,17 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return mapDataChanged
   }
 
-  private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
-    println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
-
-    for (indexAndDistancePair in indexToDistanceMap) {
-      val vertexValue = vertexValues[indexAndDistancePair.first]
-      val distance = indexAndDistancePair.second
-
-      if (distance != Int.MAX_VALUE) println("$vertexValue = $distance")
-      else println("$vertexValue = inf")
-    }
-  }
-
-  private fun getCompletedBfIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
-    val indexToDistanceMap = initializeIndexToDistanceMap(sourceIndex)
+  private fun bfGetCompletedIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
+    val indexToDistanceMap = bfInitializeIndexToDistanceMap(sourceIndex)
     val numberOfPassesOverAllEdges = vertexValues.size - 1
 
     for (i in 0 until numberOfPassesOverAllEdges) {
-      if (!relaxBfDistancesWithSinglePassOverAllEdges(indexToDistanceMap)) break
+      if (!bfRelaxDistancesWithSinglePassOverAllEdges(indexToDistanceMap)) break
     }
     return indexToDistanceMap
   }
 
-  private fun initializeIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
+  private fun bfInitializeIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
     val result = MyHashMap<Int, Int>()
 
     for (i in vertexValues.indices) {
@@ -378,7 +369,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return result
   }
 
-  private fun getIndexToDistanceMapWithDijkstra(sourceIndex: Int): MyHashMap<Int, Int> {
+  private fun dijkstraGetIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
     val result = MyHashMap<Int, Int>()
     val queue = MyPriorityQueue<IndexAndDistancePair>()
     queue.add(IndexAndDistancePair(sourceIndex, 0))
@@ -393,7 +384,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
         for (neighbourIndex in vertexValues.indices) {
           if (!result.containsKey(neighbourIndex)) {
-            addNeighbourIndexAndDistanceToQueue(index, tailDistance, neighbourIndex, queue)
+            dijkstraAddNeighbourIndexAndDistanceToQueue(index, tailDistance, neighbourIndex, queue)
           }
         }
       }
@@ -401,7 +392,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return result
   }
 
-  private fun addNeighbourIndexAndDistanceToQueue(index: Int, tailDistance: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndDistancePair>) {
+  private fun dijkstraAddNeighbourIndexAndDistanceToQueue(index: Int, tailDistance: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndDistancePair>) {
     val additionalDistanceToNeighbour = adjacencyMatrix[index][neighbourIndex]
 
     if (additionalDistanceToNeighbour != 0) {
@@ -410,9 +401,15 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     }
   }
 
-  private data class IndexAndDistancePair(val index: Int, val distance: Int = Int.MAX_VALUE) {
-    override fun toString(): String {
-      return "($index, $distance)"
+  private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
+    println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
+
+    for (indexAndDistancePair in indexToDistanceMap) {
+      val vertexValue = vertexValues[indexAndDistancePair.first]
+      val distance = indexAndDistancePair.second
+
+      if (distance != Int.MAX_VALUE) println("$vertexValue = $distance")
+      else println("$vertexValue = inf")
     }
   }
 
@@ -587,4 +584,11 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       }
     }
   }
+
+  private data class IndexAndDistancePair(val index: Int, val distance: Int = Int.MAX_VALUE) {
+    override fun toString(): String {
+      return "($index, $distance)"
+    }
+  }
+
 }
