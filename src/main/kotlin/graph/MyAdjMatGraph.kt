@@ -164,7 +164,8 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     val validIndex = sourceIndex != -1
 
     if (validIndex) {
-      val indexToDistanceMap = dijkstraGetIndexToDistanceMap(sourceIndex)
+      val indexToDistanceMap = MyHashMap<Int, Int>()
+      dijkstraUpdateIndexToDistanceMap(sourceIndex, indexToDistanceMap)
       return printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
     }
     println("\"${sourceValue.toString()}\" invalid")
@@ -206,6 +207,70 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
    */
   fun floydWarshall() {
     println(intMatrixToString(fwGetMatrix()))
+  }
+
+  // TODO KDoc
+  fun johnson(sourceValue: T) {
+    val sourceIndex = getIndexOfValue(sourceValue)
+    val validIndex = sourceIndex != -1
+
+    if (validIndex) {
+      val indexToTailWeightMap = johnsonGetInitialIndexToTailWeightMap()
+      val indexToDistanceMap = johnsonGetIndexToDistanceMap(indexToTailWeightMap, sourceIndex)
+
+      return printIndexToDistanceMap(sourceIndex, indexToDistanceMap)
+    }
+    println("\"${sourceValue.toString()}\" invalid")
+  }
+
+  private fun johnsonGetIndexToDistanceMap(indexToTailWeightMap: MyHashMap<Int, Int>, sourceIndex: Int): MyHashMap<Int, Int> {
+    val indexToDistanceMap = MyHashMap<Int, Int>()
+    val sourceTailWeight = indexToTailWeightMap.get(sourceIndex) ?: 0
+
+    val queue = MyPriorityQueue<IndexAndDistancePair>()
+    queue.add(IndexAndDistancePair(sourceIndex, sourceTailWeight))
+
+    while (queue.isNotEmpty()) {
+      val indexAndDistancePair = queue.poll()!! // loop guarantees result
+      val index = indexAndDistancePair.index
+      val tailWeight = indexAndDistancePair.distance + (indexToTailWeightMap.get(index) ?: 0)
+
+      if (!indexToDistanceMap.containsKey(index)) {
+        if (index == sourceIndex) indexToDistanceMap.put(index, 0)
+        else indexToDistanceMap.put(index, tailWeight - 2 * sourceTailWeight)
+
+        for (neighbourIndex in vertexValues.indices) {
+          if (!indexToDistanceMap.containsKey(neighbourIndex)) {
+            val additionalDistanceToNeighbour = adjacencyMatrix[index][neighbourIndex]
+
+            if (additionalDistanceToNeighbour != 0) {
+              val neighbourTailWeight = indexToTailWeightMap.get(neighbourIndex) ?: 0
+              val newDistance = additionalDistanceToNeighbour + tailWeight - neighbourTailWeight
+              queue.add(IndexAndDistancePair(neighbourIndex, newDistance), newDistance)
+            }
+          }
+        }
+      }
+    }
+    return indexToDistanceMap
+  }
+
+  private fun johnsonGetInitialIndexToTailWeightMap(): MyHashMap<Int, Int> {
+    val indexToDistanceMap = MyHashMap<Int, Int>()
+
+    for (index in vertexValues.indices) {
+      indexToDistanceMap.put(index, 0)
+    }
+    johnsonReWeight(indexToDistanceMap)
+    return indexToDistanceMap
+  }
+
+  private fun johnsonReWeight(indexToDistanceMap: MyHashMap<Int, Int>) {
+    val numberOfPassesOverAllEdges = vertexValues.size
+
+    for (i in 0 until numberOfPassesOverAllEdges) {
+      if (!bfRelaxDistancesWithSinglePassOverAllEdges(indexToDistanceMap)) break
+    }
   }
 
   override fun equals(other: Any?): Boolean {
@@ -280,11 +345,11 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
 
   private fun fwUpdateMatrix(vertexIndex: Int, fwMatrix: Array<IntArray>) {
     for (fromIndex in fwMatrix.indices) {
-      if (fromIndex == vertexIndex) return
+      if (fromIndex == vertexIndex) continue
       val intArray = fwMatrix[fromIndex]
 
       for (toIndex in intArray.indices) {
-        if (toIndex == vertexIndex) continue
+        if (toIndex == vertexIndex || fromIndex == toIndex) continue
 
         val fromToVertexDistance = fwMatrix[fromIndex][vertexIndex]
         val vertexToToDistance = fwMatrix[vertexIndex][toIndex]
@@ -369,8 +434,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     return result
   }
 
-  private fun dijkstraGetIndexToDistanceMap(sourceIndex: Int): MyHashMap<Int, Int> {
-    val result = MyHashMap<Int, Int>()
+  private fun dijkstraUpdateIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
     val queue = MyPriorityQueue<IndexAndDistancePair>()
     queue.add(IndexAndDistancePair(sourceIndex, 0))
 
@@ -379,17 +443,16 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
       val index = indexAndDistancePair.index
       val tailDistance = indexAndDistancePair.distance
 
-      if (!result.containsKey(index)) {
-        result.put(index, tailDistance)
+      if (!indexToDistanceMap.containsKey(index)) {
+        indexToDistanceMap.put(index, tailDistance)
 
         for (neighbourIndex in vertexValues.indices) {
-          if (!result.containsKey(neighbourIndex)) {
+          if (!indexToDistanceMap.containsKey(neighbourIndex)) {
             dijkstraAddNeighbourIndexAndDistanceToQueue(index, tailDistance, neighbourIndex, queue)
           }
         }
       }
     }
-    return result
   }
 
   private fun dijkstraAddNeighbourIndexAndDistanceToQueue(index: Int, tailDistance: Int, neighbourIndex: Int, queue: MyPriorityQueue<IndexAndDistancePair>) {
@@ -402,14 +465,16 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
   }
 
   private fun printIndexToDistanceMap(sourceIndex: Int, indexToDistanceMap: MyHashMap<Int, Int>) {
-    println("Distances from ${vertexValues[sourceIndex]} to other vertices: ")
+    val indexString = if (sourceIndex < 0) "source" else vertexValues[sourceIndex].toString()
+    println("Distances from $indexString to other vertices: ")
 
-    for (indexAndDistancePair in indexToDistanceMap) {
-      val vertexValue = vertexValues[indexAndDistancePair.first]
-      val distance = indexAndDistancePair.second
+    for (index in vertexValues.indices) {
+      val vertexValue = vertexValues[index]
+      val distance = indexToDistanceMap.get(index)
 
-      if (distance != Int.MAX_VALUE) println("$vertexValue = $distance")
-      else println("$vertexValue = inf")
+      val distanceString = if (distance == null || distance == Int.MAX_VALUE) "inf" else distance.toString()
+
+      println("$vertexValue = $distanceString")
     }
   }
 
@@ -424,7 +489,7 @@ class MyAdjMatGraph<T>(vertices: List<T>) {
     val builder = MyStringBuilder().append("[")
 
     for (int in array) {
-      if (int == Int.MAX_VALUE) builder.append("---")
+      if (int == Int.MAX_VALUE) builder.append("inf")
       else {
         when {
           int < -10 -> builder.append(" ")
