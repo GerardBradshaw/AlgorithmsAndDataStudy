@@ -15,22 +15,18 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
+    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("a", "b", "c", "x", "y", "z"));
 
-    graph.addEdge("1","2",6);
-    graph.addEdge("1","3",5);
-    graph.addEdge("1","4",5);
-    graph.addEdge("2","5",1);
-    graph.addEdge("3","2",2);
-    graph.addEdge("3","5",1);
-    graph.addEdge("4","3",2);
-    graph.addEdge("4","6",1);
-    graph.addEdge("5","7",3);
-    graph.addEdge("6","7",3);
+    graph.addEdge("a","b",-2);
+    graph.addEdge("b","c",-1);
+    graph.addEdge("c","a",4);
+    graph.addEdge("c","x",2);
+    graph.addEdge("c","y",-3);
+    graph.addEdge("z","x",1);
+    graph.addEdge("z","y",-4);
     //System.out.println(graph.toString());
 
     graph.floydWarshall();
-    graph.dijkstra("1");
   }
 
   // -------- Arrays --------
