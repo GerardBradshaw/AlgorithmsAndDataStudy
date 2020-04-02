@@ -1,5 +1,5 @@
 import array.JArraySorting;
-import graph.MyAdjMatGraph;
+import array.MyHeapSorter;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
@@ -15,18 +15,11 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    MyAdjMatGraph<String> graph = new MyAdjMatGraph<>(Arrays.asList("a", "b", "c", "x", "y", "z"));
+    int[] array = new int[] {10, 20, 15, 30, 40, 0, 5, 80, 60};
 
-    graph.addEdge("a","b",-2);
-    graph.addEdge("b","c",-1);
-    graph.addEdge("c","a",4);
-    graph.addEdge("c","x",2);
-    graph.addEdge("c","y",-3);
-    graph.addEdge("z","x",1);
-    graph.addEdge("z","y",-4);
-    //System.out.println(graph.toString());
+    MyHeapSorter sorter = new MyHeapSorter();
 
-    graph.floydWarshall();
+    System.out.println(Arrays.toString(sorter.sort(array)));
   }
 
   // -------- Arrays --------
