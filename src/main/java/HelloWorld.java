@@ -1,5 +1,5 @@
 import array.JArraySorting;
-import array.MyHeapSorter;
+import sort.MyHeapSorter;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
