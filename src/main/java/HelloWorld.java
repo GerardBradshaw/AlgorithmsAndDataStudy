@@ -4,6 +4,7 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
+import sort.MyMergeSorter;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,9 +16,11 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    int[] array = new int[] {10, 20, 15, 30, 40, 0, 5, 80, 60};
+    int[] array = new int[] {9,3,7,5,6,4,8,2,0};
+    //int[] array = new int[] {1, 3, 5, 7, 9};
+    //int[] array2 = new int[] {0,2,4,6,8,10,11,12,13};
 
-    MyHeapSorter sorter = new MyHeapSorter();
+    MyMergeSorter sorter = new MyMergeSorter();
 
     System.out.println(Arrays.toString(sorter.sort(array)));
   }
