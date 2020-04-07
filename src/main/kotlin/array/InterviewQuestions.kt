@@ -98,4 +98,32 @@ class InterviewQuestions {
       }
     }
   }
+
+  /**
+   * Returns true of [str] can be rearranged into a palindrome. Ignores spaces and characters in extended ASCII. O(n)
+   * time, O(1) space.
+   *
+   * Other methods:
+   * - Use a map to store the number of chars then iterate over the map to check there's an appropriate number of
+   * repeated letters. This is also O(n) time but O(n) space.
+   * - Use bit manipulation (see p198 of CtCI).
+   */
+  fun q1_4_palindromePermutation(str: String): Boolean {
+    val asciiCharCount = IntArray(128)
+    var strCharCount = 0
+    var numberOfOddChars = 0
+
+    for (c in str) {
+      val cInt = c.toInt()
+      if (cInt > 127 || cInt == 32) continue
+
+      asciiCharCount[cInt] += 1
+      strCharCount++
+
+      if (asciiCharCount[cInt] % 2 != 0) numberOfOddChars++
+      else numberOfOddChars--
+    }
+
+    return if (strCharCount % 2 == 0) numberOfOddChars == 0 else numberOfOddChars == 1
+  }
 }
