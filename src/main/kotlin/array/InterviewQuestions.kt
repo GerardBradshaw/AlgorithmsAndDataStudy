@@ -164,4 +164,37 @@ class InterviewQuestions {
       else -> return false
     }
   }
+
+  /**
+   * Returns a [String] representing the compressed form of [string] where the counts of each character is written rather
+   * than repeated characters if the compressed length is shorter than the original length. O(n) time, O(n) space.
+   *
+   * Other approaches:
+   * - Pre-compute the length of compressed string before calculating to potentially save space (increases actual time
+   * but still O(n)
+   * - Don't use a builder and use additional space O(n + k^2) time, k = number of character sequences. This is BAD.
+   */
+  fun q1_6_stringCompression(string: String): String {
+    val originalLength = string.length
+
+    if (originalLength > 2) {
+      var repeatCount = 0
+      var prevChar = '\u0000'
+      val builder = MyStringBuilder()
+
+      for (c in string) {
+        if (c != prevChar) {
+          if (prevChar != '\u0000') builder.append((repeatCount + 1).toString())
+          builder.append(c)
+          repeatCount = 0
+        } else if (prevChar != '\u0000') repeatCount++
+
+        prevChar = c
+      }
+      if (repeatCount != 0) builder.append((repeatCount + 1).toString())
+
+      if (builder.length() < originalLength) return builder.toString()
+    }
+    return string
+  }
 }

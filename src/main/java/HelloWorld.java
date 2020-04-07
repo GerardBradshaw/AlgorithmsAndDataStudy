@@ -20,7 +20,7 @@ public class HelloWorld {
 
     InterviewQuestions questions = new InterviewQuestions();
 
-    System.out.println(questions.q1_5_oneAway("pale", "bake"));
+    System.out.println(questions.q1_6_stringCompression("aabcccccaaa"));
   }
 
   // -------- Arrays --------
