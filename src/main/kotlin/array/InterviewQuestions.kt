@@ -1,6 +1,7 @@
 package array
 
 import map.MyHashMap
+import java.lang.Exception
 
 class InterviewQuestions {
 
@@ -60,5 +61,41 @@ class InterviewQuestions {
       else return false
     }
     return true
+  }
+
+  /**
+   * Replaces spaces in [charArray] with '%20'. Assumes there are blank spaces at the end of the array to accommodate
+   * the extra space required for additional characters. [length] is the initial length of charArray excluding end blanks.
+   * O(n) time, O(1) space.
+   *
+   * Other methods:
+   * - Copy to new array (O(n) time but O(n + s) space, s = number of spaces)
+   */
+  fun q1_3_URLify(charArray: CharArray, length: Int) {
+    var spaceCount = 0
+    for (i in 0..length - 1) if (charArray[i] == ' ') spaceCount++ // O(n)
+
+    val requiredLength = length + spaceCount * 2
+    if (charArray.size < requiredLength) throw Exception()
+    else if (length == requiredLength) return
+
+    val lastRequiredIndex = requiredLength - 1
+
+    var urlPointer = length - 1
+    var insertionPointer = lastRequiredIndex
+
+    while (insertionPointer >= 0) {
+      when (charArray[urlPointer]) {
+        ' ' -> {
+          charArray[insertionPointer--] = '0'
+          charArray[insertionPointer--] = '2'
+          charArray[insertionPointer--] = '%'
+          urlPointer--
+        }
+        else -> {
+          charArray[insertionPointer--] = charArray[urlPointer--]
+        }
+      }
+    }
   }
 }
