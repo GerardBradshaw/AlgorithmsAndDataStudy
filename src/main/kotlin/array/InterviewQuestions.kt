@@ -197,4 +197,38 @@ class InterviewQuestions {
     }
     return string
   }
+
+  /**
+   * Rotates and NxN [matrix] clockwise 90 degrees in O(N^2) time and O(1) space.
+   *
+   * Other approaches:
+   * - Copy to another matrix. Requires O(N^2) space.
+   * - Perform other mathematical rotations in O(N^2) time and O(1) space also.
+   */
+  fun q1_7_rotateMatrix(matrix: Array<IntArray>) {
+    val maxIndex = matrix.size - 1
+
+    for (row in 0 until maxIndex) {
+      for (column in 0 until (maxIndex - row)) {
+        if (row + column != maxIndex) {
+          val mirrorColumn = maxIndex - row
+          val mirrorRow = maxIndex - column
+
+          // Swap mirror values
+          val val1 = matrix[row][column]
+          matrix[row][column] = matrix[mirrorRow][mirrorColumn]
+          matrix[mirrorRow][mirrorColumn] = val1
+        }
+      }
+    }
+
+    // Rearrange rows
+    val size = matrix.size
+    for (col in 0..((matrix.size - 1) /2)) {
+      val col1 = matrix[col]
+      matrix[col] = matrix[size - 1 - col]
+      matrix[size - 1 - col] = col1
+    }
+  }
+
 }

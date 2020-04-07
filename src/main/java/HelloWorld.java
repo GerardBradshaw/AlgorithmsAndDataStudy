@@ -20,7 +20,13 @@ public class HelloWorld {
 
     InterviewQuestions questions = new InterviewQuestions();
 
-    System.out.println(questions.q1_6_stringCompression("aabcccccaaa"));
+    int[][] matrix = new int[][] {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
+
+    questions.q1_7_rotateMatrix(matrix);
+
+    for (int[] array : matrix) {
+      System.out.println(Arrays.toString(array));
+    }
   }
 
   // -------- Arrays --------
