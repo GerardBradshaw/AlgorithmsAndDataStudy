@@ -1,3 +1,4 @@
+import array.InterviewQuestions;
 import array.JArraySorting;
 import sort.MyHeapSorter;
 import hashtable.MyJHashTable;
@@ -17,11 +18,12 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    int[] array = new int[] {1,9,3,7,5,6,4,8,2};
+    InterviewQuestions questions = new InterviewQuestions();
 
-    MyQuickSorter sorter = new MyQuickSorter();
+    char[] charArray = {'h','i',' ','y','o','u',' ','!',' ', ' ', ' ', ' '};
+    questions.q1_3_URLify(charArray, 8);
 
-    System.out.println(Arrays.toString(sorter.sort(array)));
+    System.out.println(Arrays.toString(charArray));
   }
 
   // -------- Arrays --------
