@@ -20,10 +20,7 @@ public class HelloWorld {
 
     InterviewQuestions questions = new InterviewQuestions();
 
-    char[] charArray = {'h','i',' ','y','o','u',' ','!',' ', ' ', ' ', ' '};
-    questions.q1_3_URLify(charArray, 8);
-
-    System.out.println(Arrays.toString(charArray));
+    System.out.println(questions.q1_4_palindromePermutation("tac ocat"));
   }
 
   // -------- Arrays --------
