@@ -2,6 +2,7 @@ package array
 
 import map.MyHashMap
 import java.lang.Exception
+import kotlin.math.abs
 
 class InterviewQuestions {
 
@@ -100,7 +101,7 @@ class InterviewQuestions {
   }
 
   /**
-   * Returns true of [str] can be rearranged into a palindrome. Ignores spaces and characters in extended ASCII. O(n)
+   * Returns true of [string] can be rearranged into a palindrome. Ignores spaces and characters in extended ASCII. O(n)
    * time, O(1) space.
    *
    * Other methods:
@@ -108,12 +109,12 @@ class InterviewQuestions {
    * repeated letters. This is also O(n) time but O(n) space.
    * - Use bit manipulation (see p198 of CtCI).
    */
-  fun q1_4_palindromePermutation(str: String): Boolean {
+  fun q1_4_palindromePermutation(string: String): Boolean {
     val asciiCharCount = IntArray(128)
     var strCharCount = 0
     var numberOfOddChars = 0
 
-    for (c in str) {
+    for (c in string) {
       val cInt = c.toInt()
       if (cInt > 127 || cInt == 32) continue
 
@@ -125,5 +126,42 @@ class InterviewQuestions {
     }
 
     return if (strCharCount % 2 == 0) numberOfOddChars == 0 else numberOfOddChars == 1
+  }
+
+  /**
+   * Returns true if [string1] and [string2] are one edit away. An edit is defined as insertion of a character, deletion
+   * of a character, or replacement of a character. O(N) time, O(1) space.
+   *
+   * Other approaches:
+   * - Brute force (very slow)
+   */
+  fun q1_5_oneAway(string1: String, string2: String): Boolean {
+    when (abs(string1.length - string2.length)) {
+      0 -> {
+        var numberOfEdits = 0
+        for (i in string1.indices) {
+          if (string1[i] != string2[i]) numberOfEdits++
+        }
+        return numberOfEdits <= 1
+      }
+      1 -> {
+        val longerString = if (string1.length > string2.length) string1 else string2
+        val shorterString = if (longerString == string1) string2 else string1
+
+        var longerOffset = 0
+
+        for (i in shorterString.indices) {
+          val shorterStringChar = shorterString[i]
+          val longerStringChar = longerString[i + longerOffset]
+
+          if (shorterStringChar != longerStringChar) {
+            longerOffset++
+            if (longerOffset > 1) return false
+          }
+        }
+        return true
+      }
+      else -> return false
+    }
   }
 }

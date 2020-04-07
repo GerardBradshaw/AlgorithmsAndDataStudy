@@ -20,7 +20,7 @@ public class HelloWorld {
 
     InterviewQuestions questions = new InterviewQuestions();
 
-    System.out.println(questions.q1_4_palindromePermutation("tac ocat"));
+    System.out.println(questions.q1_5_oneAway("pale", "bake"));
   }
 
   // -------- Arrays --------
