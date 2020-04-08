@@ -1,10 +1,11 @@
-package array
+package questions
 
+import array.MyStringBuilder
 import map.MyHashMap
 import java.lang.Exception
 import kotlin.math.abs
 
-class InterviewQuestions {
+class S1_ArraysAndStrings {
 
   /**
    * Returns true if [string] has all unique characters. O(n) time, O(1) space. Assumes string is ASCII.
