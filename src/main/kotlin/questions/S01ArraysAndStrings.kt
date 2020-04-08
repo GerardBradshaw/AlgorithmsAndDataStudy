@@ -5,7 +5,7 @@ import map.MyHashMap
 import java.lang.Exception
 import kotlin.math.abs
 
-class S1_ArraysAndStrings {
+class S01ArraysAndStrings {
 
   /**
    * Returns true if [string] has all unique characters. O(n) time, O(1) space. Assumes string is ASCII.
@@ -15,7 +15,7 @@ class S1_ArraysAndStrings {
    * - Sort the array using heap sort for O(n log(n)) time (no extra space needed!) if modification of string allowed.
    * - Compare every char with all others for O(n^2) time.
    */
-  fun q1_1_isUnique(string: String): Boolean {
+  fun q0101isUnique(string: String): Boolean {
     if (string.length > 128) return false
 
     val asciiCharInString = BooleanArray(128)
@@ -32,9 +32,9 @@ class S1_ArraysAndStrings {
    *
    * Other methods:
    * - Sort strings then check if they are equal for O(n log(n)) time.
-   * - Use an approach similar to [q1_1_isUnique] if character space is known.
+   * - Use an approach similar to [q0101isUnique] if character space is known.
    */
-  fun q1_2_checkPermutation(string1: String, string2: String): Boolean {
+  fun q0102checkPermutation(string1: String, string2: String): Boolean {
     if (string1.length != string2.length) return false
 
     val charToCount = MyHashMap<Char, Int>()
@@ -73,7 +73,7 @@ class S1_ArraysAndStrings {
    * Other methods:
    * - Copy to new array (O(n) time but O(n + s) space, s = number of spaces)
    */
-  fun q1_3_URLify(charArray: CharArray, length: Int) {
+  fun q0103urlify(charArray: CharArray, length: Int) {
     var spaceCount = 0
     for (i in 0..length - 1) if (charArray[i] == ' ') spaceCount++ // O(n)
 
@@ -110,7 +110,7 @@ class S1_ArraysAndStrings {
    * repeated letters. This is also O(n) time but O(n) space.
    * - Use bit manipulation (see p198 of CtCI).
    */
-  fun q1_4_palindromePermutation(string: String): Boolean {
+  fun q0104palindromePermutation(string: String): Boolean {
     val asciiCharCount = IntArray(128)
     var strCharCount = 0
     var numberOfOddChars = 0
@@ -136,7 +136,7 @@ class S1_ArraysAndStrings {
    * Other approaches:
    * - Brute force (very slow)
    */
-  fun q1_5_oneAway(string1: String, string2: String): Boolean {
+  fun q0105oneAway(string1: String, string2: String): Boolean {
     when (abs(string1.length - string2.length)) {
       0 -> {
         var numberOfEdits = 0
@@ -175,7 +175,7 @@ class S1_ArraysAndStrings {
    * but still O(n)
    * - Don't use a builder and use additional space O(n + k^2) time, k = number of character sequences. This is BAD.
    */
-  fun q1_6_stringCompression(string: String): String {
+  fun q0106stringCompression(string: String): String {
     val originalLength = string.length
 
     if (originalLength > 2) {
@@ -206,7 +206,7 @@ class S1_ArraysAndStrings {
    * - Copy to another matrix. Requires O(N^2) space.
    * - Perform other mathematical rotations in O(N^2) time and O(1) space also.
    */
-  fun q1_7_rotateMatrix(matrix: Array<IntArray>) {
+  fun q0107rotateMatrix(matrix: Array<IntArray>) {
     val maxIndex = matrix.size - 1
 
     for (row in 0 until maxIndex) {
@@ -240,7 +240,7 @@ class S1_ArraysAndStrings {
    * first entry in the column is set to zero if any exist in the column. Then, rows/columns that start with zero in the
    * matrix are entirely zeroed.
    */
-  fun q1_8_zeroMatrix(matrix: Array<IntArray>) {
+  fun q0108zeroMatrix(matrix: Array<IntArray>) {
     val maxRow = matrix.size - 1
     val maxCol = matrix[0].size - 1
     val rowDelete = BooleanArray(matrix.size)
@@ -266,7 +266,7 @@ class S1_ArraysAndStrings {
   /**
    * See output.
    */
-  fun q1_9_stringRotation(string1: String, string2: String) {
+  fun q0109stringRotation(string1: String, string2: String) {
     println("Needs \"isSubstring()\" method. Basically, call isSubstring(s1s1, s2) after checking they're the same length. This needs O(N) time and space.")
   }
 }
