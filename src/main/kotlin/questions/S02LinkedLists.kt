@@ -129,6 +129,23 @@ class S02LinkedLists {
     return node
   }
 
+  data class Index(var value: Int)
+
+  /**
+   * Removes [node] from the list if it's not the last in the list by replacing its data with the data from its child.
+   * O(1) space and time.
+   *
+   * Other approaches:
+   * - I can't think of any! Could potentially add that if it's the last node (node.next == null), it's marked as a
+   * dummy (this would have to be a property of Node, though).
+   */
+  fun q0203DeleteMiddleNode(node: Node) {
+    val next = node.next ?: return
+    node.data = next.data
+    node.next = next.next
+    next.next = null
+  }
+
   class Node(var data: Int) {
     var next: Node? = null
 
@@ -161,5 +178,4 @@ class S02LinkedLists {
     }
   }
 
-  data class Index(var value: Int)
 }
