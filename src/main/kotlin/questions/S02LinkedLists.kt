@@ -146,6 +146,46 @@ class S02LinkedLists {
     next.next = null
   }
 
+  /**
+   * Partitions a linked list starting at [head] by moving all elements larger than [x] to the right, and all elements
+   * less than it to the left. Note that the partition element [x] can appear anywhere in the right side of the list.
+   * O(N) time, O(1) space.
+   *
+   * Other approaches:
+   * - Create 2 lists (one less than x, one greater than x), then join them. O(N) time and space.
+   * - Grow the list at the head and tail. This is the same as the approach I implemented except an initial walkthrough
+   * doesn't have to be done! O(N) time, O(N) space if a new list is created. O(1) space if the existing list is used
+   * (but need to keep track of the first element added to the right!).
+   */
+  fun q0204Partition(head: Node, x: Int) {
+    var maxPos = 0
+    var last = head
+
+    while (last.next != null) {
+      last = last.next!!
+      maxPos++
+    }
+
+    var pos = 0
+    var prev = head
+    var current = head.next ?: return
+
+    while (pos < maxPos) {
+      if (current.data >= x) {
+        prev.next = current.next
+        current.next = null
+        last.next = current
+        last = last.next!! // Just set to current which is not null
+        current = prev.next!! // Won't be null until pos > maxPos which is not possible in this loop
+      }
+      else {
+        current = current.next!! // Won't be null until pos > maxPos which is not possible in this loop
+        prev = prev.next!! // Won't be null until pos > maxPos which is not possible in this loop
+      }
+      pos++
+    }
+  }
+
   class Node(var data: Int) {
     var next: Node? = null
 

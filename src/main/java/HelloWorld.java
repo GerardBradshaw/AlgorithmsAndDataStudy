@@ -17,11 +17,13 @@ public class HelloWorld {
 
     S02LinkedLists questions = new S02LinkedLists();
 
-    S02LinkedLists.Node head = new S02LinkedLists.Node(4);
-    head.appendAllToTail(3,1,4,4,5,1,3,2,0);
+    S02LinkedLists.Node head = new S02LinkedLists.Node(3);
+    head.appendAllToTail(5,8,5,10,2,1);
     System.out.println(head.toString());
 
-    System.out.println(questions.q0202cReturnKthToLast(head, 9));
+    questions.q0204Partition(head, 5);
+    System.out.println(head);
+
   }
 
   // -------- Arrays --------
