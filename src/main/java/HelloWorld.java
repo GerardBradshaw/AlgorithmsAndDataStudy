@@ -1,9 +1,9 @@
-import questions.S1_ArraysAndStrings;
 import array.JArraySorting;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
+import questions.S02LinkedLists;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,15 +15,13 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S1_ArraysAndStrings questions = new S1_ArraysAndStrings();
+    S02LinkedLists questions = new S02LinkedLists();
 
-    int[][] matrix = new int[][] {{1,2,3,4},{5,0,6,7},{8,9,10,11},{12,13,14,0}};
+    S02LinkedLists.Node head = new S02LinkedLists.Node(4);
+    head.appendAllToTail(3,1,4,4,5,1,3,2,0);
+    System.out.println(head.toString());
 
-    questions.q1_8_zeroMatrix(matrix);
-
-    for (int[] array : matrix) {
-      System.out.println(Arrays.toString(array));
-    }
+    System.out.println(questions.q0202cReturnKthToLast(head, 9));
   }
 
   // -------- Arrays --------
