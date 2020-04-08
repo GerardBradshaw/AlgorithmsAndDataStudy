@@ -261,4 +261,11 @@ class InterviewQuestions {
       }
     }
   }
+
+  /**
+   * See output.
+   */
+  fun q1_9_stringRotation(string1: String, string2: String) {
+    println("Needs \"isSubstring()\" method. Basically, call isSubstring(s1s1, s2) after checking they're the same length. This needs O(N) time and space.")
+  }
 }
