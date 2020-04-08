@@ -5,7 +5,13 @@ import set.MyHashSet
 
 class S02LinkedLists {
 
-  fun q0201AremoveDups(head: Node) {
+  /**
+   * Removes duplicates from linked list given by [head] using a set. O(N) time, O(N) space.
+   *
+   * Other approaches:
+   * - See [q0201bRemoveDups] for method that trades space for time.
+   */
+  fun q0201aRemoveDups(head: Node) {
     val set = MyHashSet<Int>()
 
     var current: Node? = head
@@ -25,7 +31,13 @@ class S02LinkedLists {
     }
   }
 
-  fun q0201BremoveDups(head: Node) {
+  /**
+   * Removes duplicates from linked list given by [head] using 2 pointers. O(N^2) time, O(1) space.
+   *
+   * Other approaches:
+   * - See [q0201aRemoveDups] for method that trades time for space.
+   */
+  fun q0201bRemoveDups(head: Node) {
     var slowPointer: Node? = head
     var fastPointerPrev: Node? = head
     var fastPointer: Node? = head.next
@@ -48,6 +60,73 @@ class S02LinkedLists {
         }
       }
     }
+  }
+
+  /**
+   * Returns the value of the [k]th value from the end of the linked list given by [head] using 2 pointers. O(N) time,
+   * O(1) space.
+   *
+   * Other approaches:
+   * - Loop through to get the size, then loop through again and return value at size - k. O(N) time, O(1) space. But
+   * takes twice as long as the method I implemented since you have to loop over the list twice.
+   * - ([q0202bReturnKthToLast]) Use recursion to get to the end of the list, then return an increasing counter on the
+   * way back. When the counter is equal to k, print the value. O(N) time, O(N) space.
+   * - (C) Use recursion as above, but add a wrapper class to the counter and use it as a function parameter instead of a
+   * return value. Return the node instead. O(N) time, O(N) space.
+   */
+  fun q0202aReturnKthToLast(head: Node, k: Int): Int? {
+    var slow = head
+    var fast: Node? = head
+
+    // Move fast k away from slow
+    for (i in 0..k) {
+      if (fast == null) return null
+      fast = fast.next
+    }
+
+    // Move fast and slow at same speed. When fast is at the end, slow is at k from the end!
+    while (fast != null) {
+      slow = slow.next!!
+      fast = fast.next
+    }
+    return slow.data
+  }
+
+  /**
+   * Prints the value of the [k]th value from the end of the linked list given by [node] using recursion. O(N) space and
+   * time.
+   *
+   * See [q0202aReturnKthToLast] and [q0202cReturnKthToLast] for alternate approaches.
+   */
+  fun q0202bReturnKthToLast(node: Node, k: Int) {
+    q0202bReturnKthToLast(node, k)
+  }
+
+  private fun q0202bReturnKthToLastHelper(node: Node?, k: Int): Int {
+    if (node == null) return 0
+
+    val index = q0202bReturnKthToLastHelper(node.next, k) + 1
+    if (index == k) println(node.data)
+    return index
+  }
+
+  /**
+   * Returns the value of the [k]th vale from the end of the linked list given by [node] using recusion. O(N) space and
+   * time.
+   *
+   * See [q0202aReturnKthToLast] and [q0202bReturnKthToLast] for alternate approaches.
+   */
+  fun q0202cReturnKthToLast(node: Node, k: Int): Int? {
+    return q0202cReturnKthToLastHelper(node, k, Index(0))?.data
+  }
+
+  private fun q0202cReturnKthToLastHelper(head: Node?, k: Int, index: Index): Node? {
+    if (head == null) return null
+
+    val node = q0202cReturnKthToLastHelper(head.next, k, index)
+    index.value++
+    if (index.value == k + 1) return head
+    return node
   }
 
   class Node(var data: Int) {
@@ -81,4 +160,6 @@ class S02LinkedLists {
       return builder.removeEnd(2).append("]").toString()
     }
   }
+
+  data class Index(var value: Int)
 }
