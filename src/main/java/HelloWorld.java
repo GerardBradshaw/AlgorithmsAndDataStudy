@@ -1,12 +1,9 @@
-import array.InterviewQuestions;
+import questions.S1_ArraysAndStrings;
 import array.JArraySorting;
-import sort.MyHeapSorter;
 import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
-import sort.MyMergeSorter;
-import sort.MyQuickSorter;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -18,7 +15,7 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    InterviewQuestions questions = new InterviewQuestions();
+    S1_ArraysAndStrings questions = new S1_ArraysAndStrings();
 
     int[][] matrix = new int[][] {{1,2,3,4},{5,0,6,7},{8,9,10,11},{12,13,14,0}};
 
