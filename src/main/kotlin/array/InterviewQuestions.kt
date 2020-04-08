@@ -231,4 +231,34 @@ class InterviewQuestions {
     }
   }
 
+  /**
+   * If a zero exists in [matrix], the row and column containing it are all zeroed. O(M * N) time, O(M + N) space.
+   *
+   * Other approaches:
+   * - Could reduce space complexity to O(1) if first entry in row is set to zero if any zero exists in the row, and the
+   * first entry in the column is set to zero if any exist in the column. Then, rows/columns that start with zero in the
+   * matrix are entirely zeroed.
+   */
+  fun q1_8_zeroMatrix(matrix: Array<IntArray>) {
+    val maxRow = matrix.size - 1
+    val maxCol = matrix[0].size - 1
+    val rowDelete = BooleanArray(matrix.size)
+    val colDelete = BooleanArray(matrix[0].size)
+
+    for (row in 0..maxRow) {
+      for (col in 0..maxCol) {
+        if (matrix[row][col] == 0) {
+          rowDelete[row] = true
+          colDelete[col] = true
+        }
+      }
+    }
+
+    for (row in 0..maxRow) {
+      for (col in 0..maxCol) {
+        if (rowDelete[row]) matrix[row][col] = 0
+        if (colDelete[col]) matrix[row][col] = 0
+      }
+    }
+  }
 }

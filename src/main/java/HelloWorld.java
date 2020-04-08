@@ -20,9 +20,9 @@ public class HelloWorld {
 
     InterviewQuestions questions = new InterviewQuestions();
 
-    int[][] matrix = new int[][] {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
+    int[][] matrix = new int[][] {{1,2,3,4},{5,0,6,7},{8,9,10,11},{12,13,14,0}};
 
-    questions.q1_7_rotateMatrix(matrix);
+    questions.q1_8_zeroMatrix(matrix);
 
     for (int[] array : matrix) {
       System.out.println(Arrays.toString(array));
