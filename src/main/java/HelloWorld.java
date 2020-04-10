@@ -17,12 +17,17 @@ public class HelloWorld {
 
     S02LinkedLists questions = new S02LinkedLists();
 
-    S02LinkedLists.Node head = new S02LinkedLists.Node(3);
-    head.appendAllToTail(5,8,5,10,2,1);
-    System.out.println(head.toString());
+    S02LinkedLists.Node n = new S02LinkedLists.Node(6);
+    n.appendAllToTail(1,7);
+    System.out.println(n.toString());
 
-    questions.q0204Partition(head, 5);
-    System.out.println(head);
+    S02LinkedLists.Node m = new S02LinkedLists.Node(2);
+    m.appendAllToTail(9,5);
+    System.out.println(m.toString());
+
+
+    S02LinkedLists.Node r = questions.q0205cSumLists(n, m);
+    System.out.println(r);
 
   }
 

@@ -117,10 +117,10 @@ class S02LinkedLists {
    * See [q0202aReturnKthToLast] and [q0202bReturnKthToLast] for alternate approaches.
    */
   fun q0202cReturnKthToLast(node: Node, k: Int): Int? {
-    return q0202cReturnKthToLastHelper(node, k, Index(0))?.data
+    return q0202cReturnKthToLastHelper(node, k, Q0202cIndex(0))?.data
   }
 
-  private fun q0202cReturnKthToLastHelper(head: Node?, k: Int, index: Index): Node? {
+  private fun q0202cReturnKthToLastHelper(head: Node?, k: Int, index: Q0202cIndex): Node? {
     if (head == null) return null
 
     val node = q0202cReturnKthToLastHelper(head.next, k, index)
@@ -129,7 +129,7 @@ class S02LinkedLists {
     return node
   }
 
-  data class Index(var value: Int)
+  private data class Q0202cIndex(var value: Int)
 
   /**
    * Removes [node] from the list if it's not the last in the list by replacing its data with the data from its child.
@@ -186,6 +186,115 @@ class S02LinkedLists {
     }
   }
 
+  /**
+   * Returns a [Node] representing the result of adding [head1] and [head2] using an iterative approach. All LLs are in
+   * the form [1's, 10's, 100's, ...]. O(N + M) time, O(L) space, M = length of head1, N = length of head 2, L =
+   * max(M, N)
+   *
+   * Other approaches:
+   * - Use recursion (see [q0205bSumLists]).
+   */
+  fun q0205aSumLists(head1: Node, head2: Node): Node {
+    var current1: Node? = head1
+    var current2: Node? = head2
+    var carryOver = false
+    var currentResult = Node(0)
+    val resultHeadParent = currentResult
+
+    while (current1 != null || current2 != null) {
+      val value1 = current1?.data ?: 0
+      val value2 = current2?.data ?: 0
+      var sum = value1 + value2 + if(carryOver) 1 else 0
+      carryOver = false
+
+      if (sum > 9) {
+        carryOver = true
+        sum -= 10
+      }
+
+      currentResult.next = Node(sum)
+      currentResult = currentResult.next!! // next just added
+      current1 = current1?.next
+      current2 = current2?.next
+    }
+
+    if (carryOver) currentResult.next = Node(1)
+
+    return resultHeadParent.next!!
+  }
+
+  /** Returns a [Node] representing the result of adding [head1] and [head2] using a recursive approach. All LLs are in
+   * the form [1's, 10's, 100's, ...]. O(N + M) time, O(L) space, M = length of head1, N = length of head2, L = max(M,N).
+   *
+   * Other approaches:
+   * - Use iteration (see [q0205aSumLists]).
+   */
+  fun q0205bSumLists(head1: Node, head2: Node): Node {
+    return q0205bHelper(head1, head2, false)!!
+  }
+
+  private fun q0205bHelper(node1: Node?, node2: Node?, carryOver: Boolean): Node? {
+    if (node1 == null && node2 == null && !carryOver) {
+      return null
+    }
+
+    var value = (node1?.data ?: 0) + (node2?.data ?: 0) + if (carryOver) 1 else 0
+    val returnCarry = value > 9
+    if (returnCarry) value -= 10
+
+    val result = Node(value)
+
+    if (node1 != null || node2 != null) {
+      val resultNext = q0205bHelper(node1?.next, node2?.next, returnCarry)
+      result.next = resultNext
+    }
+
+    return result
+  }
+
+  /**
+   * Returns a [Node] representing the result of adding [head1] and [head2] using a recursive approach. All LLs are in
+   * the form [..., 100's, 10's, 1's]. O(N + M) time, O(L) space, M = length of head1, N = length of head2, L = max(M,N).
+   *
+   * Other approaches:
+   * - Use iteration.
+   */
+  fun q0205cSumLists(head1: Node, head2: Node): Node {
+    var current1: Node? = head1
+    var current2: Node? = head2
+
+    while (current1 != null && current2 != null) {
+      current1 = current1.next
+      current2 = current2.next
+    }
+
+    while (current1 != null) head2.appendToHead(0)
+    while (current2 != null) head1.appendToHead(0)
+
+    val result = q0205cHelper(head1, head2)
+    if (result.carryOver) result.sum!!.appendToHead(1)
+    return result.sum!!
+  }
+
+  private fun q0205cHelper(node1: Node?, node2: Node?): Q0205cPartialSum {
+    if (node1 == null && node2 == null) {
+      return Q0205cPartialSum()
+    }
+
+    val partialSum = q0205cHelper(node1?.next, node2?.next)
+    var result = (node1?.data ?: 0) + (node2?.data ?: 0) + if (partialSum.carryOver) 1 else 0
+
+    val resultCarry = result > 9
+    if (resultCarry) result -= 10
+
+    if (partialSum.sum == null) partialSum.sum = Node(result) else partialSum.sum!!.appendToHead(result)
+    partialSum.carryOver = resultCarry
+
+    return partialSum
+  }
+
+  private data class Q0205cPartialSum(var sum: Node? = null, var carryOver: Boolean = false)
+
   class Node(var data: Int) {
     var next: Node? = null
 
@@ -193,6 +302,13 @@ class S02LinkedLists {
       var last = this
       while (last.next != null) last = last.next!!
       last.next = Node(data)
+    }
+
+    fun appendToHead(data: Int) {
+      val oldHead = Node(this.data)
+      oldHead.next = this.next
+      this.next = oldHead
+      this.data = data
     }
 
     fun appendAllToTail(vararg data: Int) {
@@ -217,5 +333,4 @@ class S02LinkedLists {
       return builder.removeEnd(2).append("]").toString()
     }
   }
-
 }
