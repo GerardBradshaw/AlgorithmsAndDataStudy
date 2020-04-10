@@ -22,7 +22,7 @@ public class HelloWorld {
     System.out.println(n.toString());
 
     S02LinkedLists.Node m = new S02LinkedLists.Node(2);
-    m.appendAllToTail(9,5);
+    m.appendAllToTail(9,5,1);
     System.out.println(m.toString());
 
 

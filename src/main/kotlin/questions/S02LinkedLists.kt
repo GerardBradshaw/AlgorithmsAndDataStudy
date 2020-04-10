@@ -272,8 +272,8 @@ class S02LinkedLists {
     while (current2 != null) head1.appendToHead(0)
 
     val result = q0205cHelper(head1, head2)
-    if (result.carryOver) result.sum!!.appendToHead(1)
-    return result.sum!!
+    if (result.carryOver) result.list!!.appendToHead(1)
+    return result.list!!
   }
 
   private fun q0205cHelper(node1: Node?, node2: Node?): Q0205cPartialSum {
@@ -281,19 +281,19 @@ class S02LinkedLists {
       return Q0205cPartialSum()
     }
 
-    val partialSum = q0205cHelper(node1?.next, node2?.next)
-    var result = (node1?.data ?: 0) + (node2?.data ?: 0) + if (partialSum.carryOver) 1 else 0
+    val result = q0205cHelper(node1?.next, node2?.next)
 
-    val resultCarry = result > 9
-    if (resultCarry) result -= 10
+    var sum = (node1?.data ?: 0) + (node2?.data ?: 0) + if (result.carryOver) 1 else 0
+    val nextCarryOver = sum > 9
+    if (nextCarryOver) sum -= 10
 
-    if (partialSum.sum == null) partialSum.sum = Node(result) else partialSum.sum!!.appendToHead(result)
-    partialSum.carryOver = resultCarry
+    if (result.list == null) result.list = Node(sum) else result.list!!.appendToHead(sum)
+    result.carryOver = nextCarryOver
 
-    return partialSum
+    return result
   }
 
-  private data class Q0205cPartialSum(var sum: Node? = null, var carryOver: Boolean = false)
+  private data class Q0205cPartialSum(var list: Node? = null, var carryOver: Boolean = false)
 
   class Node(var data: Int) {
     var next: Node? = null
