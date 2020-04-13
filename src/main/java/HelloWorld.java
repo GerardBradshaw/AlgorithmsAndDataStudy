@@ -4,6 +4,7 @@ import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
 import questions.S02LinkedLists;
+import questions.S03StacksAndQueues;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,20 +16,37 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S02LinkedLists questions = new S02LinkedLists();
+    S03StacksAndQueues questions = new S03StacksAndQueues();
 
-    S02LinkedLists.Node list = new S02LinkedLists.Node(1);
-    list.appendAllToTail(2,3);
+    S03StacksAndQueues.Q0301Stack stack = new S03StacksAndQueues.Q0301Stack();
 
-    S02LinkedLists.Node loop = new S02LinkedLists.Node(4);
-    loop.appendAllToTail(5,6,7,8,9,10,11);
+    stack.push(0,1);
+    stack.push(0,2);
+    stack.push(0,3);
+    stack.push(0,4);
+    stack.push(0,5);
 
-    list.appendListToTail(loop);
-    loop.appendListToTail(loop);
+    System.out.println(stack.pop(0));
+    System.out.println(stack.pop(0));
+    System.out.println(stack.pop(0));
+    System.out.println(stack.pop(0));
+    System.out.println(stack.pop(0));
 
-    S02LinkedLists.Node startOfLoop = questions.q0208LoopDetection(list);
-    if (startOfLoop != null) System.out.println(startOfLoop.getValue());
-    else System.out.println("no intersection");
+    stack.push(1, 10);
+    stack.push(1, 9);
+    stack.push(1, 8);
+    stack.push(1, 7);
+    stack.push(1, 6);
+    stack.push(1, 5);
+    stack.push(1, 4);
+    stack.push(1, 3);
+    stack.push(1, 2);
+    stack.push(1, 1);
+    stack.push(1, 1);
+
+
+    System.out.println(stack.pop(1));
+
 
   }
 
