@@ -17,19 +17,17 @@ public class HelloWorld {
 
     S02LinkedLists questions = new S02LinkedLists();
 
-    S02LinkedLists.Node commonList = new S02LinkedLists.Node(7);
-    commonList.appendAllToTail(2,1);
+    S02LinkedLists.Node list = new S02LinkedLists.Node(1);
+    list.appendAllToTail(2,3);
 
-    S02LinkedLists.Node head1= new S02LinkedLists.Node(3);
-    head1.appendAllToTail(1,5,9);
-    head1.appendListToTail(commonList);
+    S02LinkedLists.Node loop = new S02LinkedLists.Node(4);
+    loop.appendAllToTail(5,6,7,8,9,10,11);
 
-    S02LinkedLists.Node head2 = new S02LinkedLists.Node(7);
-    head2.appendAllToTail(4,6);
-    head2.appendListToTail(commonList);
+    list.appendListToTail(loop);
+    loop.appendListToTail(loop);
 
-    S02LinkedLists.Node commonNode = questions.q0207aIntersection(head1, head2);
-    if (commonNode != null) System.out.println(commonNode.toString());
+    S02LinkedLists.Node startOfLoop = questions.q0208LoopDetection(list);
+    if (startOfLoop != null) System.out.println(startOfLoop.getValue());
     else System.out.println("no intersection");
 
   }

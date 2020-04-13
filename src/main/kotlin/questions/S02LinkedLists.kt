@@ -402,11 +402,12 @@ class S02LinkedLists {
   private data class Q0206cReturnObject(var node: Node?, var isPalindromeSoFar: Boolean)
 
   /**
-   * Returns the first common [Node] of [head1] and [head2] if one exists. O(N + M) time, O(1) space, N & M are the size
+   * Returns the first common [Node] of [head1] and [head2] if one exists. O(A + B) time, O(1) space, A & B are the size
    * of each list.
    *
    * Other approaches:
-   * - Compare each node in head1 with each node in head2. Super simple but time increases to O(N * M).
+   * - Compare each node in head1 with each node in head2. Super simple but time increases to O(A * B).
+   * - Create a set containing each node. Same time but requires O(A + B) space.
    */
   fun q0207aIntersection(head1: Node, head2: Node): Node? {
     if (head1 == head2) return head1
@@ -462,6 +463,34 @@ class S02LinkedLists {
     return null
   }
 
+  /**
+   * Returns the [Node] at the start of a loop in [head] if a loop exists. O(N) time, O(1) space.
+   *
+   * Alternate approaches:
+   * - Use a set to keep track of visited nodes. When the first duplicate comes up, return it. Increases space to O(N).
+   */
+  fun q0208LoopDetection(head: Node): Node? {
+    if (head.next == null) return null
+
+    var slow = head
+    var fast: Node? = head
+
+    while (fast != null) {
+      slow = slow.next!!
+      fast = fast.next?.next
+      if (fast == slow) break
+    }
+    if (fast == null) return null
+
+    fast = head
+
+    while (fast != slow) {
+      fast = fast!!.next
+      slow = slow.next!!
+    }
+    return fast
+  }
+
   class Node(var value: Int) {
     var next: Node? = null
 
@@ -505,6 +534,7 @@ class S02LinkedLists {
       return result
     }
 
+    /*
     override fun toString(): String {
       val builder = MyStringBuilder().append("[")
 
@@ -516,5 +546,6 @@ class S02LinkedLists {
       }
       return builder.removeEnd(2).append("]").toString()
     }
+     */
   }
 }
