@@ -17,12 +17,20 @@ public class HelloWorld {
 
     S02LinkedLists questions = new S02LinkedLists();
 
-    S02LinkedLists.Node n = new S02LinkedLists.Node(7);
-    n.appendAllToTail(7);
-    System.out.println(n.toString());
+    S02LinkedLists.Node commonList = new S02LinkedLists.Node(7);
+    commonList.appendAllToTail(2,1);
 
-    Boolean result = questions.q0206cPalindrome(n);
-    System.out.println(result);
+    S02LinkedLists.Node head1= new S02LinkedLists.Node(3);
+    head1.appendAllToTail(1,5,9);
+    head1.appendListToTail(commonList);
+
+    S02LinkedLists.Node head2 = new S02LinkedLists.Node(7);
+    head2.appendAllToTail(4,6);
+    head2.appendListToTail(commonList);
+
+    S02LinkedLists.Node commonNode = questions.q0207aIntersection(head1, head2);
+    if (commonNode != null) System.out.println(commonNode.toString());
+    else System.out.println("no intersection");
 
   }
 

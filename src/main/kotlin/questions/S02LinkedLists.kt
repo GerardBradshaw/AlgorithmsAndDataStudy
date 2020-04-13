@@ -386,9 +386,9 @@ class S02LinkedLists {
     }
   }
 
-  private fun q0206cHelper(node: Node?, length: Int): q0206cReturnObject {
-    if (node == null || length <= 0) return q0206cReturnObject(node, true) // Even number of nodes
-    else if (length == 1) return q0206cReturnObject(node.next, true) // Odd number of nodes
+  private fun q0206cHelper(node: Node?, length: Int): Q0206cReturnObject {
+    if (node == null || length <= 0) return Q0206cReturnObject(node, true) // Even number of nodes
+    else if (length == 1) return Q0206cReturnObject(node.next, true) // Odd number of nodes
 
     val result = q0206cHelper(node.next!!, length - 2)
 
@@ -399,7 +399,68 @@ class S02LinkedLists {
     return result
   }
 
-  private data class q0206cReturnObject(var node: Node?, var isPalindromeSoFar: Boolean)
+  private data class Q0206cReturnObject(var node: Node?, var isPalindromeSoFar: Boolean)
+
+  /**
+   * Returns the first common [Node] of [head1] and [head2] if one exists. O(N + M) time, O(1) space, N & M are the size
+   * of each list.
+   *
+   * Other approaches:
+   * - Compare each node in head1 with each node in head2. Super simple but time increases to O(N * M).
+   */
+  fun q0207aIntersection(head1: Node, head2: Node): Node? {
+    if (head1 == head2) return head1
+
+    var lengthDifference = q0207aGetSizeDiff(head1, head2)
+
+    var list1 = head1
+    var list2 = head2
+
+    if (lengthDifference > 0) {
+      while (lengthDifference != 0) {
+        list1 = list1.next!!
+        lengthDifference--
+      }
+    }
+    else if (lengthDifference < 0) {
+      while (lengthDifference != 0) {
+        list2 = list2.next!!
+        lengthDifference++
+      }
+    }
+
+    return q0207aGetIntersectionOfSameSizeLists(list1, list2)
+  }
+
+  private fun q0207aGetSizeDiff(head1: Node, head2: Node): Int {
+    var result = 0
+    var current1 = head1
+    var current2 = head2
+
+    while (current1.next != null || current2.next != null) {
+      if (current1.next != null) {
+        current1 = current1.next!!
+        result++
+      }
+      if (current2.next != null) {
+        current2 = current2.next!!
+        result--
+      }
+    }
+    return result
+  }
+
+  private fun q0207aGetIntersectionOfSameSizeLists(list1: Node, list2: Node): Node? {
+    var current1: Node? = list1
+    var current2: Node? = list2
+
+    while (current1 != null && current2 != null) {
+      if (current1 == current2) return current1
+      current1 = current1.next
+      current2 = current2.next
+    }
+    return null
+  }
 
   class Node(var value: Int) {
     var next: Node? = null
@@ -415,6 +476,12 @@ class S02LinkedLists {
       oldHead.next = this.next
       this.next = oldHead
       this.value = data
+    }
+
+    fun appendListToTail(node: Node) {
+      var last = this
+      while (last.next != null) last = last.next!!
+      last.next = node
     }
 
     fun appendAllToTail(vararg data: Int) {
