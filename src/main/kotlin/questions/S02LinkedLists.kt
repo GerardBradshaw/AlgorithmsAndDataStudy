@@ -19,13 +19,13 @@ class S02LinkedLists {
     var prev: Node? = null
 
     while (current != null) {
-      if (set.contains(current.data)) {
+      if (set.contains(current.value)) {
         prev!!.next = current.next
         current.next = null
         current = prev.next
       }
       else {
-        set.add(current.data)
+        set.add(current.value)
         prev = current
         current = current.next
       }
@@ -50,7 +50,7 @@ class S02LinkedLists {
           fastPointer = slowPointer?.next
           fastPointerPrev = slowPointer
         }
-        fastPointer.data == slowPointer.data -> {
+        fastPointer.value == slowPointer.value -> {
           fastPointerPrev!!.next = fastPointer.next
           fastPointer.next = null
           fastPointer = fastPointerPrev.next
@@ -90,7 +90,7 @@ class S02LinkedLists {
       slow = slow.next!!
       fast = fast.next
     }
-    return slow.data
+    return slow.value
   }
 
   /**
@@ -107,7 +107,7 @@ class S02LinkedLists {
     if (node == null) return 0
 
     val index = q0202bReturnKthToLastHelper(node.next, k) + 1
-    if (index == k) println(node.data)
+    if (index == k) println(node.value)
     return index
   }
 
@@ -118,7 +118,7 @@ class S02LinkedLists {
    * See [q0202aReturnKthToLast] and [q0202bReturnKthToLast] for alternate approaches.
    */
   fun q0202cReturnKthToLast(node: Node, k: Int): Int? {
-    return q0202cReturnKthToLastHelper(node, k, Q0202cIndex(0))?.data
+    return q0202cReturnKthToLastHelper(node, k, Q0202cIndex(0))?.value
   }
 
   private fun q0202cReturnKthToLastHelper(head: Node?, k: Int, index: Q0202cIndex): Node? {
@@ -142,7 +142,7 @@ class S02LinkedLists {
    */
   fun q0203DeleteMiddleNode(node: Node) {
     val next = node.next ?: return
-    node.data = next.data
+    node.value = next.value
     node.next = next.next
     next.next = null
   }
@@ -172,7 +172,7 @@ class S02LinkedLists {
     var current = head.next ?: return
 
     while (pos < maxPos) {
-      if (current.data >= x) {
+      if (current.value >= x) {
         prev.next = current.next
         current.next = null
         last.next = current
@@ -203,8 +203,8 @@ class S02LinkedLists {
     val resultHeadParent = currentResult
 
     while (current1 != null || current2 != null) {
-      val value1 = current1?.data ?: 0
-      val value2 = current2?.data ?: 0
+      val value1 = current1?.value ?: 0
+      val value2 = current2?.value ?: 0
       var sum = value1 + value2 + if(carryOver) 1 else 0
       carryOver = false
 
@@ -239,7 +239,7 @@ class S02LinkedLists {
       return null
     }
 
-    var value = (node1?.data ?: 0) + (node2?.data ?: 0) + if (carryOver) 1 else 0
+    var value = (node1?.value ?: 0) + (node2?.value ?: 0) + if (carryOver) 1 else 0
     val returnCarry = value > 9
     if (returnCarry) value -= 10
 
@@ -284,7 +284,7 @@ class S02LinkedLists {
 
     val result = q0205cHelper(node1?.next, node2?.next)
 
-    var sum = (node1?.data ?: 0) + (node2?.data ?: 0) + if (result.carryOver) 1 else 0
+    var sum = (node1?.value ?: 0) + (node2?.value ?: 0) + if (result.carryOver) 1 else 0
     val nextCarryOver = sum > 9
     if (nextCarryOver) sum -= 10
 
@@ -320,7 +320,7 @@ class S02LinkedLists {
     if (isOddSize) slow = slow!!.next!! // size must be at least 3, so there's at least one in line
 
     while (slow != null) {
-      if (slow.data != stack.pop()!!.data) return false // Not null since loop prevented null from being added
+      if (slow.value != stack.pop()!!.value) return false // Not null since loop prevented null from being added
       slow = slow.next
     }
     return true
@@ -341,12 +341,12 @@ class S02LinkedLists {
   }
 
   private fun reverseList(head: Node): Node {
-    val result = Node(head.data)
+    val result = Node(head.value)
 
     var current: Node? = head.next
 
     while (current != null) {
-      result.appendToHead(current.data)
+      result.appendToHead(current.value)
       current = current.next
     }
 
@@ -359,7 +359,7 @@ class S02LinkedLists {
     var fast: Node? = head1
 
     while (fast?.next != null) {
-      if (slow1.data == slow2.data) {
+      if (slow1.value == slow2.value) {
         slow1 = slow1.next!!
         slow2 = slow2.next!!
         fast = fast.next!!.next
@@ -394,14 +394,14 @@ class S02LinkedLists {
 
     if (result.node == null || !result.isPalindromeSoFar) return result
 
-    result.isPalindromeSoFar = result.node!!.data == node.data
+    result.isPalindromeSoFar = result.node!!.value == node.value
     result.node = result.node!!.next
     return result
   }
 
   private data class q0206cReturnObject(var node: Node?, var isPalindromeSoFar: Boolean)
 
-  class Node(var data: Int) {
+  class Node(var value: Int) {
     var next: Node? = null
 
     fun appendToTail(data: Int) {
@@ -411,10 +411,10 @@ class S02LinkedLists {
     }
 
     fun appendToHead(data: Int) {
-      val oldHead = Node(this.data)
+      val oldHead = Node(this.value)
       oldHead.next = this.next
       this.next = oldHead
-      this.data = data
+      this.value = data
     }
 
     fun appendAllToTail(vararg data: Int) {
@@ -444,7 +444,7 @@ class S02LinkedLists {
       var current: Node? = this
 
       while (current != null) {
-        builder.append(current.data.toString()).append(", ")
+        builder.append(current.value.toString()).append(", ")
         current = current.next
       }
       return builder.removeEnd(2).append("]").toString()
