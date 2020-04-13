@@ -17,17 +17,12 @@ public class HelloWorld {
 
     S02LinkedLists questions = new S02LinkedLists();
 
-    S02LinkedLists.Node n = new S02LinkedLists.Node(6);
-    n.appendAllToTail(1,7);
+    S02LinkedLists.Node n = new S02LinkedLists.Node(7);
+    n.appendAllToTail(7);
     System.out.println(n.toString());
 
-    S02LinkedLists.Node m = new S02LinkedLists.Node(2);
-    m.appendAllToTail(9,5,1);
-    System.out.println(m.toString());
-
-
-    S02LinkedLists.Node r = questions.q0205cSumLists(n, m);
-    System.out.println(r);
+    Boolean result = questions.q0206cPalindrome(n);
+    System.out.println(result);
 
   }
 

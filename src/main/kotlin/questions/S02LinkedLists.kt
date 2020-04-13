@@ -2,6 +2,7 @@ package questions
 
 import array.MyStringBuilder
 import set.MyHashSet
+import stack.MyStack
 
 class S02LinkedLists {
 
@@ -295,6 +296,111 @@ class S02LinkedLists {
 
   private data class Q0205cPartialSum(var list: Node? = null, var carryOver: Boolean = false)
 
+  /**
+   * Returns true if [head] is a palindrome using iteration. O(N) time and space.
+   *
+   * Other approaches:
+   * - Reverse and compare (see [q0206bPalindrome]). O(N) time and space.
+   * - Recursive approach (see [q0206cPalindrome]). O(N) time and space.
+   */
+  fun q0206aPalindrome(head: Node): Boolean {
+    if (head.next == null) return true
+
+    var slow: Node? = head
+    var fast: Node? = head
+    val stack = MyStack<Node>()
+
+    while (fast?.next != null) {
+      stack.push(slow)
+      slow = slow!!.next!! // always behind fast
+      fast = fast.next!!.next // condition of loop
+    }
+
+    val isOddSize = fast != null
+    if (isOddSize) slow = slow!!.next!! // size must be at least 3, so there's at least one in line
+
+    while (slow != null) {
+      if (slow.data != stack.pop()!!.data) return false // Not null since loop prevented null from being added
+      slow = slow.next
+    }
+    return true
+  }
+
+  /**
+   * Returns true if [head] is a palindrome by reversing the list and comparing until the middle is reached. O(N) time and space.
+   *
+   * Other approaches:
+   * - Iterative approach (see [q0206aPalindrome]). O(N) time and space.
+   * - Recursive approach (see [q0206cPalindrome]). O(N) time and space.
+   */
+  fun q0206bPalindrome(head: Node): Boolean {
+    if (head.next == null) return true
+
+    val reverseList = reverseList(head)
+    return isFirstHalfEqual(head, reverseList)
+  }
+
+  private fun reverseList(head: Node): Node {
+    val result = Node(head.data)
+
+    var current: Node? = head.next
+
+    while (current != null) {
+      result.appendToHead(current.data)
+      current = current.next
+    }
+
+    return result
+  }
+
+  private fun isFirstHalfEqual(head1: Node, head2: Node): Boolean {
+    var slow1 = head1
+    var slow2 = head2
+    var fast: Node? = head1
+
+    while (fast?.next != null) {
+      if (slow1.data == slow2.data) {
+        slow1 = slow1.next!!
+        slow2 = slow2.next!!
+        fast = fast.next!!.next
+      }
+      else return false
+    }
+    return true
+  }
+
+  /**
+   * Returns true if [head] is a palindrome by using a recursive approach. O(N) time and space.
+   *
+   * Other approaches:
+   * - Iterative approach (see [q0206aPalindrome]). O(N) time and space.
+   * - Reverse and compare (see [q0206bPalindrome]). O(N) time and space.
+   */
+  fun q0206cPalindrome(head: Node): Boolean {
+    val size = head.size()
+
+    return if (size <= 1) true
+    else {
+      val result = q0206cHelper(head, size)
+      result.isPalindromeSoFar
+    }
+  }
+
+  private fun q0206cHelper(node: Node?, length: Int): q0206cReturnObject {
+    if (node == null || length <= 0) return q0206cReturnObject(node, true) // Even number of nodes
+    else if (length == 1) return q0206cReturnObject(node.next, true) // Odd number of nodes
+
+    val result = q0206cHelper(node.next!!, length - 2)
+
+    if (result.node == null || !result.isPalindromeSoFar) return result
+
+    result.isPalindromeSoFar = result.node!!.data == node.data
+    result.node = result.node!!.next
+    return result
+  }
+
+  private data class q0206cReturnObject(var node: Node?, var isPalindromeSoFar: Boolean)
+
   class Node(var data: Int) {
     var next: Node? = null
 
@@ -319,6 +425,17 @@ class S02LinkedLists {
         last.next = Node(d)
         last = last.next!!
       }
+    }
+
+    fun size(): Int {
+      var result = 0
+      var current: Node? = this
+
+      while (current != null) {
+        current = current.next
+        result++
+      }
+      return result
     }
 
     override fun toString(): String {
