@@ -57,6 +57,9 @@ class S03StacksAndQueues {
     class FullStackException : Exception()
   }
 
+  /**
+   * A stack with a min() function that returns the minimum value in the stack. All functions are O(1) time.
+   */
   class Q0301StackMin {
 
     private var top: Node? = null
