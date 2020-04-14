@@ -3,7 +3,6 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
-import questions.S02LinkedLists;
 import questions.S03StacksAndQueues;
 import tree.XMyBinarySearchTree;
 
@@ -16,38 +15,33 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S03StacksAndQueues questions = new S03StacksAndQueues();
+    S03StacksAndQueues.Q0301StackMin stack = new S03StacksAndQueues.Q0301StackMin();
 
-    S03StacksAndQueues.Q0301Stack stack = new S03StacksAndQueues.Q0301Stack();
+    stack.push(9);
+    stack.push(2);
+    stack.push(4);
+    stack.push(8);
+    stack.push(6);
+    stack.push(1);
+    stack.push(7);
+    stack.push(3);
+    stack.push(8);
+    stack.push(5);
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
 
-    stack.push(0,1);
-    stack.push(0,2);
-    stack.push(0,3);
-    stack.push(0,4);
-    stack.push(0,5);
-
-    System.out.println(stack.pop(0));
-    System.out.println(stack.pop(0));
-    System.out.println(stack.pop(0));
-    System.out.println(stack.pop(0));
-    System.out.println(stack.pop(0));
-
-    stack.push(1, 10);
-    stack.push(1, 9);
-    stack.push(1, 8);
-    stack.push(1, 7);
-    stack.push(1, 6);
-    stack.push(1, 5);
-    stack.push(1, 4);
-    stack.push(1, 3);
-    stack.push(1, 2);
-    stack.push(1, 1);
-    stack.push(1, 1);
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
 
 
-    System.out.println(stack.pop(1));
-
-
+    System.out.println(stack.min());
   }
 
   // -------- Arrays --------
