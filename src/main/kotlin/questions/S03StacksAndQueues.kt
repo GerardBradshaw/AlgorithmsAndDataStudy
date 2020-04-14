@@ -2,7 +2,7 @@ package questions
 
 import array.MyArrayList
 import java.lang.Exception
-import java.lang.IndexOutOfBoundsException
+import java.lang.NullPointerException
 import java.util.*
 
 class S03StacksAndQueues {
@@ -133,6 +133,37 @@ class S03StacksAndQueues {
     }
 
     private data class Node(val value: Int, var prev: Node?)
+  }
+
+  /**
+   * A queue implemented using 2 stacks.
+   *
+   * Improvements:
+   * - Don't reverse the stacks until absolutely necessary (i.e. when polling).
+   */
+  class Q0304QueueViaStacks {
+    private val tempStack = GenericStack()
+    private val reverseStack = GenericStack()
+
+    fun enqueue(value: Int) {
+      while (reverseStack.isNotEmpty()) {
+        tempStack.push(reverseStack.pop())
+      }
+      reverseStack.push(value)
+      while (tempStack.isNotEmpty()) {
+        reverseStack.push(tempStack.pop())
+      }
+    }
+
+    fun poll(): Int {
+      if (reverseStack.isEmpty()) throw NullPointerException()
+      return reverseStack.pop()
+    }
+
+    fun peek(): Int {
+      if (reverseStack.isEmpty()) throw NullPointerException()
+      return reverseStack.peek()
+    }
   }
 
   private class GenericStack {
