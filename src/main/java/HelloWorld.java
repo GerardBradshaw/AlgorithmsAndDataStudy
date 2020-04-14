@@ -15,7 +15,7 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S03StacksAndQueues.Q0301StackMin stack = new S03StacksAndQueues.Q0301StackMin();
+    S03StacksAndQueues.Q0303StackOfPlates stack = new S03StacksAndQueues.Q0303StackOfPlates();
 
     stack.push(9);
     stack.push(2);
@@ -31,17 +31,23 @@ public class HelloWorld {
     stack.push(2);
     stack.push(3);
 
-    stack.pop();
-    stack.pop();
-    stack.pop();
-    stack.pop();
-    stack.pop();
-    stack.pop();
-    stack.pop();
-    stack.pop();
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
+    System.out.println(stack.pop());
 
-
-    System.out.println(stack.min());
   }
 
   // -------- Arrays --------

@@ -1,6 +1,8 @@
 package questions
 
+import array.MyArrayList
 import java.lang.Exception
+import java.lang.IndexOutOfBoundsException
 import java.util.*
 
 class S03StacksAndQueues {
@@ -60,7 +62,7 @@ class S03StacksAndQueues {
   /**
    * A stack with a min() function that returns the minimum value in the stack. All functions are O(1) time.
    */
-  class Q0301StackMin {
+  class Q0302StackMin {
 
     private var top: Node? = null
 
@@ -82,8 +84,90 @@ class S03StacksAndQueues {
       else throw EmptyStackException()
     }
 
-    private data class Node(val value: Int, var prev: Node?) {
+    data class Node(val value: Int, var prev: Node?) {
       var smallestPrev: Node = this
     }
+  }
+
+  /**
+   * A stack composed of several smaller stacks and fun popAt(index: Int) function that pops a value from a specific stack.
+   */
+  class Q0303StackOfPlates {
+    private val stackList = MyArrayList<GenericStack>()
+    private val maxStackSize = 3
+    private val topStack: Int
+      get() = stackList.size - 1
+
+    fun peek(): Int {
+      if (stackList.isEmpty()) throw EmptyStackException()
+      val stack = stackList.get(topStack)
+      return stack.peek()
+    }
+
+    fun pop(): Int {
+      if (stackList.isEmpty()) throw EmptyStackException()
+
+      var stack = stackList.get(topStack)
+      if (stack.isEmpty()) stackList.delete(topStack)
+
+      stack = stackList.get(topStack)
+      return stack.pop()
+    }
+
+    fun push(value: Int) {
+      if (stackList.isEmpty()) stackList.add(GenericStack())
+      var stack = stackList.get(topStack)
+
+      if (stack.size == maxStackSize) {
+        stackList.add(GenericStack())
+        stack = stackList.get(topStack)
+      }
+
+      stack.push(value)
+    }
+
+    fun popAt(index: Int): Int {
+      val stackIndex = index / maxStackSize
+      val stack = stackList.get(topStack)
+      return stack.pop()
+    }
+
+    private data class Node(val value: Int, var prev: Node?)
+  }
+
+  private class GenericStack {
+    private var head: Node? = null
+    var size = 0
+      private set
+
+    fun peek(): Int {
+      if (head != null) return head!!.value
+      throw EmptyStackException()
+    }
+
+    fun pop(): Int {
+      if (head == null) throw EmptyStackException()
+      val resultNode = head
+      head = head!!.prev
+      resultNode!!.prev = null
+      size--
+      return resultNode.value
+    }
+
+    fun push(value: Int) {
+      val newNode = Node(value, head)
+      head = newNode
+      size++
+    }
+
+    fun isEmpty(): Boolean {
+      return head == null
+    }
+
+    fun isNotEmpty(): Boolean {
+      return head != null
+    }
+
+    private data class Node(val value: Int, var prev: Node?)
   }
 }
