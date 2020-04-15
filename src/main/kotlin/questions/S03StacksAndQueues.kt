@@ -291,6 +291,85 @@ class S03StacksAndQueues {
     return result
   }
 
+  /**
+   * Imitates an animal shelter of dogs and cats where a request for a dog/cat/either will return the least-recently
+   * added animal of that type.
+   *
+   * Other approaches:
+   * - I kind of misunderstood the question but my functionality is correct. An intended approach is to use a LL each
+   * for dogs and cats, along with a custom Animal class which stores its species, name, and timestamp. All you'd have
+   * to do is peek at both lists and retrieve the animal with oldest timestamp for dequeueAny().
+   */
+  class Q0306AnimalShelter {
+    private val isDogAddedLastList = LinkedList<Boolean>()
+    private val dogQueue = Queue()
+    private val catQueue = Queue()
+    private var animalNumber = 0
+
+    fun enqueue(isDog: Boolean, name: String) {
+      if (isDog) enqueueDog(name) else enqueueCat(name)
+    }
+
+    private fun enqueueDog(name: String) {
+      dogQueue.enqueue(name + animalNumber)
+      isDogAddedLastList.add(true)
+      animalNumber++
+    }
+
+    private fun enqueueCat(name: String) {
+      catQueue.enqueue(name + animalNumber)
+      isDogAddedLastList.add(false)
+      animalNumber++
+    }
+
+    fun dequeueAny(): String {
+      val result = if (isDogAddedLastList.first) dogQueue.dequeue() else catQueue.dequeue()
+      isDogAddedLastList.removeFirst()
+      return result
+    }
+
+    fun dequeueDog(): String {
+      isDogAddedLastList.remove(true)
+      return dogQueue.dequeue()
+    }
+
+    fun dequeueCat(): String {
+      isDogAddedLastList.remove(false)
+      return catQueue.dequeue()
+    }
+
+    private class Queue {
+      private var oldest: Node? = null
+      private var newest: Node? = null
+      private var size = 0
+
+      fun enqueue(name: String) {
+        val newNode = Node(name)
+
+        when {
+          oldest == null -> oldest = newNode
+          newest == null -> {
+            newest = newNode
+            oldest!!.prev = newest
+          }
+          else -> {
+            newest!!.prev = newNode
+            newest = newNode
+          }
+        }
+        size++
+      }
+
+      fun dequeue(): String {
+        val result = oldest!!.nameAndId
+        oldest = oldest!!.prev
+        return result
+      }
+
+      private data class Node(val nameAndId: String, var prev: Node? = null)
+    }
+  }
+
   class GenericStack {
     private var head: Node? = null
     var size = 0

@@ -17,20 +17,29 @@ public class HelloWorld {
 
     S03StacksAndQueues questions = new S03StacksAndQueues();
 
-    S03StacksAndQueues.GenericStack stack = new S03StacksAndQueues.GenericStack();
-    stack.push(9);
-    stack.push(2);
-    stack.push(4);
-    stack.push(6);
-    stack.push(1);
-    stack.push(7);
-    stack.push(8);
-    stack.push(5);
-    stack.push(3);
-    System.out.println(stack);
+    S03StacksAndQueues.Q0306AnimalShelter animalShelter = new S03StacksAndQueues.Q0306AnimalShelter();
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(false, "cat");
+    animalShelter.enqueue(false, "cat");
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(false, "cat");
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(true, "dog");
+    animalShelter.enqueue(false, "cat");
+    animalShelter.enqueue(false, "cat");
 
-    questions.q0305cSortStack(stack);
-    System.out.println(stack);
+    System.out.println(animalShelter.dequeueCat());
+    System.out.println(animalShelter.dequeueDog());
+    System.out.println(animalShelter.dequeueAny());
+    System.out.println(animalShelter.dequeueAny());
+    System.out.println(animalShelter.dequeueDog());
+    System.out.println(animalShelter.dequeueCat());
+    System.out.println(animalShelter.dequeueCat());
+    System.out.println(animalShelter.dequeueDog());
+
+
   }
 
   // -------- Arrays --------
