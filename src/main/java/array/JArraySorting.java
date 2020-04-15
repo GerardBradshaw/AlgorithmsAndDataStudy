@@ -165,7 +165,7 @@ public abstract class JArraySorting {
           result[resultPointer] = left[leftPointer];
           leftPointer++;
 
-          // Otherwise the number in the second array is smaller, so add it to the result and advange its pointer
+          // Otherwise the number in the second array is smaller, so add it to the result and advance its pointer
         } else {
           result[resultPointer] = right[rightPointer];
           rightPointer++;
