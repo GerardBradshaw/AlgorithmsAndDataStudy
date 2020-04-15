@@ -1,6 +1,7 @@
 package questions
 
 import array.MyArrayList
+import array.MyStringBuilder
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.util.*
@@ -90,7 +91,8 @@ class S03StacksAndQueues {
   }
 
   /**
-   * A stack composed of several smaller stacks and fun popAt(index: Int) function that pops a value from a specific stack.
+   * A stack composed of several smaller stacks and fun popAt(index: Int) function that pops a value from a specific
+   * stack.
    */
   class Q0303StackOfPlates {
     private val stackList = MyArrayList<GenericStack>()
@@ -166,7 +168,130 @@ class S03StacksAndQueues {
     }
   }
 
-  private class GenericStack {
+  /**
+   * Sorts [stack] using only another [GenericStack] as a temporary data structure. O(N^2) time, O(N) space.
+   */
+  fun q0305aSortStack(stack: GenericStack) {
+    if (stack.isEmpty()) return
+
+    val sortedStack = GenericStack()
+    sortedStack.push(stack.pop())
+
+    while (stack.isNotEmpty()) {
+      q0305aPushToSortedStack(stack.pop(), sortedStack, stack)
+    }
+
+    while (sortedStack.isNotEmpty()) stack.push(sortedStack.pop())
+  }
+
+  private fun q0305aPushToSortedStack(current: Int, sortedStack: GenericStack, unsortedStack: GenericStack) {
+    while (sortedStack.isNotEmpty()) {
+      if (current > sortedStack.peek()) {
+        sortedStack.push(current)
+        return
+      }
+      else unsortedStack.push(sortedStack.pop())
+    }
+    sortedStack.push(current)
+  }
+
+  /**
+   * Sorts [stack] using a MergeSort approach and only [GenericStack]s for temp data storage. O(N * log(N)) time,
+   * O(N) space.
+   *
+   * Improvements:
+   * - Could use queue or array instead of stack for sorting. This would eliminate the need to reverse the stack each
+   * time using [q0305EnsureStackAscending].
+   */
+  fun q0305bSortStack(stack: GenericStack) {
+    val result = q0305bMergeSort(stack)
+    while (result.isNotEmpty()) stack.push(result.pop())
+  }
+
+  private fun q0305bMergeSort(stack: GenericStack): GenericStack {
+    if (stack.size == 1) return stack
+
+    var pushToStack1 = true
+    var stack1 = GenericStack()
+    var stack2 = GenericStack()
+
+    while (stack.isNotEmpty()) {
+      if (pushToStack1) stack1.push(stack.pop())
+      else stack2.push(stack.pop())
+      pushToStack1 = !pushToStack1
+    }
+
+    stack1 = q0305bMergeSort(stack1)
+    stack2 = q0305bMergeSort(stack2)
+    return q0305bMergeStacks(stack1, stack2)
+  }
+
+  private fun q0305bMergeStacks(stack1: GenericStack, stack2: GenericStack): GenericStack {
+    val result = GenericStack()
+
+    q0305EnsureStackAscending(stack1)
+    q0305EnsureStackAscending(stack2)
+
+    while (stack1.isNotEmpty() && stack2.isNotEmpty()) {
+      if (stack1.peek() <= stack2.peek()) result.push(stack1.pop())
+      else result.push(stack2.pop())
+    }
+
+    while (stack1.isNotEmpty()) result.push(stack1.pop())
+    while (stack2.isNotEmpty()) result.push(stack2.pop())
+
+    return result
+  }
+
+  private fun q0305EnsureStackAscending(stack: GenericStack) {
+    if (stack.size <= 1) return
+
+    val first = stack.pop()
+    if (first > stack.peek()) {
+      stack.push(first)
+      stack.reverse()
+    }
+    else stack.push(first)
+  }
+
+  /**
+   * Sorts [stack] using a QuickSort approach and only [GenericStack]s for temp data storage. O(N * log(N)) time,
+   * O(N) space (for recursion stack).
+   */
+  fun q0305cSortStack(stack: GenericStack) {
+    val result = q0305cQuickSort(stack)
+    while (result.isNotEmpty()) stack.push(result.pop())
+  }
+
+  private fun q0305cQuickSort(stack: GenericStack): GenericStack {
+    if (stack.size <= 1) return stack
+
+    val pivot = stack.pop()
+    var lesserOrEqualStack = GenericStack()
+    var greaterStack = GenericStack()
+
+    while (stack.isNotEmpty()) {
+      if (stack.peek() <= pivot) lesserOrEqualStack.push(stack.pop())
+      else greaterStack.push(stack.pop())
+    }
+
+    lesserOrEqualStack = q0305cQuickSort(lesserOrEqualStack)
+    greaterStack = q0305cQuickSort(greaterStack)
+    return q0305cCombineStacks(lesserOrEqualStack, pivot, greaterStack)
+  }
+
+  private fun q0305cCombineStacks(lesserOrEqualStack: GenericStack, pivot: Int, greaterStack: GenericStack): GenericStack {
+    val result = GenericStack()
+
+    while (greaterStack.isNotEmpty()) result.push(greaterStack.pop())
+    result.push(pivot)
+    while (lesserOrEqualStack.isNotEmpty()) result.push(lesserOrEqualStack.pop())
+
+    result.reverse()
+    return result
+  }
+
+  class GenericStack {
     private var head: Node? = null
     var size = 0
       private set
@@ -191,12 +316,35 @@ class S03StacksAndQueues {
       size++
     }
 
+    fun reverse() {
+      val temp = GenericStack()
+      temp.head = head
+      head = null
+      while (temp.isNotEmpty()) push(temp.pop())
+    }
+
     fun isEmpty(): Boolean {
       return head == null
     }
 
     fun isNotEmpty(): Boolean {
       return head != null
+    }
+
+    override fun toString(): String {
+      var current = head
+
+      return if (current == null) "[]"
+      else {
+        val result = MyStringBuilder().append("[")
+
+        while (current != null) {
+          result.append(current.value.toString()).append(", ")
+          current = current.prev
+        }
+
+        result.removeEnd(2).append("]").toString()
+      }
     }
 
     private data class Node(val value: Int, var prev: Node?)

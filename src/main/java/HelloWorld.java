@@ -15,39 +15,22 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S03StacksAndQueues.Q0304QueueViaStacks stack = new S03StacksAndQueues.Q0304QueueViaStacks();
+    S03StacksAndQueues questions = new S03StacksAndQueues();
 
-    stack.enqueue(9);
-    stack.enqueue(2);
-    stack.enqueue(4);
-    stack.enqueue(8);
-    stack.enqueue(6);
-    stack.enqueue(1);
-    stack.enqueue(7);
-    stack.enqueue(3);
-    stack.enqueue(8);
-    stack.enqueue(5);
-    stack.enqueue(1);
-    stack.enqueue(2);
-    stack.enqueue(3);
+    S03StacksAndQueues.GenericStack stack = new S03StacksAndQueues.GenericStack();
+    stack.push(9);
+    stack.push(2);
+    stack.push(4);
+    stack.push(6);
+    stack.push(1);
+    stack.push(7);
+    stack.push(8);
+    stack.push(5);
+    stack.push(3);
+    System.out.println(stack);
 
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-    System.out.println(stack.poll());
-
+    questions.q0305cSortStack(stack);
+    System.out.println(stack);
   }
 
   // -------- Arrays --------
