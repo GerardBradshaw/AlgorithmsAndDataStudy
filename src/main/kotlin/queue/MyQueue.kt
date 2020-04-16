@@ -1,5 +1,6 @@
 package queue
 
+import array.MyStringBuilder
 import java.lang.StringBuilder
 
 class MyQueue<T> {
@@ -25,11 +26,11 @@ class MyQueue<T> {
   }
 
   fun dequeue(): T? {
-    val frontHolder = front ?: return null
+    val result = front ?: return null
 
-    front = frontHolder.prev
-    frontHolder.prev = null
-    return frontHolder.data
+    front = front!!.prev
+    if (front?.prev == null) back = null
+    return result.data
   }
 
   fun isEmpty(): Boolean {
@@ -42,16 +43,16 @@ class MyQueue<T> {
 
   override fun toString(): String {
     val frontHolder = front ?: return "[]"
-    val builder = StringBuilder()
+    val builder = MyStringBuilder()
     var current: Node<T>? = frontHolder
 
-    builder.append("FRONT ")
+    builder.append("f [")
 
     while (current != null) {
-      builder.append("[").append(current.data).append("] <- ")
+      builder.append(current.data.toString()).append(", ")
       current = current.prev
     }
-    return builder.append("BACK").toString()
+    return builder.removeEnd(2).append("] b").toString()
   }
 
   override fun equals(other: Any?): Boolean {
