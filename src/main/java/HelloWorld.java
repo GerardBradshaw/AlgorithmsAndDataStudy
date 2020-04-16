@@ -4,6 +4,7 @@ import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
 import questions.S03StacksAndQueues;
+import questions.S04TreesAndGraphs;
 import tree.XMyBinarySearchTree;
 
 import java.io.FileNotFoundException;
@@ -15,29 +16,37 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S03StacksAndQueues questions = new S03StacksAndQueues();
+    S04TreesAndGraphs questions = new S04TreesAndGraphs();
 
-    S03StacksAndQueues.Q0306AnimalShelter animalShelter = new S03StacksAndQueues.Q0306AnimalShelter();
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(false, "cat");
-    animalShelter.enqueue(false, "cat");
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(false, "cat");
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(true, "dog");
-    animalShelter.enqueue(false, "cat");
-    animalShelter.enqueue(false, "cat");
+    S04TreesAndGraphs.Graph graph = new S04TreesAndGraphs.Graph();
+    graph.addNode(1);
+    graph.addNode(2);
+    graph.addNode(3);
+    graph.addNode(4);
+    graph.addNode(5);
+    graph.addNode(6);
+    graph.addNode(7);
+    graph.addNode(8);
 
-    System.out.println(animalShelter.dequeueCat());
-    System.out.println(animalShelter.dequeueDog());
-    System.out.println(animalShelter.dequeueAny());
-    System.out.println(animalShelter.dequeueAny());
-    System.out.println(animalShelter.dequeueDog());
-    System.out.println(animalShelter.dequeueCat());
-    System.out.println(animalShelter.dequeueCat());
-    System.out.println(animalShelter.dequeueDog());
+    graph.addEdge(1,2);
+    graph.addEdge(1,4);
+    graph.addEdge(3,2);
+    graph.addEdge(4,3);
+    graph.addEdge(4,5);
+    graph.addEdge(4,7);
+    graph.addEdge(4,8);
+    graph.addEdge(7,4);
+    graph.addEdge(8,7);
+
+    for (int i = 1; i <= 8; i++) {
+      S04TreesAndGraphs.Node fromNode = graph.getNode(i);
+      for (int j = 1; j <= 8; j++) {
+        S04TreesAndGraphs.Node toNode = graph.getNode(j);
+        if (questions.q0401aRouteBetweenNodes(fromNode, toNode)) {
+          if (i != j) System.out.println(i + " to " + j);
+        }
+      }
+    }
 
 
   }
