@@ -18,37 +18,11 @@ public class HelloWorld {
 
     S04TreesAndGraphs questions = new S04TreesAndGraphs();
 
-    S04TreesAndGraphs.Graph graph = new S04TreesAndGraphs.Graph();
-    graph.addNode(1);
-    graph.addNode(2);
-    graph.addNode(3);
-    graph.addNode(4);
-    graph.addNode(5);
-    graph.addNode(6);
-    graph.addNode(7);
-    graph.addNode(8);
+    int[] array = new int[] {1,2,3,4,5,6,7,8,9};
 
-    graph.addEdge(1,2);
-    graph.addEdge(1,4);
-    graph.addEdge(3,2);
-    graph.addEdge(4,3);
-    graph.addEdge(4,5);
-    graph.addEdge(4,7);
-    graph.addEdge(4,8);
-    graph.addEdge(7,4);
-    graph.addEdge(8,7);
+    S04TreesAndGraphs.TreeNode tree = questions.q0402MinimalTree(array);
 
-    for (int i = 1; i <= 8; i++) {
-      S04TreesAndGraphs.Node fromNode = graph.getNode(i);
-      for (int j = 1; j <= 8; j++) {
-        S04TreesAndGraphs.Node toNode = graph.getNode(j);
-        if (questions.q0401aRouteBetweenNodes(fromNode, toNode)) {
-          if (i != j) System.out.println(i + " to " + j);
-        }
-      }
-    }
-
-
+    tree.printInOrder();
   }
 
   // -------- Arrays --------
