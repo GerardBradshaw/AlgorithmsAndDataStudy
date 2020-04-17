@@ -134,9 +134,9 @@ class MyAvlTree : Iterable<Int> {
   }
 
   private fun printPostOrderHelper(node: Node) {
-    println(node.value)
-    node.right?.let { printPostOrderHelper(it) }
     node.left?.let { printPostOrderHelper(it) }
+    node.right?.let { printPostOrderHelper(it) }
+    println(node.value)
   }
 
   private fun printPreOrderHelper(node: Node) {

@@ -76,9 +76,9 @@ class MyRedBlackTree<T : Comparable<T>> : Collection<T>, Iterable<T> {
   }
 
   private fun printPostOrderHelper(node: Node<T>) {
-    println(node.toString())
-    node.right?.let { printPostOrderHelper(it) }
     node.left?.let { printPostOrderHelper(it) }
+    node.right?.let { printPostOrderHelper(it) }
+    println(node.toString())
   }
 
 
