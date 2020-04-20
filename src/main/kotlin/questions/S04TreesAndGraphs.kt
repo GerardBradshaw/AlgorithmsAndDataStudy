@@ -4,6 +4,7 @@ import queue.MyQueue
 import stack.MyStack
 import java.lang.NullPointerException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 class S04TreesAndGraphs {
@@ -60,6 +61,58 @@ class S04TreesAndGraphs {
   }
 
   private data class Q0402Node(val value: Int, var left: Q0402Node?, var right: Q0402Node?)
+
+  /**
+   * Returns an [ArrayList] of [LinkedList] of all the [TreeNode] at each depth in [tree] using a modified DFS approach.
+   * O(N) time, O(N) space.
+   *
+   * Other approaches:
+   * - [q0403bListOfDepths] BFS approach
+   */
+  fun q0403aListOfDepths(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
+    val result = ArrayList<LinkedList<TreeNode>>()
+    q0402aDfs(tree, result, 0)
+    return result
+  }
+
+  private fun q0402aDfs(node: TreeNode?, result: ArrayList<LinkedList<TreeNode>>, depth: Int) {
+    if (node == null) return
+
+    if (result.size == depth) result.add(LinkedList())
+
+    result[depth].add(node)
+    q0402aDfs(node.left, result, depth + 1)
+    q0402aDfs(node.right, result, depth + 1)
+  }
+
+  /**
+   * Returns an [ArrayList] of [LinkedList] of all the [TreeNode] at each depth in [tree] using a modified BFS approach.
+   * O(N) time, O(N) space.
+   *
+   * Other approaches:
+   * - [q0403bListOfDepths] DFS approach
+   */
+  fun q0403bListOfDepths(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
+    val result = ArrayList<LinkedList<TreeNode>>()
+
+    var currentList = LinkedList<TreeNode>()
+    currentList.add(tree)
+
+    while (currentList.size > 0) {
+      result.add(currentList)
+      val parentList = currentList
+
+      currentList = LinkedList()
+
+      for (parent in parentList) {
+        if (parent.left != null) currentList.add(parent.left!!)
+        if (parent.right != null) currentList.add(parent.right!!)
+      }
+    }
+    return result
+  }
+
+
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
