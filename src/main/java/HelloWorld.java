@@ -22,9 +22,7 @@ public class HelloWorld {
 
     S04TreesAndGraphs.TreeNode tree = questions.q0402MinimalTree(array);
 
-    ArrayList<LinkedList<S04TreesAndGraphs.TreeNode>> lists = questions.q0403aListOfDepths(tree);
-
-    System.out.println("done");
+    System.out.println(questions.q0404CheckBalanced(tree));
   }
 
   // -------- Arrays --------

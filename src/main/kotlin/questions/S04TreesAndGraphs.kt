@@ -6,6 +6,8 @@ import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
+import kotlin.math.abs
+import kotlin.math.max
 
 class S04TreesAndGraphs {
 
@@ -112,7 +114,26 @@ class S04TreesAndGraphs {
     return result
   }
 
+  /**
+   * Returns true if [tree] is balanced. O(N) time, O(H) space, N = number of nodes, H = height of tree.
+   */
+  fun q0404CheckBalanced(tree: TreeNode): Boolean {
+    return q0404Recur(tree) >= -1
+  }
 
+  private fun q0404Recur(node: TreeNode?): Int {
+    if (node == null) return -1
+
+    val leftHeight = q0404Recur(node.left)
+    if (leftHeight == Int.MIN_VALUE) return Int.MIN_VALUE
+
+    val rightHeight = q0404Recur(node.right)
+    if (rightHeight == Int.MIN_VALUE) return Int.MIN_VALUE
+
+    val heightDiff = abs(leftHeight - rightHeight)
+
+    return if (heightDiff > 1) Int.MIN_VALUE else max(leftHeight, rightHeight) + 1
+  }
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
