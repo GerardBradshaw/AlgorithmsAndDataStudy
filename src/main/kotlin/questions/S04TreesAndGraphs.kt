@@ -190,6 +190,32 @@ class S04TreesAndGraphs {
     q0405bInOrderFillResult(node.right, result)
   }
 
+  /**
+   * Returns the next [TreeNode] after [node] in an in-order traversal of a BST containing Node. O(logN) time, O(1)
+   * space. Returns null if node is the last in the traversal.
+   * NOTE: Assumes that [TreeNode]s have a reference to their parents (which they don't). This doesn't actually work
+   * because of that.
+   */
+  fun q0406Successor(node: TreeNode): TreeNode? {
+    if (node.right == null) {
+      var parent = q0406GetParent(node)
+      while (parent != null && parent.value <= node.value) {
+        parent = q0406GetParent(parent)
+      }
+      return parent
+    }
+
+    var current = node.right!!
+    while (current.left != null) {
+      current = current.left!!
+    }
+    return current
+  }
+
+  private fun q0406GetParent(node: TreeNode): TreeNode? {
+    println("Note: q0406GetParent has been called which does not get the parent. The question just assumed that this was a working function.")
+    return null
+  }
 
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
