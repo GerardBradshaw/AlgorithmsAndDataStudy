@@ -22,7 +22,10 @@ public class HelloWorld {
 
     S04TreesAndGraphs.TreeNode tree = questions.q0402MinimalTree(array);
 
-    System.out.println(questions.q0404CheckBalanced(tree));
+    S04TreesAndGraphs.TreeNode newRoot = new S04TreesAndGraphs.TreeNode(50, null, tree);
+
+    System.out.println(questions.q0405aIsValidBst(newRoot));
+    System.out.println(questions.q0405bIsValidBst(newRoot));
   }
 
   // -------- Arrays --------

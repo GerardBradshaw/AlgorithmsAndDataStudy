@@ -1,5 +1,6 @@
 package questions
 
+import array.MyArrayList
 import queue.MyQueue
 import stack.MyStack
 import java.lang.NullPointerException
@@ -118,22 +119,78 @@ class S04TreesAndGraphs {
    * Returns true if [tree] is balanced. O(N) time, O(H) space, N = number of nodes, H = height of tree.
    */
   fun q0404CheckBalanced(tree: TreeNode): Boolean {
-    return q0404Recur(tree) >= -1
+    return q0404GetHeight(tree) >= -1
   }
 
-  private fun q0404Recur(node: TreeNode?): Int {
+  private fun q0404GetHeight(node: TreeNode?): Int {
     if (node == null) return -1
 
-    val leftHeight = q0404Recur(node.left)
+    val leftHeight = q0404GetHeight(node.left)
     if (leftHeight == Int.MIN_VALUE) return Int.MIN_VALUE
 
-    val rightHeight = q0404Recur(node.right)
+    val rightHeight = q0404GetHeight(node.right)
     if (rightHeight == Int.MIN_VALUE) return Int.MIN_VALUE
 
     val heightDiff = abs(leftHeight - rightHeight)
 
     return if (heightDiff > 1) Int.MIN_VALUE else max(leftHeight, rightHeight) + 1
   }
+
+  /**
+   * Returns true if [tree] is a BST using min/max values of trees. O(N) time, O(H) space, where H = height of tree.
+   *
+   * Other approaches:
+   * - [q0405bIsValidBst] in-order traversal approach. Simpler but not as robust (accuracy not guaranteed if duplicate
+   * values are present).
+   */
+  fun q0405aIsValidBst(tree: TreeNode): Boolean {
+    return q0405aIsValidNode(tree, Int.MIN_VALUE, Int.MAX_VALUE)
+  }
+
+  private fun q0405aIsValidNode(node: TreeNode?, min: Int, max: Int): Boolean {
+    if (node == null) return true
+
+    if (node.value >= max || node.value < min) return false
+
+    val leftValid = q0405aIsValidNode(node.left, min, node.value)
+    if (!leftValid) return false
+
+    val rightValid = q0405aIsValidNode(node.right, node.value, max)
+    if (!rightValid) return false
+
+    return true
+  }
+
+  /**
+   * Returns true if [tree] is a BST by creating an array using in-order traversal and checking if the array is sorted
+   * in ascending order. O(N) time, O(N) space.
+   * CAUTION: Can give false positive if tree contains duplicate values.
+   *
+   * Other approaches:
+   * - [q0405aIsValidBst] min/max values of subtree approach. Can handle duplicates and uses less space.
+   */
+  fun q0405bIsValidBst(tree: TreeNode): Boolean {
+    val result = MyArrayList<Int>()
+    q0405bInOrderFillResult(tree, result)
+
+    var prev = Int.MIN_VALUE
+
+    for (i in result) {
+      if (prev > i) return false
+      prev = i
+    }
+    return true
+  }
+
+  private fun q0405bInOrderFillResult(node: TreeNode?, result: MyArrayList<Int>) {
+    if (node == null) return
+
+    q0405bInOrderFillResult(node.left, result)
+    result.add(node.value)
+    q0405bInOrderFillResult(node.right, result)
+  }
+
+
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
