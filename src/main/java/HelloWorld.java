@@ -3,7 +3,6 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
-import questions.S03StacksAndQueues;
 import questions.S04TreesAndGraphs;
 import tree.XMyBinarySearchTree;
 
@@ -17,15 +16,18 @@ public class HelloWorld {
   public static void main(String[] args) {
 
     S04TreesAndGraphs questions = new S04TreesAndGraphs();
-
     int[] array = new int[] {1,2,3,4,5,6,7,8,9};
-
     S04TreesAndGraphs.TreeNode tree = questions.q0402MinimalTree(array);
 
-    S04TreesAndGraphs.TreeNode newRoot = new S04TreesAndGraphs.TreeNode(50, null, tree);
+    String[] projects = new String[] {"a","b","c","d","e","f"};
+    String[][] dependencies = new String[][] {{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"}};
 
-    System.out.println(questions.q0405aIsValidBst(newRoot));
-    System.out.println(questions.q0405bIsValidBst(newRoot));
+    S04TreesAndGraphs.Q0407Graph.Project[] solution = questions.q0407BuildOrder(projects, dependencies);
+
+    for (S04TreesAndGraphs.Q0407Graph.Project p : solution) {
+      System.out.println(p.getName());
+    }
+
   }
 
   // -------- Arrays --------
