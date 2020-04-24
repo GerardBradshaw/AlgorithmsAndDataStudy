@@ -5,6 +5,7 @@ import map.Word;
 import linkedlist.MyJDoublyLinkedList;
 import questions.S04TreesAndGraphs;
 import tree.XMyBinarySearchTree;
+import questions.S04TreesAndGraphs.TreeNode;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -17,17 +18,14 @@ public class HelloWorld {
 
     S04TreesAndGraphs questions = new S04TreesAndGraphs();
     int[] array = new int[] {1,2,3,4,5,6,7,8,9};
-    S04TreesAndGraphs.TreeNode tree = questions.q0402MinimalTree(array);
 
-    String[] projects = new String[] {"a","b","c","d","e","f"};
-    String[][] dependencies = new String[][] {{"a","d"},{"f","b"},{"b","d"},{"f","a"},{"d","c"}};
+    TreeNode left = questions.q0402MinimalTree(array);
+    TreeNode right = new TreeNode(0, null, null);
+    TreeNode root = new TreeNode(10, left, right);
 
-    S04TreesAndGraphs.Q0407Graph.Project[] solution = questions.q0407BuildOrder(projects, dependencies);
+    TreeNode ancestor = questions.q0408FirstCommonAncestor(root, root.getLeft().getRight().getLeft(), root.getLeft().getRight().getRight().getRight());
 
-    for (S04TreesAndGraphs.Q0407Graph.Project p : solution) {
-      System.out.println(p.getName());
-    }
-
+    System.out.println(ancestor.toString());
   }
 
   // -------- Arrays --------

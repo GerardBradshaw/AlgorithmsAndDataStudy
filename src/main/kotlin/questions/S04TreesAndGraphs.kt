@@ -340,8 +340,77 @@ class S04TreesAndGraphs {
     }
   }
 
-  
-  private data class Q0408TraversalResult(var foundNode1: Boolean = false, var foundNode2: Boolean = false, var commonNode: TreeNode? = null)
+  fun testingInOrderTraversal(tree: TreeNode): String {
+    val builder = StringBuilder()
+    inOrderHelper(tree, builder)
+    return builder.toString()
+  }
+
+  private fun inOrderHelper(node: TreeNode?, builder: StringBuilder) {
+    if (node == null) return
+
+    inOrderHelper(node.left, builder)
+    builder.append(node.value.toString())
+    inOrderHelper(node.right, builder)
+  }
+
+  /**
+   * TODO
+   */
+  fun q0408FirstCommonAncestor(tree: TreeNode, node1: TreeNode, node2: TreeNode): TreeNode? {
+    val result = searchSubtreeForTargets(tree, node1, node2)
+    return result.commonAncestor
+  }
+
+  private fun searchSubtreeForTargets(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode): CommonAncestorResult {
+    if (currentNode == null) return CommonAncestorResult()
+
+    val leftSearch = searchSubtreeForTargets(currentNode.left, targetNode1, targetNode2)
+
+    var foundNode1 = leftSearch.foundNode1 || currentNode == targetNode1
+    var foundNode2 = leftSearch.foundNode2 || currentNode == targetNode2
+    var commonAncestor = leftSearch.commonAncestor
+
+    if (foundNode1 && foundNode2) {
+      return CommonAncestorResult(foundNode1, foundNode2, commonAncestor ?: currentNode)
+    }
+
+    val rightSearch = searchSubtreeForTargets(currentNode.right, targetNode1, targetNode2)
+
+    foundNode1 = foundNode1 || rightSearch.foundNode1
+    foundNode2 = foundNode2 || rightSearch.foundNode2
+    commonAncestor = commonAncestor ?: rightSearch.commonAncestor
+
+    if (foundNode1 && foundNode2) {
+      return CommonAncestorResult(foundNode1, foundNode2, commonAncestor ?: currentNode)
+    }
+
+    return CommonAncestorResult(foundNode1, foundNode2, null)
+  }
+
+  private fun updateAncestorResult(): CommonAncestorResult {
+    TODO()
+  }
+
+  private fun q0408GetEarliestNode(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode, result: CommonAncestorResult) {
+    if (currentNode == null) return
+
+    q0408GetEarliestNode(currentNode.left, targetNode1, targetNode2, result)
+    q0408GetEarliestNode(currentNode.right, targetNode1, targetNode2, result)
+
+    when (currentNode) {
+      targetNode1 -> result.foundNode1 = true
+      targetNode2 -> result.foundNode2 = true
+    }
+
+    if (result.foundNode1 && result.foundNode2) {
+      if (result.commonAncestor == null) result.commonAncestor = currentNode
+    }
+  }
+
+  private data class CommonAncestorResult(var foundNode1: Boolean = false, var foundNode2: Boolean = false, var commonAncestor: TreeNode? = null)
+
+
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
@@ -380,6 +449,16 @@ class S04TreesAndGraphs {
         println(node.value)
         printInOrderHelper(node.right)
       }
+    }
+
+    override fun equals(other: Any?): Boolean {
+      if (other is TreeNode) return other.value == value
+
+      return false
+    }
+
+    override fun toString(): String {
+      return value.toString()
     }
   }
 
