@@ -48,16 +48,16 @@ class S04TreesAndGraphs {
    * Creates a BST of minimal height from [array] assuming it's sorted in ascending order. O(N) time, O(1) additional space.
    */
   fun q0402MinimalTree(array: IntArray): TreeNode {
-    return q0402Recur(array, 0, array.size - 1)!!
+    return q0402CreateNodeFromMid(array, 0, array.size - 1)!!
   }
 
-  private fun q0402Recur(array: IntArray, leftIndex: Int, rightIndex: Int): TreeNode? {
+  private fun q0402CreateNodeFromMid(array: IntArray, leftIndex: Int, rightIndex: Int): TreeNode? {
     if (leftIndex > rightIndex) return null
 
     val mid = (leftIndex + rightIndex) / 2
     val node = TreeNode(array[mid])
-    node.left = q0402Recur(array, leftIndex, mid - 1)
-    node.right = q0402Recur(array, mid + 1, rightIndex)
+    node.left = q0402CreateNodeFromMid(array, leftIndex, mid - 1)
+    node.right = q0402CreateNodeFromMid(array, mid + 1, rightIndex)
     return node
   }
 
@@ -340,32 +340,18 @@ class S04TreesAndGraphs {
     }
   }
 
-  fun testingInOrderTraversal(tree: TreeNode): String {
-    val builder = StringBuilder()
-    inOrderHelper(tree, builder)
-    return builder.toString()
-  }
-
-  private fun inOrderHelper(node: TreeNode?, builder: StringBuilder) {
-    if (node == null) return
-
-    inOrderHelper(node.left, builder)
-    builder.append(node.value.toString())
-    inOrderHelper(node.right, builder)
-  }
-
   /**
-   * TODO
+   * Returns the first common ancestor of 2 nodes in a Binary Tree. O(N) time, O(N) space.
    */
   fun q0408FirstCommonAncestor(tree: TreeNode, node1: TreeNode, node2: TreeNode): TreeNode? {
-    val result = searchSubtreeForTargets(tree, node1, node2)
+    val result = q0408SearchSubtreeForTargets(tree, node1, node2)
     return result.commonAncestor
   }
 
-  private fun searchSubtreeForTargets(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode): CommonAncestorResult {
+  private fun q0408SearchSubtreeForTargets(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode): CommonAncestorResult {
     if (currentNode == null) return CommonAncestorResult()
 
-    val leftSearch = searchSubtreeForTargets(currentNode.left, targetNode1, targetNode2)
+    val leftSearch = q0408SearchSubtreeForTargets(currentNode.left, targetNode1, targetNode2)
 
     var foundNode1 = leftSearch.foundNode1 || currentNode == targetNode1
     var foundNode2 = leftSearch.foundNode2 || currentNode == targetNode2
@@ -375,7 +361,7 @@ class S04TreesAndGraphs {
       return CommonAncestorResult(foundNode1, foundNode2, commonAncestor ?: currentNode)
     }
 
-    val rightSearch = searchSubtreeForTargets(currentNode.right, targetNode1, targetNode2)
+    val rightSearch = q0408SearchSubtreeForTargets(currentNode.right, targetNode1, targetNode2)
 
     foundNode1 = foundNode1 || rightSearch.foundNode1
     foundNode2 = foundNode2 || rightSearch.foundNode2
@@ -388,29 +374,7 @@ class S04TreesAndGraphs {
     return CommonAncestorResult(foundNode1, foundNode2, null)
   }
 
-  private fun updateAncestorResult(): CommonAncestorResult {
-    TODO()
-  }
-
-  private fun q0408GetEarliestNode(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode, result: CommonAncestorResult) {
-    if (currentNode == null) return
-
-    q0408GetEarliestNode(currentNode.left, targetNode1, targetNode2, result)
-    q0408GetEarliestNode(currentNode.right, targetNode1, targetNode2, result)
-
-    when (currentNode) {
-      targetNode1 -> result.foundNode1 = true
-      targetNode2 -> result.foundNode2 = true
-    }
-
-    if (result.foundNode1 && result.foundNode2) {
-      if (result.commonAncestor == null) result.commonAncestor = currentNode
-    }
-  }
-
   private data class CommonAncestorResult(var foundNode1: Boolean = false, var foundNode2: Boolean = false, var commonAncestor: TreeNode? = null)
-
-
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
