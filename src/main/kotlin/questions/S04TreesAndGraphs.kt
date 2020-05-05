@@ -5,6 +5,7 @@ import queue.MyQueue
 import stack.MyStack
 import java.lang.NullPointerException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -375,6 +376,59 @@ class S04TreesAndGraphs {
   }
 
   private data class CommonAncestorResult(var foundNode1: Boolean = false, var foundNode2: Boolean = false, var commonAncestor: TreeNode? = null)
+
+  /**
+   * Returns all possible arrays that could have led to the given BST assuming it was created by traversing an array
+   * from left to right and inserting each element. O(N^e) time (I have no idea what e is, but it's big!).
+   */
+  fun q0409BstSequences(bst: TreeNode): ArrayList<LinkedList<Int>> {
+    return getLists(bst)
+  }
+
+  private fun getLists(node: TreeNode?): ArrayList<LinkedList<Int>> {
+    val result = ArrayList<LinkedList<Int>>()
+
+    if (node == null) {
+      result.add(LinkedList<Int>())
+      return result
+    }
+
+    val prefix = LinkedList<Int>().also { it.add(node.value) }
+
+    val leftResult = getLists(node.left)
+    val rightResult = getLists(node.right)
+
+    for (leftList in leftResult) {
+      for (rightList in rightResult) {
+        weave(leftList, rightList, prefix, result)
+      }
+    }
+
+    return result
+  }
+
+  private fun weave(list1: LinkedList<Int>, list2: LinkedList<Int>, prefix: LinkedList<Int>,
+                    result: ArrayList<LinkedList<Int>>) {
+    if (list1.isEmpty() || list2.isEmpty()) {
+      @Suppress("UNCHECKED_CAST")
+      val res = prefix.clone() as LinkedList<Int>
+
+      res.addAll(list1)
+      res.addAll(list2)
+      result.add(res)
+      return
+    }
+
+    prefix.addLast(list1.removeFirst())
+    weave(list1, list2, prefix, result)
+    list1.addFirst(prefix.removeLast())
+
+    prefix.addLast(list2.removeFirst())
+    weave(list1, list2, prefix, result)
+    list2.addFirst(prefix.removeLast())
+  }
+
+  private fun weave(node1: TreeNode, node2: TreeNode) {}
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {

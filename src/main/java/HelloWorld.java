@@ -23,9 +23,16 @@ public class HelloWorld {
     TreeNode right = new TreeNode(0, null, null);
     TreeNode root = new TreeNode(10, left, right);
 
-    TreeNode ancestor = questions.q0408FirstCommonAncestor(root, root.getLeft().getRight().getLeft(), root.getLeft().getRight().getRight().getRight());
+    TreeNode bstLeft = new TreeNode(2, new TreeNode(1, null, null), null);
+    TreeNode bstRight = new TreeNode(4, null, new TreeNode(5, null, null));
+    TreeNode bst = new TreeNode(3, bstLeft, bstRight);
 
-    System.out.println(ancestor.toString());
+    ArrayList<LinkedList<Integer>> result = questions.q0409BstSequences(root);
+
+    for (LinkedList<Integer> list : result) {
+      System.out.println(Arrays.toString(list.toArray()));
+    }
+
   }
 
   // -------- Arrays --------
