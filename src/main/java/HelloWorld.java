@@ -17,21 +17,28 @@ public class HelloWorld {
   public static void main(String[] args) {
 
     S04TreesAndGraphs questions = new S04TreesAndGraphs();
-    int[] array = new int[] {1,2,3,4,5,6,7,8,9};
+    int[] array = new int[] {10,3,11,5,13,12,1,7,15,2,8,6,14,9};
 
-    TreeNode left = questions.q0402MinimalTree(array);
-    TreeNode right = new TreeNode(0, null, null);
-    TreeNode root = new TreeNode(10, left, right);
+    S04TreesAndGraphs.TreeNode2 tree = new S04TreesAndGraphs.TreeNode2(4, null, null, 1);
 
-    TreeNode bstLeft = new TreeNode(2, new TreeNode(1, null, null), null);
-    TreeNode bstRight = new TreeNode(4, null, new TreeNode(5, null, null));
-    TreeNode bst = new TreeNode(3, bstLeft, bstRight);
-
-    ArrayList<LinkedList<Integer>> result = questions.q0409BstSequences(root);
-
-    for (LinkedList<Integer> list : result) {
-      System.out.println(Arrays.toString(list.toArray()));
+    for (int i : array) {
+      tree.insert(i);
     }
+
+    tree.delete(10);
+    tree.delete(2);
+    tree.delete(13);
+    tree.delete(9);
+    tree.delete(4);
+
+    int[] count = new int[15];
+
+    for (int i = 0; i < 10000; i++) {
+      int result = tree.getRandomNode().getValue();
+      count[result - 1]++;
+    }
+
+    System.out.println(Arrays.toString(count));
 
   }
 

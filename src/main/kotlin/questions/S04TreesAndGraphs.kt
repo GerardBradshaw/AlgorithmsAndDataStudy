@@ -428,7 +428,127 @@ class S04TreesAndGraphs {
     list2.addFirst(prefix.removeLast())
   }
 
-  private fun weave(node1: TreeNode, node2: TreeNode) {}
+  /**
+   * Returns a random node in a Binary Tree. O(D) time to retrieve random node, where D is the maximum depth of the tree.
+   */
+  fun q0411RandomNode(tree: TreeNode2): TreeNode2 {
+    return tree.getRandomNode()
+  }
+
+  class TreeNode2(var value: Int, var left: TreeNode2? = null, var right: TreeNode2? = null, var size: Int = 1) {
+
+    fun getRandomNode(): TreeNode2 {
+      val rand = Random()
+      val index = rand.nextInt(size)
+      return getIthNode(index)
+    }
+
+    private fun getIthNode(index: Int): TreeNode2 {
+      val leftSize = left?.size ?: 0
+
+      return when {
+        leftSize == index -> this
+        leftSize > index -> left!!.getIthNode(index)
+        else -> right!!.getIthNode(index - leftSize - 1)
+      }
+    }
+
+    fun insert(data: Int) {
+      size++
+
+      if (data < value) {
+        if (left != null) left!!.insert(data)
+        else left = TreeNode2(data)
+      }
+      else {
+        if (right != null) right!!.insert(data)
+        else right = TreeNode2(data)
+      }
+    }
+
+    fun insert(node: TreeNode2) {
+      size += node.size
+
+      if (node.value < value) {
+        if (left != null) left!!.insert(node)
+        else left = node
+      }
+      else {
+        if (right != null) right!!.insert(node)
+        else right = node
+      }
+    }
+
+    fun delete(data: Int): Boolean {
+      return deleteSelfOrKeepSearching(null, data)
+    }
+
+    private fun deleteSelfOrKeepSearching(parent: TreeNode2?, data: Int): Boolean {
+      return when {
+        data < value -> searchLeftToDelete(data)
+        data > value -> searchRightToDelete(data)
+        else -> deleteSelf(parent)
+      }
+    }
+
+    private fun searchLeftToDelete(data: Int): Boolean {
+      if (left == null) return false
+      size--
+      return left!!.deleteSelfOrKeepSearching(this, data)
+    }
+
+    private fun searchRightToDelete(data: Int): Boolean {
+      if (right == null) return false
+      size--
+      return right!!.deleteSelfOrKeepSearching(this, data)
+    }
+
+    private fun deleteSelf(parent: TreeNode2?): Boolean {
+      if (parent != null) moveRightUpAndRelocateLeft(parent)
+      else deleteSelfAmRoot()
+      return true
+    }
+
+    private fun moveRightUpAndRelocateLeft(parent: TreeNode2) {
+      if (parent.left == this) parent.left = right
+      else parent.right = right
+      if (left != null) {
+        parent.size -= left!!.size
+        parent.insert(left!!)
+      }
+    }
+
+    private fun deleteSelfAmRoot() {
+      if (right != null) {
+        value = right!!.value
+        size--
+        right!!.deleteSelfOrKeepSearching(this, right!!.value)
+      }
+      else if (left != null) {
+        value = left!!.value
+        size--
+        left!!.deleteSelfOrKeepSearching(this, left!!.value)
+      }
+    }
+
+    fun find(data: Int): TreeNode2? {
+      if (data == value) return this
+
+      return when {
+        data < value && left != null -> left!!.find(data)
+        data >= value && right != null -> right!!.find(data)
+        else -> null
+      }
+    }
+
+    fun print() {
+      if (left != null) left!!.print()
+      println(value.toString())
+      if (right != null) right!!.print()
+    }
+  }
+
+
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
