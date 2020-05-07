@@ -17,29 +17,29 @@ public class HelloWorld {
   public static void main(String[] args) {
 
     S04TreesAndGraphs questions = new S04TreesAndGraphs();
-    int[] array = new int[] {10,3,11,5,13,12,1,7,15,2,8,6,14,9};
+    
+    TreeNode tree2 =
+        new TreeNode(10,
+            new TreeNode(0,
+                new TreeNode(-10,
+                    new TreeNode(-1,
+                        null,
+                        null),
+                    new TreeNode(-5,
+                        new TreeNode(5,
+                            null,
+                            null),
+                        null)),
+                null),
+            new TreeNode(20,
+                new TreeNode(-20,
+                    null,
+                    null),
+                new TreeNode(30,
+                    null,
+                    null)));
 
-    S04TreesAndGraphs.TreeNode2 tree = new S04TreesAndGraphs.TreeNode2(4, null, null, 1);
-
-    for (int i : array) {
-      tree.insert(i);
-    }
-
-    tree.delete(10);
-    tree.delete(2);
-    tree.delete(13);
-    tree.delete(9);
-    tree.delete(4);
-
-    int[] count = new int[15];
-
-    for (int i = 0; i < 10000; i++) {
-      int result = tree.getRandomNode().getValue();
-      count[result - 1]++;
-    }
-
-    System.out.println(Arrays.toString(count));
-
+    System.out.println(questions.q0412bPathsWithSum(tree2, 0));
   }
 
   // -------- Arrays --------

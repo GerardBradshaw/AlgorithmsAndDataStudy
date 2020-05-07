@@ -548,7 +548,72 @@ class S04TreesAndGraphs {
     }
   }
 
+  /**
+   * Returns the number of paths that sum to a given value. The path does not need to start or end at a root or leaf.
+   */
+  fun q0412aPathsWithSum(bt: TreeNode, value: Int): Int {
+    return getSumCountInTree(bt, value).sumCount
+  }
 
+  private fun getSumCountInTree(node: TreeNode?, targetSum: Int): Result {
+    if (node == null) return Result()
+
+    val leftSums = getSumCountInTree(node.left, targetSum)
+    val rightSums = getSumCountInTree(node.right, targetSum)
+
+    val ongoingSums = ArrayList<Int>()
+    ongoingSums.add(node.value)
+
+    var sumCount = leftSums.sumCount + rightSums.sumCount
+    if (node.value == targetSum) sumCount++
+
+    for (sum in leftSums.ongoingSums) {
+      val newSum = node.value + sum
+      ongoingSums.add(newSum)
+      if (newSum == targetSum) sumCount++
+    }
+
+    for (sum in rightSums.ongoingSums) {
+      val newSum = node.value + sum
+      ongoingSums.add(newSum)
+      if (newSum == targetSum) sumCount++
+    }
+
+    println("loop ${ongoingSums.size} times")
+
+    return Result(ongoingSums, sumCount)
+  }
+
+  fun q0412bPathsWithSum(tree: TreeNode, value: Int): Int {
+    val cumSumToCount = HashMap<Int, Int>()
+    return getPathCountFromNode(tree, value, 0, cumSumToCount)
+  }
+
+  fun getPathCountFromNode(node: TreeNode?, target: Int, cumSum: Int, cumSumToCount: HashMap<Int, Int>): Int {
+    if (node == null) return 0
+
+    val cumSumToNode = cumSum + node.value
+    val targetCumSum = cumSumToNode - target
+
+    var result = cumSumToCount.getOrDefault(targetCumSum, 0)
+    if (cumSumToNode == target) result++
+
+    updateCumSumCount(cumSumToCount, cumSumToNode, 1)
+    result += getPathCountFromNode(node.left, target, cumSumToNode, cumSumToCount)
+    result += getPathCountFromNode(node.right, target, cumSumToNode, cumSumToCount)
+    updateCumSumCount(cumSumToCount, cumSumToNode, -1)
+
+    return result
+  }
+
+  private fun updateCumSumCount(cumSumToCount: HashMap<Int, Int>, cumSum: Int, delta: Int) {
+    val newCount = cumSumToCount.getOrDefault(cumSum, 0) + delta
+    if (newCount == 0) cumSumToCount.remove(cumSum)
+    else cumSumToCount.put(cumSum, newCount)
+  }
+
+
+  private data class Result(val ongoingSums: ArrayList<Int> = ArrayList<Int>(), val sumCount: Int = 0)
 
   data class GraphNode(var value: Int, var children: ArrayList<GraphNode> = ArrayList()) {
     override fun toString(): String {
