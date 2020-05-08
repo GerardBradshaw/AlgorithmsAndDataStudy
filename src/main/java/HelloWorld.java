@@ -19,7 +19,7 @@ public class HelloWorld {
 
     S05BitManipulation questions = new S05BitManipulation();
 
-    System.out.println(questions.insertion(1024,19,2,6));
+    System.out.println(questions.smallDoubleToBinaryString(0.7197265625));
   }
 
   // -------- Arrays --------

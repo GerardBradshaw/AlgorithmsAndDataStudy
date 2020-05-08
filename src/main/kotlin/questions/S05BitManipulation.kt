@@ -1,21 +1,63 @@
 package questions
 
+import kotlin.math.pow
+
 class S05BitManipulation {
 
   fun insertion(n: Int, m: Int, i: Int, j: Int): Int {
-    // Examples in comments are NOT exact (just representative)
+    val allOnes = 0.inv()
 
-    val allOnes = 0.inv() // !0
+    val maskLeft = if (j < 31) allOnes.shl(j + 1) else 0
+    val maskRight = 1.shl(i) - 1
 
-    val maskLeft = if (j < 31) allOnes.shl(j + 1) else 0 // 1111111 << j+1 = 11110000000
-    val maskRight = 1.shl(i) - 1 // (1 << i) - 1 = 0000001000 - 1 = 0000000111
+    val mask = maskLeft or maskRight
 
-    val mask = maskLeft or maskRight // 1110000000 or 000000111 = 11110000111
-
-    val nCleared = n and mask // 1010011011 && 111110000111 = 1010000011
-    val mShifted = m.shl(i) // 1001 << i = 10010000
+    val nCleared = n and mask
+    val mShifted = m.shl(i)
 
     return nCleared or mShifted
   }
+
+  fun toBinaryString(n: Int, bits: Int): String {
+    val stringBuilder = StringBuilder()
+    var remainder = n
+
+    for (i in bits-1 downTo 0) {
+      val bitValue = 2.0.pow(i).toInt()
+
+      if (remainder == 0 || remainder / bitValue == 0) stringBuilder.append(0)
+      else {
+        remainder -= bitValue
+        stringBuilder.append(1)
+      }
+    }
+
+    return if (remainder != 0) "ERROR"
+    else stringBuilder.toString()
+  }
+
+  fun smallDoubleToBinaryString(d: Double): String {
+    if (d < 0 || d > 1) return "must be between 0 and 1"
+
+    val stringBuilder = StringBuilder().append(".")
+    var remainder = d
+
+    for (i in 1..32) {
+      if (remainder == 0.0) break
+
+      val bitValue = 2.0.pow(-i)
+
+      if (remainder - bitValue < 0) stringBuilder.append(0)
+      else {
+        stringBuilder.append(1)
+        remainder -= bitValue
+      }
+    }
+
+    return if (remainder != 0.0) return "ERROR"
+    else stringBuilder.toString()
+  }
+
+
 
 }
