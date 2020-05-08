@@ -4,6 +4,7 @@ import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
 import questions.S04TreesAndGraphs;
+import questions.S05BitManipulation;
 import tree.XMyBinarySearchTree;
 import questions.S04TreesAndGraphs.TreeNode;
 
@@ -16,30 +17,9 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S04TreesAndGraphs questions = new S04TreesAndGraphs();
-    
-    TreeNode tree2 =
-        new TreeNode(10,
-            new TreeNode(0,
-                new TreeNode(-10,
-                    new TreeNode(-1,
-                        null,
-                        null),
-                    new TreeNode(-5,
-                        new TreeNode(5,
-                            null,
-                            null),
-                        null)),
-                null),
-            new TreeNode(20,
-                new TreeNode(-20,
-                    null,
-                    null),
-                new TreeNode(30,
-                    null,
-                    null)));
+    S05BitManipulation questions = new S05BitManipulation();
 
-    System.out.println(questions.q0412bPathsWithSum(tree2, 0));
+    System.out.println(questions.insertion(1024,19,2,6));
   }
 
   // -------- Arrays --------
