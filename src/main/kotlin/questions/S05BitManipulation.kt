@@ -79,5 +79,67 @@ class S05BitManipulation {
     return maxLength
   }
 
+  fun nextNumber(n: Int): IntArray {
+    var nextLargest = -1
+    var nextSmallest = -1
+    var bitMask = 1
+    var zeroCount = 0
+    var oneCount = 0
+
+    while (bitMask != 0) {
+      val currentBit = if (bitMask and n != 0) 1 else 0
+
+      if (currentBit == 1) {
+        if (zeroCount > 0 && nextSmallest == -1) nextSmallest = getNextSmallest(zeroCount, oneCount, n)
+        oneCount++
+
+      } else {
+        if (oneCount > 0 && nextLargest == -1) nextLargest = getNextLargest(zeroCount, oneCount, n)
+        zeroCount++
+      }
+
+      if (nextLargest != -1 && nextSmallest != -1) break
+
+      bitMask = bitMask shl 1
+    }
+
+    if (nextSmallest == -1) nextSmallest = n
+    if (nextLargest == -1) nextLargest = n
+
+    return intArrayOf(nextSmallest, nextLargest)
+  }
+
+  private fun getNextLargest(zeroCount: Int, oneCount: Int, n: Int): Int {
+    val ones = 0.inv()
+
+    val nFlippedAtCurrentPosition = n or 1.shl(zeroCount + oneCount)
+    val leftSide = nFlippedAtCurrentPosition and ones.shl(zeroCount + oneCount)
+    val rightSide = ones.shl(oneCount - 1).inv()
+
+    return leftSide or rightSide
+  }
+
+  private fun getNextSmallest(zeroCount: Int, oneCount: Int, n: Int): Int {
+    val ones = 0.inv()
+
+    val rightSideLeft = ones.shl(zeroCount + oneCount)
+    val rightSideRight = ones.shl(zeroCount - 1).inv()
+    val rightSide = (rightSideLeft or rightSideRight).inv()
+
+    val leftSide = n and ones.shl(zeroCount + oneCount + 1)
+
+    return leftSide or rightSide
+  }
+
+  fun oneCount(n: Int): Int {
+    var mask = 1
+    var count = 0
+
+    while (mask < n) {
+      if (n and mask != 0) count++
+      mask = mask.shl(1)
+    }
+    return count
+  }
 
 }

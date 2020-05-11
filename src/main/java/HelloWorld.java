@@ -19,7 +19,34 @@ public class HelloWorld {
 
     S05BitManipulation questions = new S05BitManipulation();
 
-    System.out.println(questions.flipBitToWin(Integer.MIN_VALUE));
+    Random random = new Random();
+    for (int i = 1; i < 1000; i++) {
+      int n = Math.abs(random.nextInt(10000));
+      int[] result = questions.nextNumber(n);
+      int smaller = result[0];
+      int larger = result[1];
+
+      if (n > larger) System.out.println("n larger than larger :(");
+      if (n < smaller) System.out.println("n smaller than smaller :(");
+
+      int n1Count = questions.oneCount(n);
+
+      int smaller1Count = questions.oneCount(result[0]);
+      if (smaller1Count != n1Count) System.out.println("smaller has wrong 1 count" + " n = " + n + ", s = " + smaller + " l = " + larger);
+
+      int larger1Count = questions.oneCount(result[1]);
+      if (larger1Count != n1Count) System.out.println("larger has wrong 1 count" + " n = " + n + ", s = " + smaller + " l = " + larger);
+
+      for (int j = n + 1; j < larger; j++) {
+        int j1Count = questions.oneCount(j);
+        if (j1Count == n1Count) System.out.println(j + " is a smaller larger");
+      }
+
+      for (int k = smaller + 1; k < n; k++) {
+        int k1Count = questions.oneCount(k);
+        if (k1Count == n1Count) System.out.println(k + " is a larger smaller");
+      }
+    }
   }
 
   // -------- Arrays --------
