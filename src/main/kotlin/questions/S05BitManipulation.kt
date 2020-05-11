@@ -58,6 +58,26 @@ class S05BitManipulation {
     else stringBuilder.toString()
   }
 
+  fun flipBitToWin(n: Int): Int {
+    if (n.inv() == 0) return 32
+
+    var nCopy = n
+    var currentLength = 0
+    var prevLength = 0
+
+    var maxLength = 1
+
+    while (nCopy != 0) {
+      if ((nCopy and 1) == 1) currentLength++
+      else {
+        prevLength = if (nCopy and 2 == 0) 0 else currentLength
+        currentLength = 0
+      }
+      maxLength = Math.max(prevLength + currentLength + 1, maxLength)
+      nCopy = nCopy.ushr(1)
+    }
+    return maxLength
+  }
 
 
 }

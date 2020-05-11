@@ -19,7 +19,7 @@ public class HelloWorld {
 
     S05BitManipulation questions = new S05BitManipulation();
 
-    System.out.println(questions.smallDoubleToBinaryString(0.7197265625));
+    System.out.println(questions.flipBitToWin(Integer.MIN_VALUE));
   }
 
   // -------- Arrays --------
