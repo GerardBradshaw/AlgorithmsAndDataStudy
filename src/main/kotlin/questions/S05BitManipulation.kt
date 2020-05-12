@@ -142,4 +142,26 @@ class S05BitManipulation {
     return count
   }
 
+  fun debugger(){}
+
+  fun pairwiseSwap(n: Int): Int {
+    var workingResult = 0
+    for (i in 0..30 step 2) {
+      val firstBit = if (n and 2.0.pow(i.toDouble()).toInt() != 0) 1 else 0
+      var secondBit = if (n and 2.0.pow(i.toDouble() + 1).toInt() != 0) 1 else 0
+      if (i == 30) secondBit = 0
+      workingResult = workingResult or firstBit.shl(i + 1)
+      workingResult = workingResult or secondBit.shl(i)
+    }
+    return workingResult
+  }
+
+  fun pairwiseSwap2(n: Int): Int {
+    val evenShiftedRight = (n and 0b0101010_10101010_10101010_10101010).ushr(1)
+    val oddShiftedLeft = (n and 0b1010101_01010101_01010101_01010101).shl(1)
+    return evenShiftedRight or oddShiftedLeft
+  }
+
+
+
 }
