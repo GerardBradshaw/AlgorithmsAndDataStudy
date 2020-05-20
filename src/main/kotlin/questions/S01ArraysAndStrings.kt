@@ -75,7 +75,7 @@ class S01ArraysAndStrings {
    */
   fun q0103Urlify(charArray: CharArray, length: Int) {
     var spaceCount = 0
-    for (i in 0..length - 1) if (charArray[i] == ' ') spaceCount++ // O(n)
+    for (i in 0 until length) if (charArray[i] == ' ') spaceCount++ // O(n)
 
     val requiredLength = length + spaceCount * 2
     if (charArray.size < requiredLength) throw Exception()

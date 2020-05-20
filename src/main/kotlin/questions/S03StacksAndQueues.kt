@@ -129,7 +129,7 @@ class S03StacksAndQueues {
     }
 
     fun popAt(index: Int): Int {
-      val stackIndex = index / maxStackSize
+      //val stackIndex = index / maxStackSize
       val stack = stackList.get(topStack)
       return stack.pop()
     }

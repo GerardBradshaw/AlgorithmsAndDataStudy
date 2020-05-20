@@ -213,7 +213,7 @@ class S04TreesAndGraphs {
 
   private fun q0406GetParent(node: TreeNode): TreeNode? {
     println("Note: q0406GetParent has been called which does not get the parent. The question just assumed that this was a working function.")
-    return null
+    return node
   }
 
   /**
