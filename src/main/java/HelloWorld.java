@@ -17,48 +17,9 @@ public class HelloWorld {
 
     S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
 
-    boolean[][] grid = new boolean[4][5];
-    //System.out.println("There are " + grid.length + " rows and " + grid[0].length + " columns");
-    grid[2][0] = true;
-    grid[1][2] = true;
-    grid[3][3] = true;
-    grid[0][4] = true;
-
-    //System.out.println(questions.magicIndex2(new int[] {4,4,4,4,4,4,4,4} ));
-
-    ArrayList<Integer> list = new ArrayList<Integer>();
-    list.add(1);
-    list.add(2);
-    list.add(3);
-    list.add(4);
-
-    //ArrayList<ArrayList<Integer>> subsets = questions.powerSet2(list);
-    //System.out.println("There are " + subsets.size() + " subsets:");
-    //for (ArrayList<Integer> subset : subsets) {
-      //System.out.println(Arrays.toString(subset.toArray()));
-    //}
-
-    //System.out.println(questions.multiplyWithGrid(5,7));
-
-    Stack<Integer> source = new Stack<>();
-    for (int i = 3; i >= 1; i--) {
-      source.add(i);
-    }
-    Stack<Integer> buffer = new Stack<>();
-    Stack<Integer> dest = new Stack<>();
-    questions.towersOfHanoi(source, dest, buffer);
-    System.out.println("Approach A: ");
-    while (!dest.isEmpty()) System.out.println(dest.pop());
-
-    S08RecursionAndDynamicProgramming.Tower sourceTower = new S08RecursionAndDynamicProgramming.Tower();
-    for (int i = 3; i >= 1; i--) {
-      sourceTower.add(i);
-    }
-    S08RecursionAndDynamicProgramming.Tower bufferTower = new S08RecursionAndDynamicProgramming.Tower();
-    S08RecursionAndDynamicProgramming.Tower destTower = new S08RecursionAndDynamicProgramming.Tower();
-    sourceTower.moveAllToDestination(bufferTower, destTower);
-    System.out.println("Approach B: ");
-    destTower.printAndClear();
+    ArrayList<String> perms = questions.getPermsWithDups3("!-----------!");
+    System.out.println(perms.size());
+    for (String s : perms) System.out.println(s);
   }
 
   // -------- Arrays --------

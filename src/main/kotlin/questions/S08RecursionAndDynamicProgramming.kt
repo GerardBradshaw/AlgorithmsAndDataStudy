@@ -2,7 +2,6 @@ package questions
 
 import java.awt.Point
 import java.lang.Exception
-import java.lang.NullPointerException
 import java.security.InvalidParameterException
 import java.util.*
 import kotlin.collections.HashSet
@@ -233,6 +232,146 @@ class S08RecursionAndDynamicProgramming {
       while (copy.isNotEmpty()) println(copy.pop())
     }
   }
+
+  // - - - - - - - - - - - - - - - - QUESTION 7 - - - - - - - - - - - - - - - -
+  fun getPermsWithoutDups(str: String): ArrayList<String> {
+    if (str.isEmpty()) {
+      val singlePerm = ArrayList<String>()
+      singlePerm.add(str)
+      return singlePerm
+    }
+
+    val perms = ArrayList<String>()
+
+    for (i in str.indices) {
+      val start = str.substring(0,i)
+      val end = str.substring(i+1)
+      val permsWithoutI = getPermsWithoutDups(start + end)
+
+      for (permWithoutI in permsWithoutI) {
+        perms.add(str[i] + permWithoutI)
+      }
+    }
+    return perms
+  }
+
+
+  // - - - - - - - - - - - - - - - - QUESTION 8a - - - - - - - - - - - - - - - -
+  fun getPermsWithDups(str: String): ArrayList<String> {
+    if (str.isEmpty()) {
+      val singlePerm = ArrayList<String>()
+      singlePerm.add(str)
+      return singlePerm
+    }
+
+    val perms = ArrayList<String>()
+    val visitedCharSet = HashSet<Char>()
+
+    for (i in str.indices) {
+      val start = str.substring(0,i)
+      val end = str.substring(i+1)
+      val permsWithoutI = getPermsWithDups(start + end)
+
+      val char = str[i]
+
+      if (!visitedCharSet.contains(char)) {
+          for (permWithoutI in permsWithoutI) {
+            perms.add(char + permWithoutI)
+          }
+          visitedCharSet.add(char)
+        }
+    }
+    return perms
+  }
+
+  // - - - - - - - - - - - - - - - - QUESTION 8b - - - - - - - - - - - - - - - -
+  fun getPermsWithDups2(str: String): ArrayList<String> {
+    val charToCountMap = stringToCharMap(str)
+    return getPermsFromMap(charToCountMap)
+  }
+
+  private fun getPermsFromMap(map: HashMap<Char, Int>): ArrayList<String> {
+    if (map.size == 1) {
+      val onlyPerm = getOnlyPerm(map)
+      val result = ArrayList<String>()
+      result.add(onlyPerm)
+      return result
+    }
+
+    val perms = ArrayList<String>()
+
+    @Suppress("UNCHECKED_CAST")
+    for (char in map.keys) {
+      val tempMap = map.clone() as HashMap<Char, Int>
+      val count = tempMap.getOrDefault(char,1)
+
+      if (count > 1) tempMap.put(char, count - 1)
+      else tempMap.remove(char)
+
+      val permsWithoutChar = getPermsFromMap(tempMap)
+
+      for (permWithoutChar in permsWithoutChar) {
+        perms.add(char + permWithoutChar)
+      }
+    }
+    return perms
+  }
+
+  private fun getOnlyPerm(map: HashMap<Char, Int>): String {
+    val entry = map.entries.iterator().next()
+    val char = entry.key
+    val count = entry.value
+
+    val resultBuilder = StringBuilder()
+    for (i in 0 until count) {
+      resultBuilder.append(char)
+    }
+    return resultBuilder.toString()
+  }
+
+  private fun stringToCharMap(str: String): HashMap<Char, Int> {
+    val map = HashMap<Char, Int>()
+    for (char in str) {
+      val count = map.getOrDefault(char, 1)
+      map.put(char, count)
+    }
+    return map
+  }
+
+  // - - - - - - - - - - - - - - - - QUESTION 8c - - - - - - - - - - - - - - - -
+  fun getPermsWithDups3(str: String): ArrayList<String> {
+    val result = ArrayList<String>()
+    val charToCountMap = getCharMapFromString(str)
+    getPerms(charToCountMap, "", str.length, result)
+    return result
+  }
+
+  private fun getPerms(map: HashMap<Char, Int>, prefix: String,
+                       remaining: Int, result: ArrayList<String>) {
+    if (remaining == 0) {
+      result.add(prefix)
+      return
+    }
+
+    for (char in map.keys) {
+      val count = map[char]!!
+      if (count > 0) {
+        map.put(char, count - 1)
+        getPerms(map, prefix + char, remaining - 1, result)
+        map.put(char, count)
+      }
+    }
+  }
+
+  private fun getCharMapFromString(str: String): HashMap<Char, Int> {
+    val map = HashMap<Char, Int>()
+    for (char in str) {
+      val count = map.getOrDefault(char, 0)
+      map.put(char, count + 1)
+    }
+    return map
+  }
+
 
 
 
