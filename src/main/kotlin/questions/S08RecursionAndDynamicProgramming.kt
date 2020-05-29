@@ -373,8 +373,27 @@ class S08RecursionAndDynamicProgramming {
   }
 
 
+  // - - - - - - - - - - - - - - - - QUESTION 9 - - - - - - - - - - - - - - - -
+  fun parens(n: Int): ArrayList<String> {
+    val results = ArrayList<String>()
+    getSolution(results, n, n, CharArray(2*n), 0)
+    return results
+  }
 
+  private fun getSolution(results: ArrayList<String>, openRem: Int, closeRem: Int,
+                          chars: CharArray, index: Int) {
+    if (openRem > closeRem) return
 
-
-
+    if (openRem == 0 && closeRem == 0) results.add(String(chars))
+    else {
+      if (openRem > 0) {
+        chars[index] = '('
+        getSolution(results, openRem - 1, closeRem, chars, index + 1)
+      }
+      if (closeRem > 0) {
+        chars[index] = ')'
+        getSolution(results, openRem, closeRem - 1, chars, index + 1)
+      }
+    }
+  }
 }

@@ -17,9 +17,8 @@ public class HelloWorld {
 
     S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
 
-    ArrayList<String> perms = questions.getPermsWithDups3("!-----------!");
-    System.out.println(perms.size());
-    for (String s : perms) System.out.println(s);
+    ArrayList<String> res = questions.parens(4);
+    for (String s : res) System.out.println(s + s.hashCode());
   }
 
   // -------- Arrays --------
