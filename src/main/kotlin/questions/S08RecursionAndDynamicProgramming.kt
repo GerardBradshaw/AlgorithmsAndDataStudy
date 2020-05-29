@@ -396,4 +396,37 @@ class S08RecursionAndDynamicProgramming {
       }
     }
   }
+
+
+  // - - - - - - - - - - - - - - - - QUESTION 10 - - - - - - - - - - - - - - - -
+  fun paintFill(screen: Array<IntArray>, row: Int, col: Int, newColour: Int) {
+    val maxRow = screen.size - 1
+    val maxCol = screen[0].size - 1
+    if (row > maxRow || col > maxCol) throw InvalidParameterException()
+
+    if (screen[row][col] == newColour) return
+
+    val visitedCells = HashSet<Point>()
+    dfsPaint(screen, row, col, screen[row][col], newColour, visitedCells)
+  }
+
+  private fun dfsPaint(screen: Array<IntArray>, row: Int, col: Int,
+                       oldColour: Int, newColour: Int, visitedCells: HashSet<Point>) {
+    val maxRow = screen.size - 1
+    val maxCol = screen[0].size - 1
+    if (row > maxRow || col > maxCol  || row < 0 || col < 0) return
+
+    if (visitedCells.contains(Point(col, row))) return
+    visitedCells.add(Point(col, row))
+
+    val currentColour = screen[row][col]
+    if (currentColour == oldColour || currentColour == newColour) {
+      screen[row][col] = newColour
+      dfsPaint(screen, row - 1, col, oldColour, newColour, visitedCells) //above
+      dfsPaint(screen, row + 1, col, oldColour, newColour, visitedCells) //below
+      dfsPaint(screen, row, col - 1, oldColour, newColour, visitedCells) //left
+      dfsPaint(screen, row, col + 1, oldColour, newColour, visitedCells) //right
+    }
+  }
+
 }
