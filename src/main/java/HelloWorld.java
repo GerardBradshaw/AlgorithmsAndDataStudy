@@ -17,37 +17,7 @@ public class HelloWorld {
 
     S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
 
-    int[][] screen = new int[5][7];
-
-    screen[0][0] = 8;
-    screen[0][1] = 8;
-    screen[0][2] = 8;
-    screen[1][0] = 8;
-    screen[1][1] = 8;
-    screen[1][2] = 8;
-
-    screen[0][4] = 8;
-    screen[0][5] = 8;
-
-    screen[4][0] = 8;
-
-    screen[3][4] = 8;
-    screen[3][5] = 8;
-    screen[3][6] = 8;
-    screen[4][4] = 8;
-    screen[4][5] = 8;
-    screen[4][6] = 8;
-
-    System.out.println("Old screen:");
-    for (int[] array : screen) System.out.println(Arrays.toString(array));
-
-    questions.paintFill(screen, 2, 1, 1);
-
-    System.out.println();
-    System.out.println("New screen:");
-
-    for (int[] array : screen) System.out.println(Arrays.toString(array));
-
+    for (int i = 1; i <= 30; i++) System.out.println(i + "c -> " + questions.coins2(i));
   }
 
   // -------- Arrays --------

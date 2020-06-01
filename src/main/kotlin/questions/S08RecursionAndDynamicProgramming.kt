@@ -429,4 +429,28 @@ class S08RecursionAndDynamicProgramming {
     }
   }
 
+
+  // - - - - - - - - - - - - - - - - QUESTION 11 - - - - - - - - - - - - - - - -
+  fun coins(change: Int): Int {
+    val changeToWays = HashMap<Int, Int>()
+    return countWays(change, intArrayOf(1, 5, 10, 25), 0, changeToWays)
+  }
+
+  private fun countWays(total: Int, denoms: IntArray, index: Int, map: HashMap<Int, Int>): Int {
+    if (map.contains(total)) return map[total]!!
+
+    val coin = denoms[index]
+    if (index == denoms.size - 1) {
+      val remaining = total % coin
+      return if (remaining == 0) 1 else 0
+    }
+
+    var ways = 0
+    for (amount in 0..total step coin) {
+      ways += countWays(total - amount, denoms, index + 1, map)
+    }
+
+    map[total] = ways
+    return ways
+  }
 }
