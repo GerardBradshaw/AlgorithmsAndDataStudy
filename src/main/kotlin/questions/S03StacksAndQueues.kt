@@ -128,11 +128,11 @@ class S03StacksAndQueues {
       stack.push(value)
     }
 
-    fun popAt(index: Int): Int {
-      //val stackIndex = index / maxStackSize
-      val stack = stackList.get(topStack)
-      return stack.pop()
-    }
+    //fun popAt(index: Int): Int {
+    //  //val stackIndex = index / maxStackSize
+    //  val stack = stackList.get(topStack)
+    //  return stack.pop()
+    //}
 
     private data class Node(val value: Int, var prev: Node?)
   }
