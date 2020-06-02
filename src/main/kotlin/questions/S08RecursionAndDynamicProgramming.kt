@@ -453,4 +453,40 @@ class S08RecursionAndDynamicProgramming {
     map[total] = ways
     return ways
   }
+
+
+  // - - - - - - - - - - - - - - - - QUESTION 12 - - - - - - - - - - - - - - - -
+  fun eightQueens() {
+    for (i in 0..7) placeValueAtPos(IntArray(8), i, 0)
+  }
+
+  private fun placeValueAtPos(board: IntArray, value: Int, pos: Int) {
+    board[pos] = value
+    if (isPosConflictWithPrev(board, pos)) return
+
+    if (pos == 7) {
+      println(board.contentToString())
+      return
+    }
+
+    for (i in 0..7) {
+      if (i == value) continue
+      placeValueAtPos(board, i, pos + 1)
+    }
+  }
+
+  private fun isPosConflictWithPrev(board: IntArray, pos: Int): Boolean {
+    if (pos == 0) return false
+
+    for (i in (pos - 1) downTo 0) {
+      val colDiff = board[pos] - board[i]
+      if (colDiff == 0) return true
+
+      val rowDiff = pos - i
+      val isDiagConflict = colDiff == rowDiff || colDiff + rowDiff == 0
+      if (isDiagConflict) return true
+    }
+    return false
+  }
+
 }

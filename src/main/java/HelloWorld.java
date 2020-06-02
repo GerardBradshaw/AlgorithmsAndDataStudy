@@ -17,7 +17,7 @@ public class HelloWorld {
 
     S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
 
-    for (int i = 1; i <= 30; i++) System.out.println(i + "c -> " + questions.coins2(i));
+    questions.eightQueens();
   }
 
   // -------- Arrays --------
