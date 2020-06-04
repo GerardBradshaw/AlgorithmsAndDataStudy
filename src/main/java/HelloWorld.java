@@ -17,7 +17,16 @@ public class HelloWorld {
 
     S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
 
-    questions.eightQueens();
+    S08RecursionAndDynamicProgramming.Box box1 = new S08RecursionAndDynamicProgramming.Box(1,1,1);
+    S08RecursionAndDynamicProgramming.Box box2 = new S08RecursionAndDynamicProgramming.Box(20,20,2);
+    S08RecursionAndDynamicProgramming.Box box3 = new S08RecursionAndDynamicProgramming.Box(30,30,3);
+    S08RecursionAndDynamicProgramming.Box box4 = new S08RecursionAndDynamicProgramming.Box(40,40,4);
+    S08RecursionAndDynamicProgramming.Box box5 = new S08RecursionAndDynamicProgramming.Box(100,25,10);
+
+    S08RecursionAndDynamicProgramming.Box[] boxes = new S08RecursionAndDynamicProgramming.Box[] {box1, box2, box3,box4, box5};
+
+    System.out.println(questions.stackOfBoxes(boxes));
+
   }
 
   // -------- Arrays --------

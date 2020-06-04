@@ -5,6 +5,7 @@ import java.lang.Exception
 import java.security.InvalidParameterException
 import java.util.*
 import kotlin.collections.HashSet
+import kotlin.math.max
 import kotlin.math.pow
 
 class S08RecursionAndDynamicProgramming {
@@ -488,5 +489,41 @@ class S08RecursionAndDynamicProgramming {
     }
     return false
   }
+
+
+  // - - - - - - - - - - - - - - - - QUESTION 13 - - - - - - - - - - - - - - - -
+  fun stackOfBoxes(boxes: Array<Box>): Int {
+    if (boxes.isEmpty()) return 0
+    return putRemainingOnStack(null, boxes, BooleanArray(boxes.size))
+  }
+
+  private fun putRemainingOnStack(base: Box?, boxes: Array<Box>, used: BooleanArray): Int {
+    val baseHeight = base?.h ?: 0
+    var maxHeightSoFar = baseHeight
+
+    for (index in boxes.indices) {
+      if (used[index]) continue
+      else {
+        val box = boxes[index]
+
+        if (box.canSitOn(base)) {
+          used[index] = true
+          val thisHeight = putRemainingOnStack(box, boxes, used)
+          maxHeightSoFar = max(thisHeight + baseHeight, maxHeightSoFar)
+          used[index] = false
+        }
+      }
+    }
+    return maxHeightSoFar
+  }
+
+  data class Box(val w: Int, val d: Int, val h: Int) {
+    fun canSitOn(box: Box?): Boolean {
+      if (box == null) return true
+      val isSmallerInAllDimens = w < box.w && d < box.d && h < box.h
+      return isSmallerInAllDimens
+    }
+  }
+
 
 }
