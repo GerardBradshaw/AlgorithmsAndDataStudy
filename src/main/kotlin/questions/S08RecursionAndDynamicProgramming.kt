@@ -526,4 +526,43 @@ class S08RecursionAndDynamicProgramming {
   }
 
 
+  // - - - - - - - - - - - - - - - - QUESTION 14 - - - - - - - - - - - - - - - -
+  fun booleanEval(expression: String, result: Boolean): Int {
+    val memo = HashMap<String, Int>()
+    return countEval(expression, result, memo)
+  }
+
+  private fun countEval(expression: String, result: Boolean, memo: HashMap<String, Int>): Int {
+    if (expression.isEmpty()) return 0
+    if (expression.length == 1) {
+      val onlyBool = expression[0] == '1'
+      return if (onlyBool == result) 1 else 0
+    }
+
+    val memoKey = result.toString() + expression
+    if (memo.contains(memoKey)) return memo[memoKey]!!
+
+    var waysToGetResult = 0
+    for (operatorIndex in 1 until expression.length step 2) {
+      val leftExpression = expression.substring(0, operatorIndex)
+      val rightExpression = expression.substring(operatorIndex + 1, expression.length)
+
+      val leftTrue = countEval(leftExpression, true, memo)
+      val rightTrue = countEval(rightExpression, true, memo)
+      val leftFalse = countEval(leftExpression, false, memo)
+      val rightFalse = countEval(rightExpression, false, memo)
+
+      val bothTrueWays = leftTrue * rightTrue
+      val bothFalseWays = leftFalse * rightFalse
+      val trueAndFalseWays = leftTrue * rightFalse + leftFalse * rightTrue
+
+      when (expression[operatorIndex]) {
+        '&' -> waysToGetResult += if (result) (bothTrueWays) else (bothFalseWays + trueAndFalseWays)
+        '|' -> waysToGetResult += if (result) (bothTrueWays + trueAndFalseWays) else (bothFalseWays)
+        '^' -> waysToGetResult += if (result) (trueAndFalseWays) else (bothTrueWays + bothFalseWays)
+      }
+    }
+    memo[memoKey] = waysToGetResult
+    return waysToGetResult
+  }
 }
