@@ -3,6 +3,7 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
+import questions.S04TreesAndGraphs2;
 import questions.S08RecursionAndDynamicProgramming;
 import tree.XMyBinarySearchTree;
 
@@ -15,11 +16,14 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S08RecursionAndDynamicProgramming questions = new S08RecursionAndDynamicProgramming();
+    S04TreesAndGraphs2 questions = new S04TreesAndGraphs2();
 
-    int result = questions.booleanEval("1^0|0|1", false);
+    ArrayList<String> projects = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F"));
 
-    System.out.println(result);
+    ArrayList<String[]> dependencies = new ArrayList<>(Arrays.asList(new String[]{"A", "D"}, new String[]{"F", "B"}, new String[]{"B", "D"}, new String[]{"F", "A"}, new String[]{"D", "C"}));
+    ArrayList<String> result = questions.buildOrder(projects, dependencies);
+
+    System.out.println(result.toString());
 
   }
 
