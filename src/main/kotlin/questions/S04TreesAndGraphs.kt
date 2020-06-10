@@ -14,7 +14,7 @@ class S04TreesAndGraphs {
   /**
    * Uses a BFS to find a route between [s] and [e].
    */
-  fun q0401aRouteBetweenNodes(s: GraphNode, e: GraphNode): Boolean {
+  fun routeBetweenNodes(s: GraphNode, e: GraphNode): Boolean {
     val visited = HashSet<GraphNode>()
     val queue = MyQueue<GraphNode>()
     queue.enqueue(s)
@@ -31,7 +31,7 @@ class S04TreesAndGraphs {
   /**
    * Uses a DFS to find a route between [s] and [e].
    */
-  fun q0401bRouteBetweenNodes(s: GraphNode, e: GraphNode): Boolean {
+  fun routeBetweenNodes2(s: GraphNode, e: GraphNode): Boolean {
     val visited = HashSet<GraphNode>()
     val stack = MyStack<GraphNode>()
     stack.push(s)
@@ -48,43 +48,43 @@ class S04TreesAndGraphs {
   /**
    * Creates a BST of minimal height from [array] assuming it's sorted in ascending order. O(N) time, O(1) additional space.
    */
-  fun q0402MinimalTree(array: IntArray): TreeNode {
-    return q0402CreateNodeFromMid(array, 0, array.size - 1)!!
+  fun minimalTree(array: IntArray): TreeNode {
+    return createNodeFromMid(array, 0, array.size - 1)!!
   }
 
-  private fun q0402CreateNodeFromMid(array: IntArray, leftIndex: Int, rightIndex: Int): TreeNode? {
+  private fun createNodeFromMid(array: IntArray, leftIndex: Int, rightIndex: Int): TreeNode? {
     if (leftIndex > rightIndex) return null
 
     val mid = (leftIndex + rightIndex) / 2
     val node = TreeNode(array[mid])
-    node.left = q0402CreateNodeFromMid(array, leftIndex, mid - 1)
-    node.right = q0402CreateNodeFromMid(array, mid + 1, rightIndex)
+    node.left = createNodeFromMid(array, leftIndex, mid - 1)
+    node.right = createNodeFromMid(array, mid + 1, rightIndex)
     return node
   }
 
-  private data class Q0402Node(val value: Int, var left: Q0402Node?, var right: Q0402Node?)
+  private data class BasicNode(val value: Int, var left: BasicNode?, var right: BasicNode?)
 
   /**
    * Returns an [ArrayList] of [LinkedList] of all the [TreeNode] at each depth in [tree] using a modified DFS approach.
    * O(N) time, O(N) space.
    *
    * Other approaches:
-   * - [q0403bListOfDepths] BFS approach
+   * - [listOfDepths2] BFS approach
    */
-  fun q0403aListOfDepths(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
+  fun listOfDepths(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
     val result = ArrayList<LinkedList<TreeNode>>()
-    q0402aDfs(tree, result, 0)
+    dfs(tree, result, 0)
     return result
   }
 
-  private fun q0402aDfs(node: TreeNode?, result: ArrayList<LinkedList<TreeNode>>, depth: Int) {
+  private fun dfs(node: TreeNode?, result: ArrayList<LinkedList<TreeNode>>, depth: Int) {
     if (node == null) return
 
     if (result.size == depth) result.add(LinkedList())
 
     result[depth].add(node)
-    q0402aDfs(node.left, result, depth + 1)
-    q0402aDfs(node.right, result, depth + 1)
+    dfs(node.left, result, depth + 1)
+    dfs(node.right, result, depth + 1)
   }
 
   /**
@@ -92,9 +92,9 @@ class S04TreesAndGraphs {
    * O(N) time, O(N) space.
    *
    * Other approaches:
-   * - [q0403bListOfDepths] DFS approach
+   * - [listOfDepths2] DFS approach
    */
-  fun q0403bListOfDepths(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
+  fun listOfDepths2(tree: TreeNode): ArrayList<LinkedList<TreeNode>> {
     val result = ArrayList<LinkedList<TreeNode>>()
 
     var currentList = LinkedList<TreeNode>()
@@ -117,17 +117,17 @@ class S04TreesAndGraphs {
   /**
    * Returns true if [tree] is balanced. O(N) time, O(H) space, N = number of nodes, H = height of tree.
    */
-  fun q0404CheckBalanced(tree: TreeNode): Boolean {
-    return q0404GetHeight(tree) >= -1
+  fun checkBalanced(tree: TreeNode): Boolean {
+    return getHeight(tree) >= -1
   }
 
-  private fun q0404GetHeight(node: TreeNode?): Int {
+  private fun getHeight(node: TreeNode?): Int {
     if (node == null) return -1
 
-    val leftHeight = q0404GetHeight(node.left)
+    val leftHeight = getHeight(node.left)
     if (leftHeight == Int.MIN_VALUE) return Int.MIN_VALUE
 
-    val rightHeight = q0404GetHeight(node.right)
+    val rightHeight = getHeight(node.right)
     if (rightHeight == Int.MIN_VALUE) return Int.MIN_VALUE
 
     val heightDiff = abs(leftHeight - rightHeight)
@@ -139,22 +139,22 @@ class S04TreesAndGraphs {
    * Returns true if [tree] is a BST using min/max values of trees. O(N) time, O(H) space, where H = height of tree.
    *
    * Other approaches:
-   * - [q0405bIsValidBst] in-order traversal approach. Simpler but not as robust (accuracy not guaranteed if duplicate
+   * - [isValidBstB] in-order traversal approach. Simpler but not as robust (accuracy not guaranteed if duplicate
    * values are present).
    */
-  fun q0405aIsValidBst(tree: TreeNode): Boolean {
-    return q0405aIsValidNode(tree, Int.MIN_VALUE, Int.MAX_VALUE)
+  fun isValidBst(tree: TreeNode): Boolean {
+    return isValidNode(tree, Int.MIN_VALUE, Int.MAX_VALUE)
   }
 
-  private fun q0405aIsValidNode(node: TreeNode?, min: Int, max: Int): Boolean {
+  private fun isValidNode(node: TreeNode?, min: Int, max: Int): Boolean {
     if (node == null) return true
 
     if (node.value >= max || node.value < min) return false
 
-    val leftValid = q0405aIsValidNode(node.left, min, node.value)
+    val leftValid = isValidNode(node.left, min, node.value)
     if (!leftValid) return false
 
-    val rightValid = q0405aIsValidNode(node.right, node.value, max)
+    val rightValid = isValidNode(node.right, node.value, max)
     if (!rightValid) return false
 
     return true
@@ -166,11 +166,11 @@ class S04TreesAndGraphs {
    * CAUTION: Can give false positive if tree contains duplicate values.
    *
    * Other approaches:
-   * - [q0405aIsValidBst] min/max values of subtree approach. Can handle duplicates and uses less space.
+   * - [isValidBst] min/max values of subtree approach. Can handle duplicates and uses less space.
    */
-  fun q0405bIsValidBst(tree: TreeNode): Boolean {
+  fun isValidBstB(tree: TreeNode): Boolean {
     val result = MyArrayList<Int>()
-    q0405bInOrderFillResult(tree, result)
+    inOrderFillResult(tree, result)
 
     var prev = Int.MIN_VALUE
 
@@ -181,12 +181,12 @@ class S04TreesAndGraphs {
     return true
   }
 
-  private fun q0405bInOrderFillResult(node: TreeNode?, result: MyArrayList<Int>) {
+  private fun inOrderFillResult(node: TreeNode?, result: MyArrayList<Int>) {
     if (node == null) return
 
-    q0405bInOrderFillResult(node.left, result)
+    inOrderFillResult(node.left, result)
     result.add(node.value)
-    q0405bInOrderFillResult(node.right, result)
+    inOrderFillResult(node.right, result)
   }
 
   /**
@@ -195,11 +195,11 @@ class S04TreesAndGraphs {
    * NOTE: Assumes that [TreeNode]s have a reference to their parents (which they don't). This doesn't actually work
    * because of that.
    */
-  fun q0406Successor(node: TreeNode): TreeNode? {
+  fun successor(node: TreeNode): TreeNode? {
     if (node.right == null) {
-      var parent = q0406GetParent(node)
+      var parent = getParent(node)
       while (parent != null && parent.value <= node.value) {
-        parent = q0406GetParent(parent)
+        parent = getParent(parent)
       }
       return parent
     }
@@ -211,7 +211,7 @@ class S04TreesAndGraphs {
     return current
   }
 
-  private fun q0406GetParent(node: TreeNode): TreeNode? {
+  private fun getParent(node: TreeNode): TreeNode? {
     println("Note: q0406GetParent has been called which does not get the parent. The question just assumed that this was a working function.")
     return node
   }
@@ -238,27 +238,27 @@ class S04TreesAndGraphs {
    *
    * 5. Return the result, or null if step 4 iteration was terminated prematurely.
    */
-  fun q0407BuildOrder(projects: Array<String>, dependencies: Array<Array<String>>): Array<Q0407Graph.Project>? {
-    val graph = q0407CreateGraph(projects, dependencies)
-    return q0407GetSortedProjectArray(graph)
+  fun buildOrder(projects: Array<String>, dependencies: Array<Array<String>>): Array<ProjectGraph.Project>? {
+    val graph = createGraph(projects, dependencies)
+    return getSortedProjectArray(graph)
   }
 
-  private fun q0407CreateGraph(projects: Array<String>, dependencies: Array<Array<String>>): Q0407Graph {
-    val result = Q0407Graph()
+  private fun createGraph(projects: Array<String>, dependencies: Array<Array<String>>): ProjectGraph {
+    val result = ProjectGraph()
 
-    q0407AddProjectsToGraph(result, projects)
-    q0407AddDependenciesToGraph(result, dependencies)
+    addProjectsToGraph(result, projects)
+    addDependenciesToGraph(result, dependencies)
 
     return result
   }
 
-  private fun q0407AddProjectsToGraph(graph: Q0407Graph, projects: Array<String>) {
+  private fun addProjectsToGraph(graph: ProjectGraph, projects: Array<String>) {
     for (project in projects) {
       graph.addProject(project)
     }
   }
 
-  private fun q0407AddDependenciesToGraph(graph: Q0407Graph, dependencies: Array<Array<String>>) {
+  private fun addDependenciesToGraph(graph: ProjectGraph, dependencies: Array<Array<String>>) {
     for (pair in dependencies) {
       val parent = pair[0]
       val dependent = pair[1]
@@ -267,11 +267,11 @@ class S04TreesAndGraphs {
     }
   }
 
-  private fun q0407GetSortedProjectArray(graph: Q0407Graph): Array<Q0407Graph.Project>? {
-    val result = Array(graph.projects.size) { Q0407Graph.Project("") }
+  private fun getSortedProjectArray(graph: ProjectGraph): Array<ProjectGraph.Project>? {
+    val result = Array(graph.projects.size) { ProjectGraph.Project("") }
     val projects = graph.projects
 
-    var resultInsertionIndex = q0407AddProjectsWithNoDependenciesToResult(result, 0, projects)
+    var resultInsertionIndex = addProjectsWithNoDependenciesToResult(result, 0, projects)
     var resultProcessIndex = 0
 
     while (resultInsertionIndex < result.size) {
@@ -281,14 +281,14 @@ class S04TreesAndGraphs {
       val dependents = current.dependents
       for (dependent in dependents) dependent.dependencyCount--
 
-      resultInsertionIndex = q0407AddProjectsWithNoDependenciesToResult(result, resultInsertionIndex, dependents)
+      resultInsertionIndex = addProjectsWithNoDependenciesToResult(result, resultInsertionIndex, dependents)
 
       resultProcessIndex++
     }
     return result
   }
 
-  private fun q0407AddProjectsWithNoDependenciesToResult(result: Array<Q0407Graph.Project>, resultInsertionIndex: Int, projects: ArrayList<Q0407Graph.Project>): Int {
+  private fun addProjectsWithNoDependenciesToResult(result: Array<ProjectGraph.Project>, resultInsertionIndex: Int, projects: ArrayList<ProjectGraph.Project>): Int {
     var resultIndex = resultInsertionIndex
 
     for (project in projects) {
@@ -300,7 +300,7 @@ class S04TreesAndGraphs {
     return resultIndex
   }
 
-  class Q0407Graph {
+  class ProjectGraph {
     val projects = ArrayList<Project>()
     private val projectIdToProjectMap = HashMap<String, Project>()
 
@@ -344,15 +344,15 @@ class S04TreesAndGraphs {
   /**
    * Returns the first common ancestor of 2 nodes in a Binary Tree. O(N) time, O(N) space.
    */
-  fun q0408FirstCommonAncestor(tree: TreeNode, node1: TreeNode, node2: TreeNode): TreeNode? {
-    val result = q0408SearchSubtreeForTargets(tree, node1, node2)
+  fun firstCommonAncestor(tree: TreeNode, node1: TreeNode, node2: TreeNode): TreeNode? {
+    val result = searchSubtreeForTargets(tree, node1, node2)
     return result.commonAncestor
   }
 
-  private fun q0408SearchSubtreeForTargets(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode): CommonAncestorResult {
+  private fun searchSubtreeForTargets(currentNode: TreeNode?, targetNode1: TreeNode, targetNode2: TreeNode): CommonAncestorResult {
     if (currentNode == null) return CommonAncestorResult()
 
-    val leftSearch = q0408SearchSubtreeForTargets(currentNode.left, targetNode1, targetNode2)
+    val leftSearch = searchSubtreeForTargets(currentNode.left, targetNode1, targetNode2)
 
     var foundNode1 = leftSearch.foundNode1 || currentNode == targetNode1
     var foundNode2 = leftSearch.foundNode2 || currentNode == targetNode2
@@ -362,7 +362,7 @@ class S04TreesAndGraphs {
       return CommonAncestorResult(foundNode1, foundNode2, commonAncestor ?: currentNode)
     }
 
-    val rightSearch = q0408SearchSubtreeForTargets(currentNode.right, targetNode1, targetNode2)
+    val rightSearch = searchSubtreeForTargets(currentNode.right, targetNode1, targetNode2)
 
     foundNode1 = foundNode1 || rightSearch.foundNode1
     foundNode2 = foundNode2 || rightSearch.foundNode2
@@ -381,7 +381,7 @@ class S04TreesAndGraphs {
    * Returns all possible arrays that could have led to the given BST assuming it was created by traversing an array
    * from left to right and inserting each element. O(N^e) time (I have no idea what e is, but it's big!).
    */
-  fun q0409BstSequences(bst: TreeNode): ArrayList<LinkedList<Int>> {
+  fun bstSequences(bst: TreeNode): ArrayList<LinkedList<Int>> {
     return getLists(bst)
   }
 
@@ -431,19 +431,19 @@ class S04TreesAndGraphs {
   /**
    * Returns a random node in a Binary Tree. O(D) time to retrieve random node, where D is the maximum depth of the tree.
    */
-  fun q0411RandomNode(tree: TreeNode2): TreeNode2 {
+  fun randomNode(tree: TreeNodeWithSize): TreeNodeWithSize {
     return tree.getRandomNode()
   }
 
-  class TreeNode2(var value: Int, var left: TreeNode2? = null, var right: TreeNode2? = null, var size: Int = 1) {
+  class TreeNodeWithSize(var value: Int, var left: TreeNodeWithSize? = null, var right: TreeNodeWithSize? = null, var size: Int = 1) {
 
-    fun getRandomNode(): TreeNode2 {
+    fun getRandomNode(): TreeNodeWithSize {
       val rand = Random()
       val index = rand.nextInt(size)
       return getIthNode(index)
     }
 
-    private fun getIthNode(index: Int): TreeNode2 {
+    private fun getIthNode(index: Int): TreeNodeWithSize {
       val leftSize = left?.size ?: 0
 
       return when {
@@ -458,15 +458,15 @@ class S04TreesAndGraphs {
 
       if (data < value) {
         if (left != null) left!!.insert(data)
-        else left = TreeNode2(data)
+        else left = TreeNodeWithSize(data)
       }
       else {
         if (right != null) right!!.insert(data)
-        else right = TreeNode2(data)
+        else right = TreeNodeWithSize(data)
       }
     }
 
-    fun insert(node: TreeNode2) {
+    fun insert(node: TreeNodeWithSize) {
       size += node.size
 
       if (node.value < value) {
@@ -483,7 +483,7 @@ class S04TreesAndGraphs {
       return deleteSelfOrKeepSearching(null, data)
     }
 
-    private fun deleteSelfOrKeepSearching(parent: TreeNode2?, data: Int): Boolean {
+    private fun deleteSelfOrKeepSearching(parent: TreeNodeWithSize?, data: Int): Boolean {
       return when {
         data < value -> searchLeftToDelete(data)
         data > value -> searchRightToDelete(data)
@@ -503,13 +503,13 @@ class S04TreesAndGraphs {
       return right!!.deleteSelfOrKeepSearching(this, data)
     }
 
-    private fun deleteSelf(parent: TreeNode2?): Boolean {
+    private fun deleteSelf(parent: TreeNodeWithSize?): Boolean {
       if (parent != null) moveRightUpAndRelocateLeft(parent)
       else deleteSelfAmRoot()
       return true
     }
 
-    private fun moveRightUpAndRelocateLeft(parent: TreeNode2) {
+    private fun moveRightUpAndRelocateLeft(parent: TreeNodeWithSize) {
       if (parent.left == this) parent.left = right
       else parent.right = right
       if (left != null) {
@@ -531,7 +531,7 @@ class S04TreesAndGraphs {
       }
     }
 
-    fun find(data: Int): TreeNode2? {
+    fun find(data: Int): TreeNodeWithSize? {
       if (data == value) return this
 
       return when {
@@ -551,7 +551,7 @@ class S04TreesAndGraphs {
   /**
    * Returns the number of paths that sum to a given value. The path does not need to start or end at a root or leaf.
    */
-  fun q0412aPathsWithSum(bt: TreeNode, value: Int): Int {
+  fun pathsWithSum(bt: TreeNode, value: Int): Int {
     return getSumCountInTree(bt, value).sumCount
   }
 
@@ -584,7 +584,7 @@ class S04TreesAndGraphs {
     return Result(ongoingSums, sumCount)
   }
 
-  fun q0412bPathsWithSum(tree: TreeNode, value: Int): Int {
+  fun pathsWithSumB(tree: TreeNode, value: Int): Int {
     val cumSumToCount = HashMap<Int, Int>()
     return getPathCountFromNode(tree, value, 0, cumSumToCount)
   }
