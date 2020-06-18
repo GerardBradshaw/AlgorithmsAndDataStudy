@@ -7,6 +7,35 @@ import kotlin.math.abs
 
 class S01ArraysAndStrings {
 
+  fun rotateMatrix(matrix: Array<IntArray>) {
+    if (matrix.size <= 1) return
+
+      for (i in 0..matrix.size / 2) {
+        val arrayEnd = matrix.size - i - 2
+        rotateArray(matrix, i, i, arrayEnd)
+      }
+  }
+
+  private fun rotateValues(matrix: Array<IntArray>, i: Int, j: Int) {
+    val iO = matrix.size - i - 1
+    val jO = matrix.size - j - 1
+
+    val topLeftVal = matrix[i][j]
+    val topRightVal = matrix[j][iO]
+    val bottomRightVal = matrix[iO][jO]
+    val bottomLeftVal = matrix[jO][i]
+
+    matrix[i][j] = bottomLeftVal
+    matrix[j][iO] = topLeftVal
+    matrix[iO][jO] = topRightVal
+    matrix[jO][i] = bottomRightVal
+  }
+
+  private fun rotateArray(matrix: Array<IntArray>, row: Int, colStart: Int, colEnd: Int) {
+    for (c in colStart..colEnd) rotateValues(matrix, row, c)
+  }
+
+
   /**
    * Returns true if [string] has all unique characters. O(n) time, O(1) space. Assumes string is ASCII.
    *

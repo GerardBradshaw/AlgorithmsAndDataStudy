@@ -3,6 +3,8 @@ import hashtable.MyJHashTable;
 import hashtable.MyJHashTable2;
 import map.Word;
 import linkedlist.MyJDoublyLinkedList;
+import questions.S01ArraysAndStrings;
+import questions.S02LinkedLists2;
 import questions.S04TreesAndGraphs2;
 import questions.S08RecursionAndDynamicProgramming;
 import tree.XMyBinarySearchTree;
@@ -16,15 +18,36 @@ public class HelloWorld {
 
   public static void main(String[] args) {
 
-    S04TreesAndGraphs2 questions = new S04TreesAndGraphs2();
+    S01ArraysAndStrings questions = new S01ArraysAndStrings();
 
-    ArrayList<String> projects = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F"));
+    /*
+    //S02LinkedLists2.Node list1 = new S02LinkedLists2.Node(6, new S02LinkedLists2.Node(1, new S02LinkedLists2.Node(7, null)));
+    S02LinkedLists2.Node list1 = new S02LinkedLists2.Node(1, null);
+    S02LinkedLists2.Node list2 = new S02LinkedLists2.Node(9, new S02LinkedLists2.Node(9, new S02LinkedLists2.Node(9, null)));
 
-    ArrayList<String[]> dependencies = new ArrayList<>(Arrays.asList(new String[]{"A", "D"}, new String[]{"F", "B"}, new String[]{"B", "D"}, new String[]{"F", "A"}, new String[]{"D", "C"}));
-    ArrayList<String> result = questions.buildOrder(projects, dependencies);
 
-    System.out.println(result.toString());
+    S02LinkedLists2.Node result = questions.sumListRecur(list1, list2);
 
+    while (result != null) {
+      System.out.println(result.getValue());
+      result = result.getNext();
+    }
+     */
+
+    int n = 6;
+
+    int[][] matrix = new int[n][n];
+
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        matrix[i][j] = i;
+      }
+    }
+
+    for (int[] row : matrix) System.out.println(Arrays.toString(row));
+    questions.rotateMatrix(matrix);
+    System.out.println();
+    for (int[] row : matrix) System.out.println(Arrays.toString(row));
   }
 
   // -------- Arrays --------
