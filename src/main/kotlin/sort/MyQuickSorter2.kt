@@ -1,6 +1,6 @@
 package sort
 
-class MyQuickSorter2 {
+object MyQuickSorter2 {
   fun sort(array: IntArray) {
     quickSort(array, 0, array.size - 1)
   }
@@ -19,7 +19,7 @@ class MyQuickSorter2 {
     var left = leftIndex
     var right = rightIndex
 
-    while (left < right) {
+    while (left <= right) {
       while (left <= rightIndex && array[left] < pivot) left++
       while (right >= leftIndex && array[right] > pivot) right--
 
